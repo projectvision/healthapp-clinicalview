@@ -1,0 +1,25 @@
+
+body {
+  max-width: 999px;
+  margin: 0 auto;
+}
+
+header {
+  background: lightblue;
+}
+
+aside {
+  float: left;
+  width: 200px;
+  border-right: 1px solid #ccc;
+  background: #efefef;
+}
+
+#main {
+  
+}
+
+#content {
+  overflow: auto;
+  padding: 0 10px;
+}

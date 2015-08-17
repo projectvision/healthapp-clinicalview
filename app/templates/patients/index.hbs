@@ -1,0 +1,14 @@
+<aside>
+  <ul>
+    {{#each model as |patient|}}
+      <li>
+        {{#link-to "patient" patient current-when="patient"}}
+          {{patient.firstName}}
+        {{/link-to}}
+      </li>
+    {{/each}}
+  </ul>
+</aside>
+
+Patients:
+{{outlet}}

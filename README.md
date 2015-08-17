@@ -1,7 +1,17 @@
 # Yabbit
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+## Problem Spaces
+
+### REST and Parse
+
+Accessing Parse cloud functions from Ember:
+https://parse.com/docs/rest/guide#cloud-code-cloud-functions
+http://codeengine.org/how-to-call-a-parse-cloud-function-in-ember-js-controller/
+
+Complex REST API endpoints:
+https://github.com/mike-north/ember-api-actions
+
+# Ember
 
 ## Prerequisites
 
@@ -50,4 +60,3 @@ Specify what it takes to deploy your app.
 * Development Browser Extensions
   * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
   * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
-

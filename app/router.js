@@ -6,6 +6,10 @@ var Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+  this.route('patients', function () {
+    this.route('index');
+  });
+  this.route('patient', {path: 'patient/:patient_id'});
 });
 
-export default Router;
+export default Router
