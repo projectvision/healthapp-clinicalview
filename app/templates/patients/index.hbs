@@ -2,13 +2,10 @@
   <ul>
     {{#each model as |patient|}}
       <li>
-        {{#link-to "patient" patient current-when="patient"}}
-          {{patient.firstName}}
-        {{/link-to}}
+        {{#link-to 'patients.index.show' patient.patientId}}{{patient.firstName}} {{patient.lastName}}{{/link-to}}
       </li>
     {{/each}}
   </ul>
 </aside>
 
-Patients:
-{{outlet}}
+{{outlet 'detail'}}

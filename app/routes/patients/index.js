@@ -1,11 +1,16 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  renderTemplate: function() {
+    this.render({
+      outlet: 'master',
+    });
+  },
   model: function(params) {
     //return this.modelFor('patient').findBy('id', params.patient_id);
     return [
       {
-        "id": 123456789,
+        "patientId": 123456789,
         "firstName": "John",
         "lastName": "Doe",
         "alerts": false,
@@ -24,7 +29,7 @@ export default Ember.Route.extend({
         }
       },
       {
-        "id": 987654321,
+        "patientId": 987654321,
         "firstName": "Miguel",
         "lastName": "Ferrara",
         "alerts": ["overweight"],
