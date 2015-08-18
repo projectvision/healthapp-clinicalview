@@ -9,9 +9,9 @@
     <tbody>
       <tr>
         <td>
-          {{model.challengeCompletion.fitness}}<br />
-          {{model.challengeCompletion.diet}}<br />
-          {{model.challengeCompletion.stress}}<br />
+          <div class="bar fitness" style="width: {{model.challengeCompletion.fitness}}%">{{model.challengeCompletion.fitness}}%</div>
+          <div class="bar diet" style="width: {{model.challengeCompletion.diet}}%">{{model.challengeCompletion.diet}}%</div>
+          <div class="bar stress" style="width: {{model.challengeCompletion.stress}}%">{{model.challengeCompletion.stress}}%</div>
         </td>
         <td>
           {{model.healthRisk.status}}<br />
@@ -22,8 +22,5 @@
       </tr>
     </tbody>
   </table>
-
-  {{model.firstName}}
-  {{model.lastName}}
 
 </div>
