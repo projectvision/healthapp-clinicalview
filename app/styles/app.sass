@@ -58,11 +58,17 @@ table
     background: $heading_bg
     th
       padding: $padding
+      &.challenge-completion
+        width: 40%
+      &.health-risk,
+      &.activity-level
+        width: 30%
   tbody
     tr
       td
         .bar
           color: white
+          padding: 2px 4px
           background: #EFEFEF
           &.fitness
             background: #F9BDD3

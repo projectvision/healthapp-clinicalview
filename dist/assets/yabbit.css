@@ -58,8 +58,14 @@ table {
     background: linear-gradient(#f9f9f9, #e6e6e6); }
     table thead th {
       padding: 10px; }
+      table thead th.challenge-completion {
+        width: 40%; }
+      table thead th.health-risk,
+      table thead th.activity-level {
+        width: 30%; }
   table tbody tr td .bar {
     color: white;
+    padding: 2px 4px;
     background: #EFEFEF; }
     table tbody tr td .bar.fitness {
       background: #F9BDD3; }
