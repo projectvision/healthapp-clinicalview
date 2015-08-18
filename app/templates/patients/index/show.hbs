@@ -1,5 +1,28 @@
 <div id="content" class="patient">
 
+  <table>
+    <thead>
+      <th>Challenge Completion</th>
+      <th>Health Risk</th>
+      <th>Activity Level</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          {{model.challengeCompletion.fitness}}<br />
+          {{model.challengeCompletion.diet}}<br />
+          {{model.challengeCompletion.stress}}<br />
+        </td>
+        <td>
+          {{model.healthRisk.status}}<br />
+        </td>
+        <td>
+          {{model.activityLevel.status}}<br />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
   {{model.firstName}}
   {{model.lastName}}
 
