@@ -231,6 +231,42 @@ define('yabbit/templates/application', ['exports'], function (exports) {
   'use strict';
 
   exports['default'] = Ember.HTMLBars.template((function() {
+    var child0 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.7",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 3,
+              "column": 4
+            },
+            "end": {
+              "line": 3,
+              "column": 62
+            }
+          },
+          "moduleName": "yabbit/templates/application.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createElement("img");
+          dom.setAttribute(el1,"id","logo");
+          dom.setAttribute(el1,"src","assets/logo.png");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
     return {
       meta: {
         "revision": "Ember@1.13.7",
@@ -241,7 +277,7 @@ define('yabbit/templates/application', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 10,
+            "line": 12,
             "column": 0
           }
         },
@@ -253,7 +289,18 @@ define('yabbit/templates/application', ['exports'], function (exports) {
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createElement("header");
-        var el2 = dom.createTextNode("\n  Yabbit\n");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","container");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n\n");
@@ -276,15 +323,17 @@ define('yabbit/templates/application', ['exports'], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(1);
-        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [4]),1,1);
+        var morphs = new Array(2);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0, 1]),1,1);
+        morphs[1] = dom.createMorphAt(dom.childAt(fragment, [4]),1,1);
         return morphs;
       },
       statements: [
-        ["content","outlet",["loc",[null,[8,2],[8,12]]]]
+        ["block","link-to",["index"],[],0,null,["loc",[null,[3,4],[3,74]]]],
+        ["content","outlet",["loc",[null,[10,2],[10,12]]]]
       ],
       locals: [],
-      templates: []
+      templates: [child0]
     };
   }()));
 
@@ -306,7 +355,7 @@ define('yabbit/templates/index', ['exports'], function (exports) {
             },
             "end": {
               "line": 5,
-              "column": 27
+              "column": 35
             }
           },
           "moduleName": "yabbit/templates/index.hbs"
@@ -316,7 +365,7 @@ define('yabbit/templates/index', ['exports'], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("Okay");
+          var el1 = dom.createTextNode("Skip for now");
           dom.appendChild(el0, el1);
           return el0;
         },
@@ -349,9 +398,10 @@ define('yabbit/templates/index', ['exports'], function (exports) {
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createTextNode("Login:\n\n");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createComment("");
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"id","loginbox");
+        var el2 = dom.createTextNode("\n  TODO: Login\n");
+        dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n\n");
         dom.appendChild(el0, el1);
@@ -362,14 +412,12 @@ define('yabbit/templates/index', ['exports'], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(2);
-        morphs[0] = dom.createMorphAt(fragment,1,1,contextualElement);
-        morphs[1] = dom.createMorphAt(fragment,3,3,contextualElement);
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment,2,2,contextualElement);
         return morphs;
       },
       statements: [
-        ["content","outlet",["loc",[null,[3,0],[3,10]]]],
-        ["block","link-to",["patients"],[],0,null,["loc",[null,[5,0],[5,39]]]]
+        ["block","link-to",["patients"],[],0,null,["loc",[null,[5,0],[5,47]]]]
       ],
       locals: [],
       templates: [child0]
