@@ -4,12 +4,12 @@
 
 ### REST and Parse
 
-Accessing Parse cloud functions from Ember:
-https://parse.com/docs/rest/guide#cloud-code-cloud-functions
-http://codeengine.org/how-to-call-a-parse-cloud-function-in-ember-js-controller/
+Accessing Parse cloud functions from Ember:  
+https://parse.com/docs/rest/guide#cloud-code-cloud-functions  
+http://codeengine.org/how-to-call-a-parse-cloud-function-in-ember-js-controller/  
 
-Complex REST API endpoints:
-https://github.com/mike-north/ember-api-actions
+Complex REST API endpoints:  
+https://github.com/mike-north/ember-api-actions  
 
 # Ember
 

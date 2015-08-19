@@ -44,8 +44,17 @@ aside {
           border-right: none;
           margin-right: -1px; }
 
-#content {
-  overflow: auto; }
+section#patients {
+  position: relative; }
+  section#patients #patients-overview {
+    overflow: auto; }
+  section#patients #content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 200px;
+    background: white;
+    min-height: 500px; }
 
 table {
   width: 100%;
