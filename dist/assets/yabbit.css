@@ -7,6 +7,9 @@
 * {
   box-sizing: border-box; }
 
+html {
+  overflow-y: scroll; }
+
 body {
   padding: 0;
   margin: 0;
@@ -17,7 +20,7 @@ body {
  * LAYOUT *
  ******************************************************************************/
 .container, #main {
-  max-width: 999px;
+  max-width: 1200px;
   margin: 0 auto; }
 
 header {
@@ -30,27 +33,6 @@ header {
   margin-top: 2px;
   border: 2px solid white;
   border-radius: 3px; }
-
-aside {
-  float: left;
-  width: 200px;
-  border-right: 1px solid #ccc;
-  background: #efefef; }
-  aside ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 0; }
-    aside ul li {
-      background: linear-gradient(#f9f9f9, #e6e6e6); }
-      aside ul li a {
-        display: block;
-        padding: 10px 15px;
-        text-shadow: 1px 1px 1px white; }
-        aside ul li a.active {
-          background: white;
-          border: 1px solid #424242;
-          border-right: none;
-          margin-right: -1px; }
 
 /******************************************************************************
  * LINKS *
@@ -69,6 +51,8 @@ a.button {
   padding: 5px;
   background: #DEEEFC;
   border-radius: 3px; }
+  a.button:hover {
+    background: #c7e2fa; }
 
 /******************************************************************************
  * SECTIONS *
@@ -78,54 +62,101 @@ a.button {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  max-width: 200px;
+  max-width: 300px;
   margin: 10px auto; }
 
 /* Patients */
 section#patients {
-  position: relative; }
+  position: relative;
+  /* remove outside table border */ }
   section#patients aside {
-    margin-top: 30px; }
+    margin-top: 40px;
+    float: left;
+    width: 300px;
+    border-right: 1px solid #ccc;
+    background: #efefef; }
+    section#patients aside ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      margin-right: -1px;
+      position: relative;
+      z-index: 999; }
+      section#patients aside ul li {
+        background: linear-gradient(#f9f9f9, #e6e6e6);
+        border-bottom: 1px solid #AAAAAA; }
+        section#patients aside ul li a {
+          display: block;
+          padding: 0 20px;
+          height: 50px;
+          line-height: 50px;
+          text-shadow: 1px 1px 1px white; }
+          section#patients aside ul li a.active {
+            background: white;
+            border: 1px solid #424242;
+            border-right: none;
+            margin: -1px -1px -1px 0; }
   section#patients #patients-overview {
-    overflow: auto; }
-  section#patients #patient {
+    overflow: auto;
+    border: 1px solid #7F7F7F;
+    border-top: 0; }
+    section#patients #patients-overview table tr {
+      height: 50px; }
+  section#patients .pane {
     position: absolute;
     top: 0;
     right: 0;
-    left: 200px;
+    left: 300px;
+    border: 1px solid #424242;
+    border-top: 0;
     background: white;
     min-height: 500px; }
   section#patients #view-all.button {
     position: absolute;
-    top: 2px;
-    left: 2px; }
-
-table {
-  width: 100%;
-  border: 1px solid #ccc;
-  margin: -1px;
-  margin-bottom: 10px; }
-  table thead {
-    heigth: 30px;
-    text-align: left;
-    font-weight: bold;
-    background: linear-gradient(#f9f9f9, #e6e6e6); }
-    table thead th {
-      padding: 10px; }
-      table thead th.challenge-completion {
-        width: 40%; }
-      table thead th.health-risk,
-      table thead th.activity-level {
-        width: 30%; }
-  table tbody tr td .bar {
-    color: white;
-    padding: 2px 4px;
-    background: #EFEFEF; }
-    table tbody tr td .bar.fitness {
-      background: #F9BDD3; }
-    table tbody tr td .bar.diet {
-      background: #73BDF4; }
-    table tbody tr td .bar.stress {
-      background: #88D392; }
+    top: 5px;
+    left: 5px;
+    width: 290px; }
+  section#patients table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px; }
+    section#patients table thead {
+      heigth: 30px;
+      text-align: left;
+      font-weight: bold;
+      background: linear-gradient(#f9f9f9, #e6e6e6); }
+      section#patients table thead th {
+        text-shadow: 1px 1px 1px #fefefe; }
+        section#patients table thead th.challenge-completion {
+          width: 40%; }
+        section#patients table thead th.health-risk,
+        section#patients table thead th.activity-level {
+          width: 30%; }
+    section#patients table tbody tr td {
+      border: 1px solid #ccc; }
+      section#patients table tbody tr td .bar {
+        color: white;
+        padding: 2px 4px;
+        background: #EFEFEF; }
+        section#patients table tbody tr td .bar.fitness {
+          background: #F9BDD3; }
+        section#patients table tbody tr td .bar.diet {
+          background: #73BDF4; }
+        section#patients table tbody tr td .bar.stress {
+          background: #88D392; }
+  section#patients table thead th {
+    border: 1px solid #ccc;
+    border-top: 0;
+    padding: 10px; }
+    section#patients table thead th:first-child {
+      border-left: 0; }
+    section#patients table thead th:last-child {
+      border-right: 0; }
+  section#patients table tbody tr td {
+    border: 1px solid #ccc; }
+    section#patients table tbody tr td:first-child {
+      border-left: 0; }
+    section#patients table tbody tr td:last-child {
+      border-right: 0; }
 
 /*# sourceMappingURL=yabbit.css.map */

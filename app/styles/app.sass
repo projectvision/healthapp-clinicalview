@@ -6,6 +6,9 @@
 *
   box-sizing: border-box
 
+html
+  overflow-y: scroll
+
 body
   padding: 0
   margin: 0
@@ -16,7 +19,7 @@ body
  * LAYOUT *
  ******************************************************************************/
 .container, #main
-  max-width: 999px
+  max-width: 1200px
   margin: 0 auto
 
 header
@@ -29,27 +32,6 @@ header
   margin-top: 2px
   border: 2px solid white
   border-radius: 3px
-
-aside
-  float: left
-  width: $sidebar_width
-  border-right: 1px solid #ccc
-  background: #efefef
-  ul
-    list-style: none
-    padding-left: 0
-    margin: 0
-    li
-      background: $heading_bg
-      a
-        display: block
-        padding: $padding 15px
-        text-shadow: 1px 1px 1px white
-        &.active
-          background: white
-          border: 1px solid #424242
-          border-right: none
-          margin-right: -1px
 
 /******************************************************************************
  * LINKS *
@@ -70,6 +52,8 @@ a.button
   padding: $padding / 2
   background: #DEEEFC
   border-radius: 3px
+  &:hover
+    background: darken(#DEEEFC, 5%)
 
 /******************************************************************************
  * SECTIONS *
@@ -88,49 +72,105 @@ a.button
 
 section#patients
   position: relative
+
   aside
-    margin-top: $table_head_height
+    margin-top: $table_head_height + 10px
+    float: left
+    width: $sidebar_width
+    border-right: 1px solid #ccc
+    background: #efefef
+    ul
+      list-style: none
+      padding-left: 0
+      margin: 0
+      margin-right: -1px
+      position: relative
+      z-index: 999
+      li
+        background: $heading_bg
+        border-bottom: 1px solid #AAAAAA
+        a
+          display: block
+          padding: 0 ($padding * 2)
+          height: $row_height
+          line-height: $row_height
+          text-shadow: 1px 1px 1px white
+          &.active
+            background: white
+            border: 1px solid #424242
+            border-right: none
+            margin: -1px -1px -1px 0
+
   #patients-overview
     overflow: auto
-  #patient
+    border: 1px solid #7F7F7F
+    border-top: 0
+    table
+      tr
+        height: $row_height
+
+  .pane
     position: absolute
     top: 0
     right: 0
     left: $sidebar_width
+    border: 1px solid #424242
+    border-top: 0
     background: white
     min-height: 500px
   #view-all.button
     position: absolute
-    top: 2px
-    left: 2px
+    top: $margin
+    left: $margin
+    width: $sidebar_width - ($margin * 2)
 
-table
-  width: 100%
-  border: 1px solid #ccc
-  margin: -1px
-  margin-bottom: 10px
-  thead
-    heigth: $table_head_height
-    text-align: left
-    font-weight: bold
-    background: $heading_bg
-    th
-      padding: $padding
-      &.challenge-completion
-        width: 40%
-      &.health-risk,
-      &.activity-level
-        width: 30%
-  tbody
-    tr
-      td
-        .bar
-          color: white
-          padding: 2px 4px
-          background: #EFEFEF
-          &.fitness
-            background: #F9BDD3
-          &.diet
-            background: #73BDF4
-          &.stress
-            background: #88D392
+  table
+    width: 100%
+    border-collapse: collapse
+    margin-bottom: 10px
+    thead
+      heigth: $table_head_height
+      text-align: left
+      font-weight: bold
+      background: $heading_bg
+      th
+        text-shadow: 1px 1px 1px #fefefe
+        &.challenge-completion
+          width: 40%
+        &.health-risk,
+        &.activity-level
+          width: 30%
+    tbody
+      tr
+        td
+          border: 1px solid #ccc
+          .bar
+            color: white
+            padding: 2px 4px
+            background: #EFEFEF
+            &.fitness
+              background: #F9BDD3
+            &.diet
+              background: #73BDF4
+            &.stress
+              background: #88D392
+
+  /* remove outside table border */
+  table
+    thead
+      th
+        border: 1px solid #ccc
+        border-top: 0
+        padding: $padding
+        &:first-child
+          border-left: 0
+        &:last-child
+          border-right: 0
+    tbody
+      tr
+        td
+          border: 1px solid #ccc
+          &:first-child
+            border-left: 0
+          &:last-child
+            border-right: 0

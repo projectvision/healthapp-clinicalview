@@ -52,7 +52,26 @@ export default Ember.Route.extend({
           "status": "Sedentary",
           "change": "down"
         }
-      }
+      },
+      {
+        "patientId": 76764565643,
+        "firstName": "Marlon",
+        "lastName": "Jones",
+        "alerts": false,
+        "challengeCompletion": {
+          "fitness": 50,
+          "diet": 15,
+          "stress": 95
+        },
+        "healthRisk": {
+          "status": "Low",
+          "change": false
+        },
+        "activityLevel": {
+          "status": "Moderate Exercise",
+          "change": "up"
+        }
+      },
     ];
   }
 });

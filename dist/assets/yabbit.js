@@ -254,6 +254,24 @@ define('yabbit/routes/patients/index', ['exports', 'ember'], function (exports, 
           "status": "Sedentary",
           "change": "down"
         }
+      }, {
+        "patientId": 76764565643,
+        "firstName": "Marlon",
+        "lastName": "Jones",
+        "alerts": false,
+        "challengeCompletion": {
+          "fitness": 50,
+          "diet": 15,
+          "stress": 95
+        },
+        "healthRisk": {
+          "status": "Low",
+          "change": false
+        },
+        "activityLevel": {
+          "status": "Moderate Exercise",
+          "change": "up"
+        }
       }];
     }
   });
@@ -962,6 +980,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createElement("div");
         dom.setAttribute(el1,"id","patient");
+        dom.setAttribute(el1,"class","pane");
         var el2 = dom.createTextNode("\n\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("table");
@@ -1411,7 +1430,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"vNmHb7Gvkgji498TMTEARjDB2oRJhgDZb04I3hNW","restApiId":"2I8w9D0u7GCp2dIhH7Vd1pRNaWG9yuhHn7LNXn1S","name":"yabbit","version":"0.0.0+8a434b44"});
+  require("yabbit/app")["default"].create({"applicationId":"vNmHb7Gvkgji498TMTEARjDB2oRJhgDZb04I3hNW","restApiId":"2I8w9D0u7GCp2dIhH7Vd1pRNaWG9yuhHn7LNXn1S","name":"yabbit","version":"0.0.0+e0c4ddca"});
 }
 
 /* jshint ignore:end */

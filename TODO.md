@@ -11,10 +11,14 @@
 
 - http://stackoverflow.com/questions/19901914/find-name-of-current-route-in-ember-js
 
+### Controllers
+
+http://fromrailstoember.com/4-controllers-are-not-controllers/
+
 ### Accessing properties
 
 Setting controller properties from other controllers/routes:  
-http://stackoverflow.com/questions/27724634/ember-restore-state-when-routing?rq=1
+http://stackoverflow.com/questions/27724634/ember-restore-state-when-routing
 
 Reading controller properties/model from other controllers:  
 http://guides.emberjs.com/v2.0.0/controllers/dependencies-between-controllers/
