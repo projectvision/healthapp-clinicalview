@@ -74,7 +74,7 @@ section#patients
   position: relative
 
   aside
-    margin-top: $table_head_height + 10px
+    margin-top: $table_head_height
     float: left
     width: $sidebar_width
     border-right: 1px solid #ccc
@@ -107,7 +107,8 @@ section#patients
     border-top: 0
     table
       tr
-        height: $row_height
+        td
+          height: $row_height
 
   .pane
     position: absolute
@@ -129,11 +130,11 @@ section#patients
     border-collapse: collapse
     margin-bottom: 10px
     thead
-      heigth: $table_head_height
       text-align: left
       font-weight: bold
       background: $heading_bg
       th
+        line-height: $table_head_height / 2
         text-shadow: 1px 1px 1px #fefefe
         &.challenge-completion
           width: 40%
@@ -143,10 +144,11 @@ section#patients
     tbody
       tr
         td
+          padding: 0
           border: 1px solid #ccc
           .bar
             color: white
-            padding: 2px 4px
+            height: $row_height / 3
             background: #EFEFEF
             &.fitness
               background: #F9BDD3
