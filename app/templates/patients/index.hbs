@@ -4,6 +4,8 @@
       <li>
         {{#link-to 'patients.index.show' patient.patientId}}{{patient.firstName}} {{patient.lastName}}{{/link-to}}
       </li>
+    {{else}}
+      <li>Empty</li>
     {{/each}}
   </ul>
 </aside>
@@ -14,7 +16,7 @@
       <th class="challenge-completion">Challenge Completion</th>
       <th class="health-risk">Health Risk</th>
       <th class="activity-level">Activity Level</th>
-    </thead>
+    </thead>    
     <tbody>
       {{#each model as |patient|}}
         <tr>

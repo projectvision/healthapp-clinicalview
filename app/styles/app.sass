@@ -1,13 +1,20 @@
 @import '_variables.sass'
 
+/******************************************************************************
+ * Render Config *
+ ******************************************************************************/
+*
+  box-sizing: border-box
+
 body
   padding: 0
   margin: 0
   color: #333
   font-family: Arial
 
-/* LAYOUT
-
+/******************************************************************************
+ * LAYOUT *
+ ******************************************************************************/
 .container, #main
   max-width: 999px
   margin: 0 auto
@@ -25,7 +32,7 @@ header
 
 aside
   float: left
-  width: 200px
+  width: $sidebar_width
   border-right: 1px solid #ccc
   background: #efefef
   ul
@@ -44,17 +51,58 @@ aside
           border-right: none
           margin-right: -1px
 
+/******************************************************************************
+ * LINKS *
+ ******************************************************************************/
+
+a
+  color: inherit
+  text-decoration: none
+  &:link, &:active, &:visited
+    color: inherit
+    text-decoration: none
+
+/* Buttons */
+
+a.button
+  color: #3F8DFF
+  text-align: center
+  padding: $padding / 2
+  background: #DEEEFC
+  border-radius: 3px
+
+/******************************************************************************
+ * SECTIONS *
+ ******************************************************************************/
+
+/* Login */
+
+#loginbox
+  padding: 10px
+  border: 1px solid #ccc
+  border-radius: 4px
+  max-width: $sidebar_width
+  margin: 10px auto
+
+/* Patients */
+
 section#patients
   position: relative
+  aside
+    margin-top: $table_head_height
   #patients-overview
     overflow: auto
-  #content
+  #patient
     position: absolute
     top: 0
     right: 0
-    left: 200px
+    left: $sidebar_width
     background: white
     min-height: 500px
+  #view-all.button
+    position: absolute
+    top: 2px
+    left: 2px
 
 table
   width: 100%
@@ -62,6 +110,7 @@ table
   margin: -1px
   margin-bottom: 10px
   thead
+    heigth: $table_head_height
     text-align: left
     font-weight: bold
     background: $heading_bg
@@ -85,24 +134,3 @@ table
             background: #73BDF4
           &.stress
             background: #88D392
-/* LINKS
-
-a
-  color: inherit
-  text-decoration: none
-  &:link, &:active, &:visited
-    color: inherit
-    text-decoration: none
-
-/******************************************************************************
- * SECTIONS *
- ******************************************************************************/
-
-/* Login */
-
-#loginbox
-  padding: 10px
-  border: 1px solid #ccc
-  border-radius: 4px
-  max-width: 200px
-  margin: 10px auto

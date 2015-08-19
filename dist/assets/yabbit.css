@@ -1,13 +1,21 @@
 /* LAYOUT */
 /* BACKGROUNDS */
 /* DIVISIONS */
+/******************************************************************************
+ * Render Config *
+ ******************************************************************************/
+* {
+  box-sizing: border-box; }
+
 body {
   padding: 0;
   margin: 0;
   color: #333;
   font-family: Arial; }
 
-/* LAYOUT */
+/******************************************************************************
+ * LAYOUT *
+ ******************************************************************************/
 .container, #main {
   max-width: 999px;
   margin: 0 auto; }
@@ -44,17 +52,53 @@ aside {
           border-right: none;
           margin-right: -1px; }
 
+/******************************************************************************
+ * LINKS *
+ ******************************************************************************/
+a {
+  color: inherit;
+  text-decoration: none; }
+  a:link, a:active, a:visited {
+    color: inherit;
+    text-decoration: none; }
+
+/* Buttons */
+a.button {
+  color: #3F8DFF;
+  text-align: center;
+  padding: 5px;
+  background: #DEEEFC;
+  border-radius: 3px; }
+
+/******************************************************************************
+ * SECTIONS *
+ ******************************************************************************/
+/* Login */
+#loginbox {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-width: 200px;
+  margin: 10px auto; }
+
+/* Patients */
 section#patients {
   position: relative; }
+  section#patients aside {
+    margin-top: 30px; }
   section#patients #patients-overview {
     overflow: auto; }
-  section#patients #content {
+  section#patients #patient {
     position: absolute;
     top: 0;
     right: 0;
     left: 200px;
     background: white;
     min-height: 500px; }
+  section#patients #view-all.button {
+    position: absolute;
+    top: 2px;
+    left: 2px; }
 
 table {
   width: 100%;
@@ -62,6 +106,7 @@ table {
   margin: -1px;
   margin-bottom: 10px; }
   table thead {
+    heigth: 30px;
     text-align: left;
     font-weight: bold;
     background: linear-gradient(#f9f9f9, #e6e6e6); }
@@ -82,24 +127,5 @@ table {
       background: #73BDF4; }
     table tbody tr td .bar.stress {
       background: #88D392; }
-
-/* LINKS */
-a {
-  color: inherit;
-  text-decoration: none; }
-  a:link, a:active, a:visited {
-    color: inherit;
-    text-decoration: none; }
-
-/******************************************************************************
- * SECTIONS *
- ******************************************************************************/
-/* Login */
-#loginbox {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  max-width: 200px;
-  margin: 10px auto; }
 
 /*# sourceMappingURL=yabbit.css.map */

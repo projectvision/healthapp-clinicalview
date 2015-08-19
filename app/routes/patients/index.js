@@ -6,6 +6,12 @@ export default Ember.Route.extend({
       outlet: 'master',
     });
   },
+  actions: {
+    didTransition: function() {
+      console.log('routeName: ' + this.routeName);
+      return true; // Bubble the didTransition event
+    }
+  },
   model: function(params) {
     //return this.modelFor('patient').findBy('id', params.patient_id);
     return [

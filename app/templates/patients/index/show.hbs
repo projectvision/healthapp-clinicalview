@@ -1,4 +1,4 @@
-<div id="content" class="patient">
+<div id="patient">
 
   <table>
     <thead>
@@ -14,13 +14,15 @@
           <div class="bar stress" style="width: {{model.challengeCompletion.stress}}%">{{model.challengeCompletion.stress}}%</div>
         </td>
         <td>
-          {{model.healthRisk.status}}<br />
+          {{model.healthRisk.status}}
         </td>
         <td>
-          {{model.activityLevel.status}}<br />
+          {{model.activityLevel.status}}
         </td>
       </tr>
     </tbody>
   </table>
 
 </div>
+
+{{#link-to 'patients.index' id="view-all" class="button"}}View All{{/link-to}}

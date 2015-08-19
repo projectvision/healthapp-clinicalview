@@ -1,16 +1,5 @@
 # Yabbit
 
-## Problem Spaces
-
-### REST and Parse
-
-Accessing Parse cloud functions from Ember:  
-https://parse.com/docs/rest/guide#cloud-code-cloud-functions  
-http://codeengine.org/how-to-call-a-parse-cloud-function-in-ember-js-controller/  
-
-Complex REST API endpoints:  
-https://github.com/mike-north/ember-api-actions  
-
 # Ember
 
 ## Prerequisites
@@ -52,11 +41,3 @@ Make use of the many generators for code, try `ember help generate` for more det
 ### Deploying
 
 Specify what it takes to deploy your app.
-
-## Further Reading / Useful Links
-
-* [ember.js](http://emberjs.com/)
-* [ember-cli](http://www.ember-cli.com/)
-* Development Browser Extensions
-  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
