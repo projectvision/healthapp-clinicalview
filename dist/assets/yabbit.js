@@ -420,11 +420,11 @@ define('yabbit/templates/index', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 5,
+              "line": 7,
               "column": 0
             },
             "end": {
-              "line": 5,
+              "line": 7,
               "column": 35
             }
           },
@@ -457,7 +457,7 @@ define('yabbit/templates/index', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 6,
+            "line": 8,
             "column": 0
           }
         },
@@ -469,8 +469,28 @@ define('yabbit/templates/index', ['exports'], function (exports) {
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createElement("div");
-        dom.setAttribute(el1,"id","loginbox");
-        var el2 = dom.createTextNode("\n  TODO: Login\n");
+        dom.setAttribute(el1,"id","login");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("input");
+        dom.setAttribute(el2,"id","email");
+        dom.setAttribute(el2,"type","text");
+        dom.setAttribute(el2,"placeholder","Email");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("input");
+        dom.setAttribute(el2,"id","password");
+        dom.setAttribute(el2,"type","password");
+        dom.setAttribute(el2,"placeholder","Password");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("input");
+        dom.setAttribute(el2,"type","submit");
+        dom.setAttribute(el2,"value","Login");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n\n");
@@ -487,7 +507,7 @@ define('yabbit/templates/index', ['exports'], function (exports) {
         return morphs;
       },
       statements: [
-        ["block","link-to",["patients"],[],0,null,["loc",[null,[5,0],[5,47]]]]
+        ["block","link-to",["patients"],[],0,null,["loc",[null,[7,0],[7,47]]]]
       ],
       locals: [],
       templates: [child0]
@@ -1430,7 +1450,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"vNmHb7Gvkgji498TMTEARjDB2oRJhgDZb04I3hNW","restApiId":"2I8w9D0u7GCp2dIhH7Vd1pRNaWG9yuhHn7LNXn1S","name":"yabbit","version":"0.0.0+e0c4ddca"});
+  require("yabbit/app")["default"].create({"applicationId":"vNmHb7Gvkgji498TMTEARjDB2oRJhgDZb04I3hNW","restApiId":"2I8w9D0u7GCp2dIhH7Vd1pRNaWG9yuhHn7LNXn1S","name":"yabbit","version":"0.0.0+af281d91"});
 }
 
 /* jshint ignore:end */

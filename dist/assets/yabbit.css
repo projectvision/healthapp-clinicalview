@@ -1,6 +1,50 @@
 /* LAYOUT */
 /* BACKGROUNDS */
 /* DIVISIONS */
+/* BUTTONS */
+/* Nav Button */
+.nav-button, input[type="submit"] {
+  color: white !important;
+  background: #3DB549;
+  text-decoration: none;
+  font-size: 1.2em;
+  padding: 7px 10px;
+  display: inline-block;
+  border: none;
+  border-radius: 5px; }
+  .nav-button:hover, input[type="submit"]:hover {
+    background: #54cc60;
+    cursor: pointer; }
+
+/******************************************************************************
+ * GENERAL *
+ ******************************************************************************/
+input {
+  color: #333;
+  outline: none;
+  border: 1px solid #ccc;
+  border-radius: 3px; }
+
+/******************************************************************************
+ * BUTTONS *
+ ******************************************************************************/
+input[type="submit"] {
+  padding: 15px 20px !important;
+  background: #3DB549; }
+
+/******************************************************************************
+ * SECTIONS *
+ ******************************************************************************/
+/* Login */
+#login input {
+  width: 100%;
+  display: block;
+  padding: 10px;
+  font-size: 1em; }
+  #login input[type="text"],
+  #login input[type="password"] {
+    margin-bottom: 5px; }
+
 /******************************************************************************
  * Render Config *
  ******************************************************************************/
@@ -58,11 +102,11 @@ a.button {
  * SECTIONS *
  ******************************************************************************/
 /* Login */
-#loginbox {
+#login {
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
   max-width: 300px;
+  border-radius: 4px;
   margin: 10px auto; }
 
 /* Patients */
