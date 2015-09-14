@@ -57,6 +57,34 @@ a.button
   &:hover
     background: darken(#DEEEFC, 5%)
 
+/* Tabs */
+
+.tabs
+  overflow: auto
+  background: linear-gradient(#ddd, #ccc)
+  border-bottom: $border
+  margin: -$padding
+  margin-bottom: $padding
+  a
+    padding: 0
+    width: 50%
+    float: left
+    text-align: center
+    color: $text_color
+    text-decoration: none
+    display: inline-block
+    height: $radiotabs_height
+    line-height: $radiotabs_height
+    text-shadow: 1px 1px 1px white
+    background: linear-gradient(#e8e8e8, #dfdfdf)
+    &:hover
+      cursor: pointer
+      background: $action_button_bg_hover
+    &.active
+      font-weight: bold
+      background: $action_button_bg
+
+
 /******************************************************************************
  * SECTIONS *
  ******************************************************************************/
@@ -66,6 +94,7 @@ a.button
 #session
   padding: 10px
   border: $border
+  overflow: hidden
   max-width: $sidebar_width
   border-radius: 4px
   margin: 10px auto

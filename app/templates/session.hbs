@@ -1,7 +1,9 @@
 <div id="session">
   <div class="tabs">
-    {{#link-to 'session.login' id="login" class="tab button"}}Login{{/link-to}}
-    {{#link-to 'session.signup' id="signup" class="tab button"}}Signup{{/link-to}}
+    {{#link-to 'session.login' id="login"}}Login{{/link-to}}
+    {{#link-to 'session.signup' id="signup"}}Signup{{/link-to}}
   </div>
   {{outlet}}
 </div>
+
+{{#link-to 'patients'}}Skip for now{{/link-to}}

@@ -1,7 +1,20 @@
-/* LAYOUT */
-/* BACKGROUNDS */
-/* DIVISIONS */
-/* BUTTONS */
+/******************************************************************************
+ * TEXT
+ *****************************************************************************/
+/* Colors */
+/******************************************************************************
+ * LAYOUT
+ *****************************************************************************/
+/* Spacing */
+/* Widths */
+/* Heights */
+/* Borders */
+/******************************************************************************
+ * BACKGROUNDS
+ *****************************************************************************/
+/******************************************************************************
+ * BUTTONS
+ *****************************************************************************/
 /* Nav Button */
 .nav-button, input[type="submit"] {
   color: white !important;
@@ -16,6 +29,10 @@
     background: #54cc60;
     cursor: pointer; }
 
+/******************************************************************************
+ * MENUS
+ *****************************************************************************/
+/* Radio Tabs */
 /******************************************************************************
  * GENERAL *
  ******************************************************************************/
@@ -100,6 +117,32 @@ a.button {
   a.button:hover {
     background: #c7e2fa; }
 
+/* Tabs */
+.tabs {
+  overflow: auto;
+  background: linear-gradient(#ddd, #ccc);
+  border-bottom: 1px solid #ccc;
+  margin: -10px;
+  margin-bottom: 10px; }
+  .tabs a {
+    padding: 0;
+    width: 50%;
+    float: left;
+    text-align: center;
+    color: #333;
+    text-decoration: none;
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    text-shadow: 1px 1px 1px white;
+    background: linear-gradient(#e8e8e8, #dfdfdf); }
+    .tabs a:hover {
+      cursor: pointer;
+      background: linear-gradient(#E5E5E5, #FFF); }
+    .tabs a.active {
+      font-weight: bold;
+      background: linear-gradient(#FFF, #E5E5E5); }
+
 /******************************************************************************
  * SECTIONS *
  ******************************************************************************/
@@ -107,6 +150,7 @@ a.button {
 #session {
   padding: 10px;
   border: 1px solid #ccc;
+  overflow: hidden;
   max-width: 300px;
   border-radius: 4px;
   margin: 10px auto; }

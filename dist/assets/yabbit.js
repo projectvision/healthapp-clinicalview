@@ -432,40 +432,6 @@ define('yabbit/templates/index', ['exports'], function (exports) {
   'use strict';
 
   exports['default'] = Ember.HTMLBars.template((function() {
-    var child0 = (function() {
-      return {
-        meta: {
-          "revision": "Ember@1.13.7",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 3,
-              "column": 0
-            },
-            "end": {
-              "line": 3,
-              "column": 35
-            }
-          },
-          "moduleName": "yabbit/templates/index.hbs"
-        },
-        arity: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("Skip for now");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes() { return []; },
-        statements: [
-
-        ],
-        locals: [],
-        templates: []
-      };
-    }());
     return {
       meta: {
         "revision": "Ember@1.13.7",
@@ -476,7 +442,7 @@ define('yabbit/templates/index', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 4,
+            "line": 2,
             "column": 0
           }
         },
@@ -489,27 +455,21 @@ define('yabbit/templates/index', ['exports'], function (exports) {
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createComment("");
         dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n\n");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createComment("");
-        dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(2);
+        var morphs = new Array(1);
         morphs[0] = dom.createMorphAt(fragment,0,0,contextualElement);
-        morphs[1] = dom.createMorphAt(fragment,2,2,contextualElement);
         dom.insertBoundary(fragment, 0);
         return morphs;
       },
       statements: [
-        ["content","outlet",["loc",[null,[1,0],[1,10]]]],
-        ["block","link-to",["patients"],[],0,null,["loc",[null,[3,0],[3,47]]]]
+        ["content","outlet",["loc",[null,[1,0],[1,10]]]]
       ],
       locals: [],
-      templates: [child0]
+      templates: []
     };
   }()));
 
@@ -1161,7 +1121,7 @@ define('yabbit/templates/session', ['exports'], function (exports) {
             },
             "end": {
               "line": 3,
-              "column": 67
+              "column": 48
             }
           },
           "moduleName": "yabbit/templates/session.hbs"
@@ -1195,7 +1155,7 @@ define('yabbit/templates/session', ['exports'], function (exports) {
             },
             "end": {
               "line": 4,
-              "column": 70
+              "column": 51
             }
           },
           "moduleName": "yabbit/templates/session.hbs"
@@ -1217,6 +1177,40 @@ define('yabbit/templates/session', ['exports'], function (exports) {
         templates: []
       };
     }());
+    var child2 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.7",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 9,
+              "column": 0
+            },
+            "end": {
+              "line": 9,
+              "column": 35
+            }
+          },
+          "moduleName": "yabbit/templates/session.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Skip for now");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
     return {
       meta: {
         "revision": "Ember@1.13.7",
@@ -1227,7 +1221,7 @@ define('yabbit/templates/session', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 8,
+            "line": 10,
             "column": 0
           }
         },
@@ -1262,6 +1256,10 @@ define('yabbit/templates/session', ['exports'], function (exports) {
         var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         return el0;
@@ -1269,19 +1267,21 @@ define('yabbit/templates/session', ['exports'], function (exports) {
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var element0 = dom.childAt(fragment, [0]);
         var element1 = dom.childAt(element0, [1]);
-        var morphs = new Array(3);
+        var morphs = new Array(4);
         morphs[0] = dom.createMorphAt(element1,1,1);
         morphs[1] = dom.createMorphAt(element1,3,3);
         morphs[2] = dom.createMorphAt(element0,3,3);
+        morphs[3] = dom.createMorphAt(fragment,2,2,contextualElement);
         return morphs;
       },
       statements: [
-        ["block","link-to",["session.login"],["id","login","class","tab button"],0,null,["loc",[null,[3,4],[3,79]]]],
-        ["block","link-to",["session.signup"],["id","signup","class","tab button"],1,null,["loc",[null,[4,4],[4,82]]]],
-        ["content","outlet",["loc",[null,[6,2],[6,12]]]]
+        ["block","link-to",["session.login"],["id","login"],0,null,["loc",[null,[3,4],[3,60]]]],
+        ["block","link-to",["session.signup"],["id","signup"],1,null,["loc",[null,[4,4],[4,63]]]],
+        ["content","outlet",["loc",[null,[6,2],[6,12]]]],
+        ["block","link-to",["patients"],[],2,null,["loc",[null,[9,0],[9,47]]]]
       ],
       locals: [],
-      templates: [child0, child1]
+      templates: [child0, child1, child2]
     };
   }()));
 
