@@ -44,6 +44,8 @@ input[type="submit"] {
   #login input[type="text"],
   #login input[type="password"] {
     margin-bottom: 5px; }
+  #login input[type="submit"] {
+    margin-top: 10px; }
 
 /******************************************************************************
  * Render Config *
