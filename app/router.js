@@ -6,6 +6,12 @@ var Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+
+  this.route('session', function() {
+    this.route('login');
+    this.route('signup');
+  });
+
   this.route('patients', function() {
     this.route('index', function() {
       this.route('show', { path: ':id' });

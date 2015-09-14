@@ -36,15 +36,15 @@ input[type="submit"] {
  * SECTIONS *
  ******************************************************************************/
 /* Login */
-#login input {
+#session input {
   width: 100%;
   display: block;
   padding: 10px;
   font-size: 1em; }
-  #login input[type="text"],
-  #login input[type="password"] {
+  #session input[type="text"],
+  #session input[type="password"] {
     margin-bottom: 5px; }
-  #login input[type="submit"] {
+  #session input[type="submit"] {
     margin-top: 10px; }
 
 /******************************************************************************
@@ -103,8 +103,8 @@ a.button {
 /******************************************************************************
  * SECTIONS *
  ******************************************************************************/
-/* Login */
-#login {
+/* Session */
+#session {
   padding: 10px;
   border: 1px solid #ccc;
   max-width: 300px;

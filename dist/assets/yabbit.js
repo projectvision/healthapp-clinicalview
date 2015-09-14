@@ -3,15 +3,6 @@
 
 /* jshint ignore:end */
 
-define('yabbit/acceptance-tests/main', ['exports', 'ember-cli-sri/acceptance-tests/main'], function (exports, main) {
-
-	'use strict';
-
-
-
-	exports['default'] = main['default'];
-
-});
 define('yabbit/adapters/application', ['exports', 'ember-parse-adapter/adapters/application'], function (exports, adapter) {
 
 	'use strict';
@@ -116,7 +107,8 @@ define('yabbit/initializers/export-application-global', ['exports', 'ember', 'ya
 
   exports.initialize = initialize;
 
-  function initialize(container, application) {
+  function initialize() {
+    var application = arguments[1] || arguments[0];
     if (config['default'].exportApplicationGlobal !== false) {
       var value = config['default'].exportApplicationGlobal;
       var globalName;
@@ -178,6 +170,12 @@ define('yabbit/router', ['exports', 'ember', 'yabbit/config/environment'], funct
   });
 
   Router.map(function () {
+
+    this.route('session', function () {
+      this.route('login');
+      this.route('signup');
+    });
+
     this.route('patients', function () {
       this.route('index', function () {
         this.route('show', { path: ':id' });
@@ -193,9 +191,8 @@ define('yabbit/routes/index', ['exports', 'ember'], function (exports, Ember) {
   'use strict';
 
   exports['default'] = Ember['default'].Route.extend({
-    setupController: function setupController(controller) {
-      // Set the IndexController's `title`
-      controller.set('title', 'Login');
+    beforeModel: function beforeModel() {
+      this.transitionTo('session.login');
     }
   });
 
@@ -211,10 +208,10 @@ define('yabbit/routes/patients/index', ['exports', 'ember'], function (exports, 
       });
     },
     actions: {
-      didTransition: function didTransition() {
-        console.log('routeName: ' + this.routeName);
-        return true; // Bubble the didTransition event
-      }
+      //didTransition: function() {
+      //  console.log('routeName: ' + this.routeName);
+      //  return true; // Bubble the didTransition event
+      //}
     },
     model: function model(params) {
       //return this.modelFor('patient').findBy('id', params.patient_id);
@@ -290,6 +287,28 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
     model: function model(params) {
       return this.modelFor('patients.index').findBy('patientId', parseInt(params.id));
     }
+  });
+
+});
+define('yabbit/routes/session/login', ['exports', 'ember'], function (exports, Ember) {
+
+  'use strict';
+
+  exports['default'] = Ember['default'].Route.extend({
+    //setupController(controller) {
+    //  controller.set('title', 'Login');
+    //}
+  });
+
+});
+define('yabbit/routes/session/signup', ['exports', 'ember'], function (exports, Ember) {
+
+  'use strict';
+
+  exports['default'] = Ember['default'].Route.extend({
+    //setupController(controller) {
+    //  controller.set('title', 'Signup');
+    //}
   });
 
 });
@@ -420,11 +439,11 @@ define('yabbit/templates/index', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 7,
+              "line": 3,
               "column": 0
             },
             "end": {
-              "line": 7,
+              "line": 3,
               "column": 35
             }
           },
@@ -457,7 +476,7 @@ define('yabbit/templates/index', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 8,
+            "line": 4,
             "column": 0
           }
         },
@@ -468,30 +487,7 @@ define('yabbit/templates/index', ['exports'], function (exports) {
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("div");
-        dom.setAttribute(el1,"id","login");
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("input");
-        dom.setAttribute(el2,"id","email");
-        dom.setAttribute(el2,"type","text");
-        dom.setAttribute(el2,"placeholder","Email");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("input");
-        dom.setAttribute(el2,"id","password");
-        dom.setAttribute(el2,"type","password");
-        dom.setAttribute(el2,"placeholder","Password");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("input");
-        dom.setAttribute(el2,"type","submit");
-        dom.setAttribute(el2,"value","Login");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n");
-        dom.appendChild(el1, el2);
+        var el1 = dom.createComment("");
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n\n");
         dom.appendChild(el0, el1);
@@ -502,12 +498,15 @@ define('yabbit/templates/index', ['exports'], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(1);
-        morphs[0] = dom.createMorphAt(fragment,2,2,contextualElement);
+        var morphs = new Array(2);
+        morphs[0] = dom.createMorphAt(fragment,0,0,contextualElement);
+        morphs[1] = dom.createMorphAt(fragment,2,2,contextualElement);
+        dom.insertBoundary(fragment, 0);
         return morphs;
       },
       statements: [
-        ["block","link-to",["patients"],[],0,null,["loc",[null,[7,0],[7,47]]]]
+        ["content","outlet",["loc",[null,[1,0],[1,10]]]],
+        ["block","link-to",["patients"],[],0,null,["loc",[null,[3,0],[3,47]]]]
       ],
       locals: [],
       templates: [child0]
@@ -1145,13 +1144,278 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
   }()));
 
 });
+define('yabbit/templates/session', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    var child0 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.7",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 3,
+              "column": 4
+            },
+            "end": {
+              "line": 3,
+              "column": 67
+            }
+          },
+          "moduleName": "yabbit/templates/session.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Login");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
+    var child1 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.7",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 4,
+              "column": 4
+            },
+            "end": {
+              "line": 4,
+              "column": 70
+            }
+          },
+          "moduleName": "yabbit/templates/session.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Signup");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
+    return {
+      meta: {
+        "revision": "Ember@1.13.7",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 8,
+            "column": 0
+          }
+        },
+        "moduleName": "yabbit/templates/session.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"id","session");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","tabs");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0]);
+        var element1 = dom.childAt(element0, [1]);
+        var morphs = new Array(3);
+        morphs[0] = dom.createMorphAt(element1,1,1);
+        morphs[1] = dom.createMorphAt(element1,3,3);
+        morphs[2] = dom.createMorphAt(element0,3,3);
+        return morphs;
+      },
+      statements: [
+        ["block","link-to",["session.login"],["id","login","class","tab button"],0,null,["loc",[null,[3,4],[3,79]]]],
+        ["block","link-to",["session.signup"],["id","signup","class","tab button"],1,null,["loc",[null,[4,4],[4,82]]]],
+        ["content","outlet",["loc",[null,[6,2],[6,12]]]]
+      ],
+      locals: [],
+      templates: [child0, child1]
+    };
+  }()));
+
+});
+define('yabbit/templates/session/login', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    return {
+      meta: {
+        "revision": "Ember@1.13.7",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 0
+          }
+        },
+        "moduleName": "yabbit/templates/session/login.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("input");
+        dom.setAttribute(el1,"id","email");
+        dom.setAttribute(el1,"type","text");
+        dom.setAttribute(el1,"placeholder","Email");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("input");
+        dom.setAttribute(el1,"id","password");
+        dom.setAttribute(el1,"type","password");
+        dom.setAttribute(el1,"placeholder","Password");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("input");
+        dom.setAttribute(el1,"type","submit");
+        dom.setAttribute(el1,"value","Login");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes() { return []; },
+      statements: [
+
+      ],
+      locals: [],
+      templates: []
+    };
+  }()));
+
+});
+define('yabbit/templates/session/signup', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    return {
+      meta: {
+        "revision": "Ember@1.13.7",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 0
+          }
+        },
+        "moduleName": "yabbit/templates/session/signup.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("input");
+        dom.setAttribute(el1,"id","email");
+        dom.setAttribute(el1,"type","text");
+        dom.setAttribute(el1,"placeholder","Email");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("input");
+        dom.setAttribute(el1,"id","password");
+        dom.setAttribute(el1,"type","password");
+        dom.setAttribute(el1,"placeholder","Password");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("input");
+        dom.setAttribute(el1,"id","password2");
+        dom.setAttribute(el1,"type","password");
+        dom.setAttribute(el1,"placeholder","Confirm Password");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("input");
+        dom.setAttribute(el1,"type","submit");
+        dom.setAttribute(el1,"value","Signup");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes() { return []; },
+      statements: [
+
+      ],
+      locals: [],
+      templates: []
+    };
+  }()));
+
+});
 define('yabbit/tests/app.jshint', function () {
 
   'use strict';
 
-  module('JSHint - .');
-  test('app.js should pass jshint', function() { 
-    ok(true, 'app.js should pass jshint.'); 
+  QUnit.module('JSHint - .');
+  QUnit.test('app.js should pass jshint', function(assert) { 
+    assert.ok(true, 'app.js should pass jshint.'); 
   });
 
 });
@@ -1159,9 +1423,9 @@ define('yabbit/tests/controllers/patients/index.jshint', function () {
 
   'use strict';
 
-  module('JSHint - controllers/patients');
-  test('controllers/patients/index.js should pass jshint', function() { 
-    ok(true, 'controllers/patients/index.js should pass jshint.'); 
+  QUnit.module('JSHint - controllers/patients');
+  QUnit.test('controllers/patients/index.js should pass jshint', function(assert) { 
+    assert.ok(true, 'controllers/patients/index.js should pass jshint.'); 
   });
 
 });
@@ -1169,9 +1433,9 @@ define('yabbit/tests/controllers/patients/index/show.jshint', function () {
 
   'use strict';
 
-  module('JSHint - controllers/patients/index');
-  test('controllers/patients/index/show.js should pass jshint', function() { 
-    ok(true, 'controllers/patients/index/show.js should pass jshint.'); 
+  QUnit.module('JSHint - controllers/patients/index');
+  QUnit.test('controllers/patients/index/show.js should pass jshint', function(assert) { 
+    assert.ok(true, 'controllers/patients/index/show.js should pass jshint.'); 
   });
 
 });
@@ -1193,9 +1457,9 @@ define('yabbit/tests/helpers/resolver.jshint', function () {
 
   'use strict';
 
-  module('JSHint - helpers');
-  test('helpers/resolver.js should pass jshint', function() { 
-    ok(true, 'helpers/resolver.js should pass jshint.'); 
+  QUnit.module('JSHint - helpers');
+  QUnit.test('helpers/resolver.js should pass jshint', function(assert) { 
+    assert.ok(true, 'helpers/resolver.js should pass jshint.'); 
   });
 
 });
@@ -1226,9 +1490,9 @@ define('yabbit/tests/helpers/start-app.jshint', function () {
 
   'use strict';
 
-  module('JSHint - helpers');
-  test('helpers/start-app.js should pass jshint', function() { 
-    ok(true, 'helpers/start-app.js should pass jshint.'); 
+  QUnit.module('JSHint - helpers');
+  QUnit.test('helpers/start-app.js should pass jshint', function(assert) { 
+    assert.ok(true, 'helpers/start-app.js should pass jshint.'); 
   });
 
 });
@@ -1236,9 +1500,9 @@ define('yabbit/tests/models/patient.jshint', function () {
 
   'use strict';
 
-  module('JSHint - models');
-  test('models/patient.js should pass jshint', function() { 
-    ok(true, 'models/patient.js should pass jshint.'); 
+  QUnit.module('JSHint - models');
+  QUnit.test('models/patient.js should pass jshint', function(assert) { 
+    assert.ok(true, 'models/patient.js should pass jshint.'); 
   });
 
 });
@@ -1246,9 +1510,9 @@ define('yabbit/tests/router.jshint', function () {
 
   'use strict';
 
-  module('JSHint - .');
-  test('router.js should pass jshint', function() { 
-    ok(true, 'router.js should pass jshint.'); 
+  QUnit.module('JSHint - .');
+  QUnit.test('router.js should pass jshint', function(assert) { 
+    assert.ok(true, 'router.js should pass jshint.'); 
   });
 
 });
@@ -1256,9 +1520,9 @@ define('yabbit/tests/routes/index.jshint', function () {
 
   'use strict';
 
-  module('JSHint - routes');
-  test('routes/index.js should pass jshint', function() { 
-    ok(true, 'routes/index.js should pass jshint.'); 
+  QUnit.module('JSHint - routes');
+  QUnit.test('routes/index.js should pass jshint', function(assert) { 
+    assert.ok(true, 'routes/index.js should pass jshint.'); 
   });
 
 });
@@ -1266,9 +1530,9 @@ define('yabbit/tests/routes/patients/index.jshint', function () {
 
   'use strict';
 
-  module('JSHint - routes/patients');
-  test('routes/patients/index.js should pass jshint', function() { 
-    ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 15, col 19, \'params\' is defined but never used.\n\n1 error'); 
+  QUnit.module('JSHint - routes/patients');
+  QUnit.test('routes/patients/index.js should pass jshint', function(assert) { 
+    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 15, col 19, \'params\' is defined but never used.\n\n1 error'); 
   });
 
 });
@@ -1276,9 +1540,29 @@ define('yabbit/tests/routes/patients/index/show.jshint', function () {
 
   'use strict';
 
-  module('JSHint - routes/patients/index');
-  test('routes/patients/index/show.js should pass jshint', function() { 
-    ok(true, 'routes/patients/index/show.js should pass jshint.'); 
+  QUnit.module('JSHint - routes/patients/index');
+  QUnit.test('routes/patients/index/show.js should pass jshint', function(assert) { 
+    assert.ok(true, 'routes/patients/index/show.js should pass jshint.'); 
+  });
+
+});
+define('yabbit/tests/routes/session/login.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - routes/session');
+  QUnit.test('routes/session/login.js should pass jshint', function(assert) { 
+    assert.ok(true, 'routes/session/login.js should pass jshint.'); 
+  });
+
+});
+define('yabbit/tests/routes/session/signup.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - routes/session');
+  QUnit.test('routes/session/signup.js should pass jshint', function(assert) { 
+    assert.ok(true, 'routes/session/signup.js should pass jshint.'); 
   });
 
 });
@@ -1293,9 +1577,9 @@ define('yabbit/tests/test-helper.jshint', function () {
 
   'use strict';
 
-  module('JSHint - .');
-  test('test-helper.js should pass jshint', function() { 
-    ok(true, 'test-helper.js should pass jshint.'); 
+  QUnit.module('JSHint - .');
+  QUnit.test('test-helper.js should pass jshint', function(assert) { 
+    assert.ok(true, 'test-helper.js should pass jshint.'); 
   });
 
 });
@@ -1319,9 +1603,9 @@ define('yabbit/tests/unit/controllers/patients-test.jshint', function () {
 
   'use strict';
 
-  module('JSHint - unit/controllers');
-  test('unit/controllers/patients-test.js should pass jshint', function() { 
-    ok(true, 'unit/controllers/patients-test.js should pass jshint.'); 
+  QUnit.module('JSHint - unit/controllers');
+  QUnit.test('unit/controllers/patients-test.js should pass jshint', function(assert) { 
+    assert.ok(true, 'unit/controllers/patients-test.js should pass jshint.'); 
   });
 
 });
@@ -1345,9 +1629,9 @@ define('yabbit/tests/unit/models/patient-test.jshint', function () {
 
   'use strict';
 
-  module('JSHint - unit/models');
-  test('unit/models/patient-test.js should pass jshint', function() { 
-    ok(true, 'unit/models/patient-test.js should pass jshint.'); 
+  QUnit.module('JSHint - unit/models');
+  QUnit.test('unit/models/patient-test.js should pass jshint', function(assert) { 
+    assert.ok(true, 'unit/models/patient-test.js should pass jshint.'); 
   });
 
 });
@@ -1370,9 +1654,9 @@ define('yabbit/tests/unit/routes/index-test.jshint', function () {
 
   'use strict';
 
-  module('JSHint - unit/routes');
-  test('unit/routes/index-test.js should pass jshint', function() { 
-    ok(true, 'unit/routes/index-test.js should pass jshint.'); 
+  QUnit.module('JSHint - unit/routes');
+  QUnit.test('unit/routes/index-test.js should pass jshint', function(assert) { 
+    assert.ok(true, 'unit/routes/index-test.js should pass jshint.'); 
   });
 
 });
@@ -1395,9 +1679,9 @@ define('yabbit/tests/unit/routes/patient-test.jshint', function () {
 
   'use strict';
 
-  module('JSHint - unit/routes');
-  test('unit/routes/patient-test.js should pass jshint', function() { 
-    ok(true, 'unit/routes/patient-test.js should pass jshint.'); 
+  QUnit.module('JSHint - unit/routes');
+  QUnit.test('unit/routes/patient-test.js should pass jshint', function(assert) { 
+    assert.ok(true, 'unit/routes/patient-test.js should pass jshint.'); 
   });
 
 });
@@ -1450,7 +1734,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"vNmHb7Gvkgji498TMTEARjDB2oRJhgDZb04I3hNW","restApiId":"2I8w9D0u7GCp2dIhH7Vd1pRNaWG9yuhHn7LNXn1S","name":"yabbit","version":"0.0.0+af281d91"});
+  require("yabbit/app")["default"].create({"name":"yabbit","version":"0.0.0+fa7a9d3d"});
 }
 
 /* jshint ignore:end */
