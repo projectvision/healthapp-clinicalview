@@ -11,11 +11,15 @@ module.exports = function(environment) {
         // Here you can enable experimental features on an ember canary build
         // e.g. 'with-controller': true
       }
-    },
+    }
+  };
 
-    APP: {
-      applicationId: 'vNmHb7Gvkgji498TMTEARjDB2oRJhgDZb04I3hNW',
-      restApiId: '2I8w9D0u7GCp2dIhH7Vd1pRNaWG9yuhHn7LNXn1S'
+  ENV['ember-parse'] = {
+    PARSE_APPLICATION_ID: 'vNmHb7Gvkgji498TMTEARjDB2oRJhgDZb04I3hNW',
+    PARSE_JAVASCRIPT_KEY: '2I8w9D0u7GCp2dIhH7Vd1pRNaWG9yuhHn7LNXn1S',
+    session: {
+      authenticationRoute: 'index',
+      ifAlreadyAuthenticatedRoute: 'patients'
     }
   };
 
