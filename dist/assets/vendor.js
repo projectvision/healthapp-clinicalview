@@ -78627,7 +78627,7 @@ define('ember-cli-app-version/templates/app-version', ['exports'], function (exp
   exports['default'] = Ember.HTMLBars.template((function() {
     return {
       meta: {
-        "revision": "Ember@1.13.7",
+        "revision": "Ember@2.0.2",
         "loc": {
           "source": null,
           "start": {
@@ -78699,12 +78699,12 @@ define('ember-parse-adapter/adapters/application', ['exports', 'ember', 'ember-d
 
     defaultSerializer: '-parse',
 
-    init: function(){
+    init: function init() {
       this._super();
 
-      this.set( 'headers', {
-        'X-Parse-Application-Id' : Ember['default'].get( this, 'applicationId' ),
-        'X-Parse-REST-API-Key'   : Ember['default'].get( this, 'restApiId' )
+      this.set('headers', {
+        'X-Parse-Application-Id': Ember['default'].get(this, 'applicationId'),
+        'X-Parse-REST-API-Key': Ember['default'].get(this, 'restApiId')
       });
     },
 
@@ -78714,20 +78714,22 @@ define('ember-parse-adapter/adapters/application', ['exports', 'ember', 'ember-d
 
     classesPath: 'classes',
 
-    pathForType: function( type ) {
-      if ( 'parseUser' === type ) {
+    pathForType: function pathForType(type) {
+      if ('parseUser' === type || 'parse-user' === type) {
         return 'users';
-      } else if ( 'login' === type ) {
+      } else if ('login' === type) {
         return 'login';
+      } else if ('function' === type) {
+        return 'functions';
       } else {
-        return this.classesPath + '/' + this.parsePathForType( type );
+        return this.classesPath + '/' + this.parsePathForType(type);
       }
     },
 
     // Using TitleStyle is recommended by Parse
     // @TODO: test
-    parsePathForType: function( type ) {
-      return Ember['default'].String.capitalize( Ember['default'].String.camelize( type ) );
+    parsePathForType: function parsePathForType(type) {
+      return Ember['default'].String.capitalize(Ember['default'].String.camelize(type));
     },
 
     /**
@@ -78736,23 +78738,20 @@ define('ember-parse-adapter/adapters/application', ['exports', 'ember', 'ember-d
     * properties onto existing data so that the record maintains
     * latest data.
     */
-    createRecord: function( store, type, record ) {
-      var serializer = store.serializerFor( type.typeKey ),
-        data       = {},
-        adapter    = this;
+    createRecord: function createRecord(store, type, snapshot) {
+      var serializer = store.serializerFor(type.modelName),
+          data = {},
+          adapter = this;
 
-      serializer.serializeIntoHash( data, type, record, { includeId: true } );
+      serializer.serializeIntoHash(data, type, snapshot, { includeId: true });
 
-      return new Ember['default'].RSVP.Promise( function( resolve, reject ) {
-        adapter.ajax( adapter.buildURL( type.typeKey ), 'POST', { data: data } ).then(
-          function( json ) {
-            var completed = Ember['default'].merge( data, json );
-            resolve( completed );
-          },
-          function( reason ) {
-            reject( reason.responseJSON );
-            }
-        );
+      return new Ember['default'].RSVP.Promise(function (resolve, reject) {
+        adapter.ajax(adapter.buildURL(type.modelName), 'POST', { data: data }).then(function (json) {
+          var completed = Ember['default'].merge(data, json);
+          resolve(completed);
+        }, function (reason) {
+          reject(reason.responseJSON);
+        });
       });
     },
 
@@ -78762,82 +78761,83 @@ define('ember-parse-adapter/adapters/application', ['exports', 'ember', 'ember-d
     * properties onto existing data so that the record maintains
     * latest data.
     */
-    updateRecord: function(store, type, record) {
-      var serializer  = store.serializerFor( type.typeKey ),
-        id          = record.get( 'id' ),
-        sendDeletes = false,
-        deleteds    = {},
-        data        = {},
-        adapter     = this;
+    updateRecord: function updateRecord(store, type, snapshot) {
+      var serializer = store.serializerFor(type.modelName),
+          id = snapshot.id,
+          sendDeletes = false,
+          deleteds = {},
+          data = {},
+          adapter = this;
 
-      serializer.serializeIntoHash(data, type, record);
+      serializer.serializeIntoHash(data, type, snapshot, { includeId: true });
 
-      type.eachRelationship(function( key ) {
-        if ( data[key] && data[key].deleteds ) {
+      // password cannot be empty
+      if (!data.password && (type.modelName === 'parseUser' || type.modelName === 'parse-user')) {
+        delete data.password;
+      }
+
+      // username cannot be empty
+      if (!data.username && (type.modelName === 'parseUser' || type.modelName === 'parse-user')) {
+        delete data.username;
+      }
+
+      type.eachRelationship(function (key) {
+        if (data[key] && data[key].deleteds) {
           deleteds[key] = data[key].deleteds;
           delete data[key].deleteds;
           sendDeletes = true;
         }
       });
 
-      return new Ember['default'].RSVP.Promise( function( resolve, reject ) {
-        if ( sendDeletes ) {
-          adapter.ajax( adapter.buildURL( type.typeKey, id ), 'PUT', { data: deleteds } ).then(
-            function() {
-              adapter.ajax( adapter.buildURL( type.typeKey, id ), 'PUT', { data: data } ).then(
-                function( updates ) {
-                  // This is the essential bit - merge response data onto existing data.
-                  resolve( Ember['default'].merge( data, updates ) );
-                },
-                function( reason ) {
-                  reject( 'Failed to save parent in relation: ' + reason.response.JSON );
-                }
-              );
-            },
-            function( reason ) {
-              reject( reason.responseJSON );
-            }
-          );
-
-        } else {
-          adapter.ajax( adapter.buildURL( type.typeKey, id ), 'PUT', { data: data } ).then(
-            function( json ) {
+      return new Ember['default'].RSVP.Promise(function (resolve, reject) {
+        if (sendDeletes) {
+          adapter.ajax(adapter.buildURL(type.modelName, id), 'PUT', { data: deleteds }).then(function () {
+            adapter.ajax(adapter.buildURL(type.modelName, id), 'PUT', { data: data }).then(function (updates) {
               // This is the essential bit - merge response data onto existing data.
-              resolve( Ember['default'].merge( data, json ) );
-            },
-            function( reason ) {
-              reject( reason.responseJSON );
-            }
-          );
+              resolve(Ember['default'].merge(data, updates));
+            }, function (reason) {
+              reject('Failed to save parent in relation: ' + reason.response.JSON);
+            });
+          }, function (reason) {
+            reject(reason.responseJSON);
+          });
+        } else {
+          adapter.ajax(adapter.buildURL(type.modelName, id), 'PUT', { data: data }).then(function (json) {
+            // This is the essential bit - merge response data onto existing data.
+            resolve(Ember['default'].merge(data, json));
+          }, function (reason) {
+            reject(reason.responseJSON);
+          });
         }
       });
     },
 
-    parseClassName: function (key ) {
-      return Ember['default'].String.capitalize( key );
+    parseClassName: function parseClassName(key) {
+      return Ember['default'].String.capitalize(key);
     },
 
     /**
     * Implementation of a hasMany that provides a Relation query for Parse
     * objects.
     */
-    findHasMany: function( store, record, relatedInfo ) {
-      var query = {
-          where: {
-            '$relatedTo': {
-              'object': {
-                '__type'    : 'Pointer',
-                'className' : this.parseClassName( record.typeKey ),
-                'objectId'  : record.get( 'id' )
-              },
-              key: relatedInfo.key
-            }
+    findHasMany: function findHasMany(store, snapshot, url, relationship) {
+      var relatedInfo_ = JSON.parse(url),
+          query = {
+        where: {
+          '$relatedTo': {
+            'object': {
+              '__type': 'Pointer',
+              'className': this.parseClassName(snapshot.modelName),
+              'objectId': snapshot.id
+            },
+            key: relatedInfo_.key
           }
+        }
       };
 
       // the request is to the related type and not the type for the record.
       // the query is where there is a pointer to this record.
-      return this.ajax( this.buildURL( relatedInfo.type.typeKey ), 'GET', { data: query } );
+      return this.ajax(this.buildURL(relationship.type), "GET", { data: query });
     },
 
     /**
@@ -78855,20 +78855,21 @@ define('ember-parse-adapter/adapters/application', ['exports', 'ember', 'ember-d
     *       }
     *     });
     */
-    findQuery: function ( store, type, query ) {
-      if ( query.where && 'string' !== Ember['default'].typeOf( query.where ) ) {
-        query.where = JSON.stringify( query.where );
+    query: function query(store, type, _query) {
+      if (_query.where && 'string' !== Ember['default'].typeOf(_query.where)) {
+        _query.where = JSON.stringify(_query.where);
       }
 
       // Pass to _super()
-      return this._super( store, type, query );
+      return this._super(store, type, _query);
     },
 
-    sessionToken: Ember['default'].computed( 'headers.X-Parse-Session-Token', function( key, value ) {
-      if ( arguments.length < 2 ) {
-        return this.get( 'headers.X-Parse-Session-Token' );
-      } else {
-        this.set( 'headers.X-Parse-Session-Token', value );
+    sessionToken: Ember['default'].computed('headers.X-Parse-Session-Token', {
+      get: function get() {
+        return this.get('headers.X-Parse-Session-Token');
+      },
+      set: function set(key, value) {
+        this.set('headers.X-Parse-Session-Token', value);
         return value;
       }
     })
@@ -78893,18 +78894,18 @@ define('ember-parse-adapter/initializers/initialize', ['exports', 'ember-parse-a
 
   'use strict';
 
-  exports['default'] = function( container, app ) {
+  exports['default'] = function (container, app) {
     Adapter['default'].reopen({
-      applicationId : app.get( 'applicationId' ),
-      restApiId     : app.get( 'restApiId' )
+      applicationId: app.get('applicationId'),
+      restApiId: app.get('restApiId')
     });
 
-    container.register( 'adapter:-parse', Adapter['default'] );
-    container.register( 'serializer:-parse', Serializer['default'] );
-    container.register( 'transform:parse-date', DateTransform['default'] );
-    container.register( 'transform:parse-file', FileTransform['default'] );
-    container.register( 'transform:parse-geo-point', GeopointTransform['default'] );
-    container.register( 'model:parse-user', ParseUser['default'] );
+    container.register('adapter:-parse', Adapter['default']);
+    container.register('serializer:-parse', Serializer['default']);
+    container.register('transform:parse-date', DateTransform['default']);
+    container.register('transform:parse-file', FileTransform['default']);
+    container.register('transform:parse-geo-point', GeopointTransform['default']);
+    container.register('model:parse-user', ParseUser['default']);
   }
 
 });
@@ -78913,69 +78914,59 @@ define('ember-parse-adapter/models/parse-user', ['exports', 'ember', 'ember-data
   'use strict';
 
   var ParseUser = DS['default'].Model.extend({
-    username      : DS['default'].attr( 'string' ),
-    password      : DS['default'].attr( 'string' ),
-    email         : DS['default'].attr( 'string' ),
-    emailVerified : DS['default'].attr( 'boolean' ),
-    sessionToken  : DS['default'].attr( 'string' ),
-    createdAt     : DS['default'].attr( 'date' ),
-    updatedAt     : DS['default'].attr( 'date' )
+    username: DS['default'].attr('string'),
+    password: DS['default'].attr('string'),
+    email: DS['default'].attr('string'),
+    emailVerified: DS['default'].attr('boolean'),
+    sessionToken: DS['default'].attr('string'),
+    createdAt: DS['default'].attr('date'),
+    updatedAt: DS['default'].attr('date')
   });
 
   ParseUser.reopenClass({
-    requestPasswordReset: function( email ) {
-      var adapter = this.get( 'store' ).adapterFor( this ),
-          data    = { email: email };
+    requestPasswordReset: function requestPasswordReset(email) {
+      var adapter = this.get('store').adapterFor('parse-user'),
+          data = { email: email };
 
-      return adapter.ajax( adapter.buildURL( 'requestPasswordReset' ), 'POST', { data:data } )['catch'] (
-        function( response ) {
-          return Ember['default'].RSVP.reject( response.responseJSON );
-        }
-      );
+      return adapter.ajax(adapter.buildURL('requestPasswordReset'), 'POST', { data: data })['catch'](function (response) {
+        return Ember['default'].RSVP.reject(response.responseJSON);
+      });
     },
 
-    login: function( store, data ) {
-      var model      = this,
-          adapter    = store.adapterFor( model ),
-          serializer = store.serializerFor( model );
+    login: function login(store, data) {
+      var model = this,
+          adapter = store.adapterFor('parse-user'),
+          serializer = store.serializerFor('parse-user');
 
-      if ( Ember['default'].isEmpty( this.typeKey ) ) {
-        throw new Error( 'Parse login must be called on a model fetched via store.modelFor' );
+      if (Ember['default'].isEmpty(this.modelName)) {
+        throw new Error('Parse login must be called on a model fetched via store.modelFor');
       }
 
-      return adapter.ajax( adapter.buildURL( 'login' ), 'GET', { data: data } ).then(
-        function( response ) {
-          serializer.normalize( model, response );
-          var record = store.push( model, response );
-          return record;
-        },
-        function( response ) {
-          return Ember['default'].RSVP.reject( response.responseJSON );
-        }
-      );
+      return adapter.ajax(adapter.buildURL('login'), 'GET', { data: data }).then(function (response) {
+        var serialized = serializer.normalize(model, response),
+            record = store.push(serialized);
+        return record;
+      }, function (response) {
+        return Ember['default'].RSVP.reject(response.responseJSON);
+      });
     },
 
-    signup: function( store, data ) {
-      var model      = this,
-          adapter    = store.adapterFor(model),
-          serializer = store.serializerFor(model);
+    signup: function signup(store, data) {
+      var model = this,
+          adapter = store.adapterFor('parse-user'),
+          serializer = store.serializerFor('parse-user');
 
-      if ( Ember['default'].isEmpty( this.typeKey ) ) {
-        throw new Error( 'Parse signup must be called on a model fetched via store.modelFor' );
+      if (Ember['default'].isEmpty(this.modelName)) {
+        throw new Error('Parse signup must be called on a model fetched via store.modelFor');
       }
 
-      return adapter.ajax( adapter.buildURL( model.typeKey ), 'POST', { data: data } ).then(
-        function( response ) {
-          serializer.normalize( model, response );
-          response.email = response.email || data.email;
-          response.username = response.username || data.username;
-          var record = store.push( model, response );
-          return record;
-        },
-        function( response ) {
-          return Ember['default'].RSVP.reject( response.responseJSON );
-        }
-      );
+      return adapter.ajax(adapter.buildURL(model.modelName), 'POST', { data: data }).then(function (response) {
+        var serialized = serializer.normalize(model, response),
+            record = store.push(serialized);
+        return record;
+      }, function (response) {
+        return Ember['default'].RSVP.reject(response.responseJSON);
+      });
     }
   });
 
@@ -78988,697 +78979,26 @@ define('ember-parse-adapter/serializers/application', ['exports', 'ember', 'embe
 
   exports['default'] = DS['default'].RESTSerializer.extend({
 
-    primaryKey: 'objectId',
-
-    extractArray: function( store, primaryType, payload ) {
-      var namespacedPayload = {};
-      namespacedPayload[ Ember['default'].String.pluralize( primaryType.typeKey ) ] = payload.results;
-
-      return this._super( store, primaryType, namespacedPayload );
-    },
-
-    extractSingle: function( store, primaryType, payload, recordId ) {
-      var namespacedPayload = {};
-      namespacedPayload[ primaryType.typeKey ] = payload; // this.normalize(primaryType, payload);
-
-      return this._super( store, primaryType, namespacedPayload, recordId );
-    },
-
-    typeForRoot: function( key ) {
-      return Ember['default'].String.dasherize( Ember['default'].String.singularize( key ) );
-    },
-
-    /**
-    * Because Parse only returns the updatedAt/createdAt values on updates
-    * we have to intercept it here to assure that the adapter knows which
-    * record ID we are dealing with (using the primaryKey).
-    */
-    extract: function( store, type, payload, id, requestType ) {
-      if( id !== null && ( 'updateRecord' === requestType || 'deleteRecord' === requestType ) ) {
-        payload[ this.get( 'primaryKey' ) ] = id;
-      }
-
-      return this._super( store, type, payload, id, requestType );
-    },
-
-    /**
-    * Extracts count from the payload so that you can get the total number
-    * of records in Parse if you're using skip and limit.
-    */
-    extractMeta: function( store, type, payload ) {
-      if ( payload && payload.count ) {
-        store.metaForType( type, { count: payload.count } );
-        delete payload.count;
-      }
-    },
-
-    /**
-    * Special handling for the Date objects inside the properties of
-    * Parse responses.
-    */
-    normalizeAttributes: function( type, hash ) {
-      type.eachAttribute( function( key, meta ) {
-        if ( 'date' === meta.type && 'object' === Ember['default'].typeOf( hash[key] ) && hash[key].iso ) {
-          hash[key] = hash[key].iso; //new Date(hash[key].iso).toISOString();
-        }
-      });
-
-      this._super( type, hash );
-    },
-
-    /**
-    * Special handling of the Parse relation types. In certain
-    * conditions there is a secondary query to retrieve the "many"
-    * side of the "hasMany".
-    */
-    normalizeRelationships: function( type, hash ) {
-      var store      = this.get('store'),
-        serializer = this;
-
-      type.eachRelationship( function( key, relationship ) {
-
-        var options = relationship.options;
-
-        // Handle the belongsTo relationships
-        if ( hash[key] && 'belongsTo' === relationship.kind ) {
-          hash[key] = hash[key].objectId;
-        }
-
-        // Handle the hasMany relationships
-        if ( hash[key] && 'hasMany' === relationship.kind ) {
-
-          // If this is a Relation hasMany then we need to supply
-          // the links property so the adapter can async call the
-          // relationship.
-          // The adapter findHasMany has been overridden to make use of this.
-          if ( options.relation ) {
-            hash.links = {};
-            hash.links[key] = { type: relationship.type, key: key };
-          }
-
-          if ( options.array ) {
-            // Parse will return [null] for empty relationships
-            if ( hash[key].length && hash[key] ) {
-              hash[key].forEach( function( item, index, items ) {
-                // When items are pointers we just need the id
-                // This occurs when request was made without the include query param.
-                if ( 'Pointer' === item.__type ) {
-                  items[index] = item.objectId;
-
-                } else {
-                  // When items are objects we need to clean them and add them to the store.
-                  // This occurs when request was made with the include query param.
-                  delete item.__type;
-                  delete item.className;
-                  item.id = item.objectId;
-                  delete item.objectId;
-                  item.type = relationship.type;
-                  serializer.normalizeAttributes( relationship.type, item );
-                  serializer.normalizeRelationships( relationship.type, item );
-                  store.push( relationship.type, item );
-                }
-              });
-            }
-          }
-        }
-      }, this );
-
-      this._super( type, hash );
-    },
-
-    serializeIntoHash: function( hash, type, record, options ) {
-      Ember['default'].merge( hash, this.serialize( record, options ) );
-    },
-
-    serializeAttribute: function( record, json, key, attribute ) {
-      // These are Parse reserved properties and we won't send them.
-      if ( 'createdAt' === key ||
-           'updatedAt' === key ||
-           'emailVerified' === key ||
-           'sessionToken' === key
-      ) {
-        delete json[key];
-
-      } else {
-        this._super( record, json, key, attribute );
-      }
-    },
-
-    serializeBelongsTo: function( record, json, relationship ) {
-      var key       = relationship.key,
-        belongsTo = record.get( key );
-
-      if ( belongsTo ) {
-        // @TODO: Perhaps this is working around a bug in Ember-Data? Why should
-        // promises be returned here.
-        if ( belongsTo instanceof DS['default'].PromiseObject ) {
-          if ( !belongsTo.get('isFulfilled' ) ) {
-            throw new Error( 'belongsTo values *must* be fulfilled before attempting to serialize them' );
-          }
-
-          belongsTo = belongsTo.get( 'content' );
-        }
-
-        json[key] = {
-          '__type'    : 'Pointer',
-          'className' : this.parseClassName( belongsTo.constructor.typeKey ),
-          'objectId'  : belongsTo.get( 'id' )
-        };
-      }
-    },
-
-    parseClassName: function( key ) {
-      if ( 'parseUser' === key) {
-        return '_User';
-
-      } else {
-        return Ember['default'].String.capitalize( Ember['default'].String.camelize( key ) );
-      }
-    },
-
-    serializeHasMany: function( record, json, relationship ) {
-      var key     = relationship.key,
-        hasMany = record.get( key ),
-        options = relationship.options;
-
-      if ( hasMany && hasMany.get( 'length' ) > 0 ) {
-        json[key] = { 'objects': [] };
-
-        if ( options.relation ) {
-          json[key].__op = 'AddRelation';
-        }
-
-        if ( options.array ) {
-          json[key].__op = 'AddUnique';
-        }
-
-        hasMany.forEach( function( child ) {
-          json[key].objects.push({
-            '__type'    : 'Pointer',
-            'className' : child.parseClassName(),
-            'objectId'  : child.get( 'id' )
-          });
-        });
-
-        if ( hasMany._deletedItems && hasMany._deletedItems.length ) {
-          if ( options.relation ) {
-            var addOperation    = json[key],
-              deleteOperation = { '__op': 'RemoveRelation', 'objects': [] };
-
-            hasMany._deletedItems.forEach( function( item ) {
-              deleteOperation.objects.push({
-                '__type'    : 'Pointer',
-                'className' : item.type,
-                'objectId'  : item.id
-              });
-            });
-
-            json[key] = { '__op': 'Batch', 'ops': [addOperation, deleteOperation] };
-          }
-
-          if ( options.array ) {
-            json[key].deleteds = { '__op': 'Remove', 'objects': [] };
-
-            hasMany._deletedItems.forEach( function( item ) {
-              json[key].deleteds.objects.push({
-                '__type'    : 'Pointer',
-                'className' : item.type,
-                'objectId'  : item.id
-              });
-            });
-          }
-        }
-
-      } else {
-        json[key] = [];
-      }
-    }
-
-  });
-
-});
-define('ember-parse-adapter/transforms/date', ['exports', 'ember-data'], function (exports, DS) {
-
-  'use strict';
-
-  exports['default'] = DS['default'].Transform.extend({
-
-    deserialize: function( serialized ) {
-      if ( !serialized ) {
-        return null;
-      }
-
-      return new Date( serialized );
-    },
-
-    serialize: function( deserialized ) {
-      if ( !deserialized ) {
-        return null;
-      }
-
-      return {
-        __type : 'Date',
-        iso    : deserialized.toISOString()
-      };
-    }
-
-  });
-
-});
-define('ember-parse-adapter/transforms/file', ['exports', 'ember-data', 'ember-parse-adapter/transforms/file'], function (exports, DS, File) {
-
-  'use strict';
-
-  exports['default'] = DS['default'].Transform.extend({
-
-    deserialize: function( serialized ) {
-      if ( !serialized ) {
-        return null;
-      }
-
-      return File['default'].create({
-        name : serialized.name,
-        url  : serialized.url
-      });
-    },
-
-    serialize: function( deserialized ) {
-      if ( !deserialized ) {
-        return null;
-      }
-
-      return {
-        __type : 'File',
-        name   : deserialized.get( 'name' ),
-        url    : deserialized.get( 'url' )
-      };
-    }
-
-  });
-
-});
-define('ember-parse-adapter/transforms/geopoint', ['exports', 'ember-data', 'ember-parse-adapter/transforms/geopoint'], function (exports, DS, GeoPoint) {
-
-  'use strict';
-
-  exports['default'] = DS['default'].Transform.extend({
-
-    deserialize: function( serialized ) {
-      if ( !serialized ) {
-        return null;
-      }
-
-      return GeoPoint['default'].create({
-        latitude  : serialized.latitude,
-        longitude : serialized.longitude
-      });
-    },
-
-    serialize: function( deserialized ) {
-      if ( !deserialized ) {
-        return null;
-      }
-
-      return {
-        __type    : 'GeoPoint',
-        latitude  : deserialized.get( 'latitude' ),
-        longitude : deserialized.get( 'longitude' )
-      };
-    }
-
-  });
-
-});
-define('ember-parse', ['ember-parse/index', 'ember', 'exports'], function(__index__, __Ember__, __exports__) {
-  'use strict';
-  var keys = Object.keys || __Ember__['default'].keys;
-  var forEach = Array.prototype.forEach && function(array, cb) {
-    array.forEach(cb);
-  } || __Ember__['default'].EnumerableUtils.forEach;
-
-  forEach(keys(__index__), (function(key) {
-    __exports__[key] = __index__[key];
-  }));
-});
-
-define('ember-parse/adapters/parse', ['exports', 'ember', 'ember-data'], function (exports, Ember, DS) {
-
-  'use strict';
-
-  /*
-   * Some portions extracted from:
-   * Parse JavaScript SDK — Version: 1.4.2
-   *
-   */
-
-  var get = Ember['default'].get,
-      forEach = Ember['default'].ArrayPolyfills.forEach;
-
-  exports['default'] = DS['default'].RESTAdapter.extend({
-    PARSE_APPLICATION_ID: null,
-    PARSE_JAVASCRIPT_KEY: null,
-
-    host: 'https://api.parse.com',
-    namespace: '1',
-    classesPath: 'classes',
-    parseClientVersion: 'js1.4.2',
-
-    init: function init() {
-      this._super();
-
-      this.set('applicationId', this.get('PARSE_APPLICATION_ID'));
-      this.set('javascriptKey', this.get('PARSE_JAVASCRIPT_KEY'));
-      this.set('installationId', this._getInstallationId());
-      this.set('sessionToken', null);
-      this.set('userId', null);
-
-      /*
-       * avoid pre-flight.
-       * Parse._ajax
-       */
-      this.set('headers', { 'Content-Type': 'text/plain' });
-    },
-
-    _getInstallationId: function _getInstallationId() {
-      /*
-       * Parse._getInstallationId
-       */
-      var lsKey = 'ember-parse/' + this.get('applicationId') + '/installationId';
-
-      if (this.get('installationId')) {
-        return this.get('installationId');
-      } else if (localStorage.getItem(lsKey)) {
-        return localStorage.getItem(lsKey);
-      } else {
-        var hexOctet = function hexOctet() {
-          return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-        };
-
-        var installationId = hexOctet() + hexOctet() + "-" + hexOctet() + "-" + hexOctet() + "-" + hexOctet() + "-" + hexOctet() + hexOctet() + hexOctet();
-
-        localStorage.setItem(lsKey, installationId);
-        return installationId;
-      }
-    },
-
-    ajaxOptions: function ajaxOptions(url, type, options) {
-      var hash = options || {};
-      hash.data = hash.data || {};
-      hash.url = url;
-      hash.type = type;
-      hash.dataType = 'json';
-      hash.context = this;
-
-      if (hash.data && type !== 'GET') {
-        hash.contentType = 'application/json; charset=utf-8';
-
-        // Parse auth stuff
-        hash.data._ClientVersion = this.get('parseClientVersion');
-        hash.data._ApplicationId = this.get('applicationId');
-        hash.data._JavaScriptKey = this.get('javascriptKey');
-        hash.data._InstallationId = this.get('installationId');
-
-        var _sessionToken = this.get('sessionToken');
-        if (_sessionToken) {
-          hash.data._SessionToken = _sessionToken;
-        }
-
-        hash.data = JSON.stringify(hash.data);
-      }
-
-      var headers = get(this, 'headers');
-      if (headers !== undefined) {
-        hash.beforeSend = function (xhr) {
-          forEach.call(Ember['default'].keys(headers), function (key) {
-            xhr.setRequestHeader(key, headers[key]);
-          });
-        };
-      }
-
-      return hash;
-    },
-
-    ajaxError: function ajaxError(jqXHR, responseText, errorThrown) {
-      if (jqXHR.responseJSON.error === 'invalid session token') {
-        // invalid session
-        var session = this.container.lookup('service:session');
-        session.resetSession();
-      }
-
-      return this._super(jqXHR, responseText, errorThrown);
-    },
-
-    normalizeErrorResponse: function normalizeErrorResponse(status, headers, payload) {
-      return [{
-        status: '' + status,
-        title: 'The backend responded with an error',
-        details: payload.error,
-        code: payload.code
-      }];
-    },
-
-    pathForType: function pathForType(type) {
-      if ('user' === type) {
-        return 'users';
-      } else if ('login' === type) {
-        return type;
-      } else if ('logout' === type) {
-        return type;
-      } else if ('requestPasswordReset' === type) {
-        return type;
-      } else if ('functions' === type) {
-        return 'functions';
-      } else {
-        return this.classesPath + '/' + this.parsePathForType(type);
-      }
-    },
-
-    // Using TitleStyle is recommended by Parse
-    parsePathForType: function parsePathForType(type) {
-      return Ember['default'].String.capitalize(Ember['default'].String.camelize(type));
-    },
-
-    parseClassName: function parseClassName(key) {
-      return Ember['default'].String.capitalize(key);
-    },
-
-    /**
-    * Because Parse doesn't return a full set of properties on the
-    * responses to updates, we want to perform a merge of the response
-    * properties onto existing data so that the record maintains
-    * latest data.
-    */
-    createRecord: function createRecord(store, type, record) {
-      var serializer = store.serializerFor(type.modelName),
-          data = { _method: 'POST' },
-          adapter = this;
-
-      serializer.serializeIntoHash(data, type, record, { includeId: true });
-
-      var promise = new Ember['default'].RSVP.Promise(function (resolve, reject) {
-        adapter.ajax(adapter.buildURL(type.modelName), 'POST', { data: data }).then(function (json) {
-          var completed = Ember['default'].merge(data, json);
-          resolve(completed);
-        }, function (reason) {
-          var err = 'Code ' + reason.responseJSON.code + ': ' + reason.responseJSON.error;
-          reject(new Error(err));
-        });
-      });
-
-      return promise;
-    },
-
-    updateRecord: function updateRecord(store, type, snapshot) {
-      var data = { _method: 'PUT' },
-          id = snapshot.id,
-          serializer = store.serializerFor(type.modelName);
-
-      serializer.serializeIntoHash(data, type, snapshot);
-
-      // debugger;
-      // snapshot.record._relationships.friends.members
-      // snapshot.record._relationships.friends.canonicalMembers
-      return this.ajax(this.buildURL(type.modelName, id, snapshot), 'POST', { data: data });
-    },
-
-    deleteRecord: function deleteRecord(store, type, snapshot) {
-      var data = { _method: 'DELETE' },
-          id = snapshot.id;
-
-      return this.ajax(this.buildURL(type.modelName, id, snapshot), 'POST', { data: data });
-    },
-
-    findRecord: function findRecord(store, type, id, snapshot) {
-      var data = { _method: 'GET' };
-      return this.ajax(this.buildURL(type.modelName, id, snapshot), 'POST', { data: data });
-    },
-
-    findAll: function findAll(store, type, sinceToken) {
-      var data = { _method: 'GET' };
-
-      if (sinceToken) {
-        data.since = sinceToken;
-      }
-
-      data.where = {};
-
-      return this.ajax(this.buildURL(type.modelName), 'POST', { data: data });
-    },
-
-    /**
-    * Implementation of a hasMany that provides a Relation query for Parse
-    * objects.
-    */
-    findHasMany: function findHasMany(store, record, relationship) {
-      var related = JSON.parse(relationship);
-
-      var query = {
-        where: {
-          '$relatedTo': {
-            'object': {
-              '__type': 'Pointer',
-              'className': this.parseClassName(record.modelName),
-              'objectId': record.id
-            },
-            key: related.key
-          }
-        },
-        _method: 'GET'
-      };
-
-      // the request is to the related type and not the type for the record.
-      // the query is where there is a pointer to this record.
-      return this.ajax(this.buildURL(related.className), 'POST', { data: query });
-    },
-
-    /**
-    * Implementation of findQuery that automatically wraps query in a
-    * JSON string.
-    *
-    * @example
-    *     this.store.find('comment', {
-    *       where: {
-    *         post: {
-    *             "__type":  "Pointer",
-    *             "className": "Post",
-    *             "objectId": post.get('id')
-    *         }
-    *       }
-    *     });
-    */
-    findQuery: function findQuery(store, type, query) {
-      query._method = 'GET';
-      return this.ajax(this.buildURL(type.modelName), 'POST', { data: query });
-    },
-
-    shouldReloadAll: function shouldReloadAll() {
-      return false;
-    },
-
-    shouldBackgroundReloadRecord: function shouldBackgroundReloadRecord() {
-      return false;
-    }
-  });
-
-});
-define('ember-parse/initializers/parse', ['exports', 'ember-parse/services/session'], function (exports, ParseSession) {
-
-  'use strict';
-
-  exports.initialize = initialize;
-
-  function initialize(container) {
-    container.register('service:session', ParseSession['default']);
-    container.injection('route', 'session', 'service:session');
-    container.injection('controller', 'session', 'service:session');
-    container.injection('component', 'session', 'service:session');
-  }
-
-  exports['default'] = {
-    before: 'store',
-    name: 'parse',
-    initialize: initialize
-  };
-
-});
-define('ember-parse/mixins/authenticated-route-mixin', ['exports', 'ember'], function (exports, Ember) {
-
-  'use strict';
-
-  exports['default'] = Ember['default'].Mixin.create({
-    beforeModel: function beforeModel(transition) {
-      var superResult = this._super(transition);
-
-      if (!this.get('session.isAuthenticated')) {
-        transition.abort();
-        var config = this.container.lookupFactory('config:environment');
-        this.transitionTo(config['ember-parse'].session.authenticationRoute);
-      }
-
-      return superResult;
-    }
-  });
-
-});
-define('ember-parse/mixins/unauthenticated-route-mixin', ['exports', 'ember'], function (exports, Ember) {
-
-  'use strict';
-
-  exports['default'] = Ember['default'].Mixin.create({
-    beforeModel: function beforeModel(transition) {
-      var superResult = this._super(transition);
-
-      if (this.get('session.isAuthenticated')) {
-        transition.abort();
-        var config = this.container.lookupFactory('config:environment');
-        this.transitionTo(config['ember-parse'].session.ifAlreadyAuthenticatedRoute);
-      }
-
-      return superResult;
-    }
-  });
-
-});
-define('ember-parse/models/parse-user', ['exports', 'ember-data'], function (exports, DS) {
-
-  'use strict';
-
-  var attr = DS['default'].attr;
-
-  exports['default'] = DS['default'].Model.extend({
-    username: attr('string'),
-    password: attr('password'),
-    email: attr('string'),
-    emailVerified: attr('boolean'),
-    sessionToken: attr('string'),
-    createdAt: attr('date'),
-    updatedAt: attr('date')
-  });
-
-});
-define('ember-parse/serializers/parse', ['exports', 'ember', 'ember-data'], function (exports, Ember, DS) {
-
-  'use strict';
-
-  exports['default'] = DS['default'].RESTSerializer.extend({
+    // this will be removed in 2.0
+    isNewSerializerAPI: true,
 
     primaryKey: 'objectId',
 
-    extractArray: function extractArray(store, primaryType, payload) {
+    normalizeArrayResponse: function normalizeArrayResponse(store, primaryType, payload) {
       var namespacedPayload = {};
       namespacedPayload[Ember['default'].String.pluralize(primaryType.modelName)] = payload.results;
 
       return this._super(store, primaryType, namespacedPayload);
     },
 
-    extractSingle: function extractSingle(store, primaryType, payload, recordId) {
+    normalizeSingleResponse: function normalizeSingleResponse(store, primaryType, payload, recordId) {
       var namespacedPayload = {};
       namespacedPayload[primaryType.modelName] = payload; // this.normalize(primaryType, payload);
 
       return this._super(store, primaryType, namespacedPayload, recordId);
     },
 
-    typeForRoot: function typeForRoot(key) {
+    modelNameFromPayloadKey: function modelNameFromPayloadKey(key) {
       return Ember['default'].String.dasherize(Ember['default'].String.singularize(key));
     },
 
@@ -79687,12 +79007,12 @@ define('ember-parse/serializers/parse', ['exports', 'ember', 'ember-data'], func
     * we have to intercept it here to assure that the adapter knows which
     * record ID we are dealing with (using the primaryKey).
     */
-    extract: function extract(store, type, payload, id, requestType) {
+    normalizeResponse: function normalizeResponse(store, primaryModelClass, payload, id, requestType) {
       if (id !== null && ('updateRecord' === requestType || 'deleteRecord' === requestType)) {
         payload[this.get('primaryKey')] = id;
       }
 
-      return this._super(store, type, payload, id, requestType);
+      return this._super(store, primaryModelClass, payload, id, requestType);
     },
 
     /**
@@ -79701,8 +79021,8 @@ define('ember-parse/serializers/parse', ['exports', 'ember', 'ember-data'], func
     */
     extractMeta: function extractMeta(store, type, payload) {
       if (payload && payload.count) {
-        store.metaForType(type, { count: payload.count });
         delete payload.count;
+        return { count: payload.count };
       }
     },
 
@@ -79720,104 +79040,98 @@ define('ember-parse/serializers/parse', ['exports', 'ember', 'ember-data'], func
       this._super(type, hash);
     },
 
-    normalizeRelationships: function normalizeRelationships(type, hash) {
-      if (this.keyForRelationship) {
-        type.eachRelationship(function (key, relationship) {
-          if (hash[key] && 'belongsTo' === relationship.kind) {
-            hash[key] = hash[key].objectId;
-          }
-
-          /*
-           * TODO: Find a better way to do this
-           * Here we set the links property to a serialized version
-           * of key and className. This info will be passed to
-           * adapter.findHasMany where we can deserialize to create
-           * the needed Parse query.
-           */
-          if (hash[key] && 'hasMany' === relationship.kind) {
-            if (!hash[key].__op && hash[key].__op !== 'AddRelation') {
-              if (!hash.links) {
-                hash.links = {};
-              }
-              hash.links[key] = JSON.stringify({
-                key: key,
-                className: hash[key].className
-              });
-            }
-
-            delete hash[key].__type;
-            delete hash[key].className;
-            hash[key] = [];
-          }
-        }, this);
+    extractRelationship: function extractRelationship(relationshipModelName, relationshipHash) {
+      if (Ember['default'].isNone(relationshipHash)) {
+        return null;
       }
+      /*
+        When `relationshipHash` is an object it usually means that the relationship
+        is polymorphic. It could however also be embedded resources that the
+        EmbeddedRecordsMixin has be able to process.
+      */
+      if (Ember['default'].typeOf(relationshipHash) === 'object') {
+        if (relationshipHash.__type && relationshipHash.__type === 'Pointer') {
+          relationshipHash.id = relationshipHash.objectId;
+          relationshipHash.type = relationshipModelName;
+          delete relationshipHash.objectId;
+          delete relationshipHash.__type;
+          delete relationshipHash.className;
+        }
+        return relationshipHash;
+      }
+
+      // https://github.com/emberjs/data/blob/v2.0.0/packages/ember-data/lib/system/coerce-id.js
+      var coerceId = relationshipHash == null || relationshipHash === '' ? null : relationshipHash + '';
+
+      return { id: coerceId, type: relationshipModelName };
     },
 
-    serializeAttribute: function serializeAttribute(record, json, key, attribute) {
+    extractRelationships: function extractRelationships(modelClass, resourceHash) {
+      var relationships = {};
+
+      modelClass.eachRelationship(function (key, relationshipMeta) {
+        var relationship = null;
+        var relationshipKey = this.keyForRelationship(key, relationshipMeta.kind, 'deserialize');
+
+        if (resourceHash.hasOwnProperty(relationshipKey)) {
+          var data = null;
+          var relationshipHash = resourceHash[relationshipKey];
+
+          if (relationshipMeta.kind === 'belongsTo') {
+            data = this.extractRelationship(relationshipMeta.type, relationshipHash);
+          } else if (relationshipHash && relationshipMeta.kind === 'hasMany') {
+            // Parse returns the array in relationshipHash.objects
+            data = Ember['default'].A(relationshipHash.objects).map(function (item) {
+              return this.extractRelationship(relationshipMeta.type, item);
+            }, this);
+          }
+          relationship = { data: data };
+        }
+
+        var linkKey = this.keyForLink(key, relationshipMeta.kind);
+
+        if (resourceHash.links && resourceHash.links.hasOwnProperty(linkKey)) {
+          var related = resourceHash.links[linkKey];
+          relationship = relationship || {};
+          relationship.links = { related: related };
+        }
+
+        if (relationship) {
+          relationships[key] = relationship;
+        }
+      }, this);
+
+      return relationships;
+    },
+
+    serializeIntoHash: function serializeIntoHash(hash, typeClass, snapshot, options) {
+      Ember['default'].merge(hash, this.serialize(snapshot, options));
+    },
+
+    serializeAttribute: function serializeAttribute(snapshot, json, key, attribute) {
       // These are Parse reserved properties and we won't send them.
-      if ('createdAt' === key || 'updatedAt' === key || 'emailVerified' === key || 'sessionToken' === key || 'password' === key) {
+      if ('createdAt' === key || 'updatedAt' === key || 'emailVerified' === key || 'sessionToken' === key) {
         delete json[key];
       } else {
-        this._super(record, json, key, attribute);
+        this._super(snapshot, json, key, attribute);
       }
     },
 
-    serializeBelongsTo: function serializeBelongsTo(record, json, relationship) {
+    serializeBelongsTo: function serializeBelongsTo(snapshot, json, relationship) {
       var key = relationship.key,
-          belongsTo = record.belongsTo(key);
+          belongsToId = snapshot.belongsTo(key, { id: true });
 
-      if (belongsTo) {
-        // @TODO: Perhaps this is working around a bug in Ember-Data? Why should
-        // promises be returned here.
-        if (belongsTo instanceof DS['default'].PromiseObject) {
-          if (!belongsTo.get('isFulfilled')) {
-            throw new Error('belongsTo values *must* be fulfilled before attempting to serialize them');
-          }
-
-          belongsTo = belongsTo.get('content');
-        }
-
-        var _className = this.parseClassName(belongsTo.type.modelName);
-
-        if (_className === 'User') {
-          _className = '_User';
-        }
-
+      if (belongsToId) {
         json[key] = {
           '__type': 'Pointer',
-          'className': _className,
-          'objectId': belongsTo.id
+          'className': this.parseClassName(relationship.type),
+          'objectId': belongsToId
         };
       }
     },
 
-    serializeIntoHash: function serializeIntoHash(hash, type, snapshot, options) {
-      var ParseACL = snapshot.record.get('ParseACL');
-
-      // Add ACL
-      if (ParseACL) {
-        var policy = {};
-
-        if (ParseACL.owner) {
-          policy[ParseACL.owner] = {};
-        }
-
-        if (ParseACL.permissions) {
-          policy[ParseACL.owner] = ParseACL.permissions;
-        } else {
-          policy[ParseACL.owner] = {
-            read: true,
-            write: true
-          };
-        }
-        hash.ACL = policy;
-      }
-
-      Ember['default'].merge(hash, this.serialize(snapshot, options));
-    },
-
     parseClassName: function parseClassName(key) {
-      if ('User' === key) {
+      if ('parseUser' === key || 'parse-user' === key) {
         return '_User';
       } else {
         return Ember['default'].String.capitalize(Ember['default'].String.camelize(key));
@@ -79825,285 +79139,70 @@ define('ember-parse/serializers/parse', ['exports', 'ember', 'ember-data'], func
     },
 
     serializeHasMany: function serializeHasMany(snapshot, json, relationship) {
-      var _this = this;
+      var key = relationship.key,
+          hasMany = snapshot.hasMany(key),
+          options = relationship.options,
+          _this = this;
 
-      var key = relationship.key;
-
-      if (this._canSerialize(key)) {
-        var payloadKey;
-
+      if (hasMany && hasMany.get('length') > 0) {
         json[key] = { 'objects': [] };
 
-        // if provided, use the mapping provided by `attrs` in
-        // the serializer
-        payloadKey = this._getMappedKey(key);
-        if (payloadKey === key && this.keyForRelationship) {
-          payloadKey = this.keyForRelationship(key, "hasMany");
+        // an array is not a relationship, right?
+
+        /*if ( options.relation ) {
+          json[key].__op = 'AddRelation';
         }
+         if ( options.array ) {
+          json[key].__op = 'AddUnique';
+        }*/
 
-        var relationshipType = snapshot.type.determineRelationshipType(relationship);
+        json[key].__op = 'AddRelation';
 
-        if (relationshipType === 'manyToNone' || relationshipType === 'manyToMany' || relationshipType === 'manyToOne') {
-          var objects = [],
-              objectsForKey = snapshot.hasMany(key),
-              objectsBeforeUpdate = snapshot.record._internalModel._relationships.get(key).canonicalMembers,
-              operation = 'AddRelation';
+        hasMany.forEach(function (child) {
+          json[key].objects.push({
+            '__type': 'Pointer',
+            'className': _this.parseClassName(child.type.modelName),
+            'objectId': child.id
+          });
+        });
 
-          // Check if this is removing the last relation for a key
-          if (objectsForKey.length === 0 && objectsBeforeUpdate.size === 1) {
-            // Removing the last relation
-            operation = 'RemoveRelation';
+        if (hasMany._deletedItems && hasMany._deletedItems.length) {
+          if (options.relation) {
+            var addOperation = json[key],
+                deleteOperation = { '__op': 'RemoveRelation', 'objects': [] };
 
-            objects.push({
-              __type: 'Pointer',
-              className: this.parseClassName(snapshot.type.typeForRelationship(key).modelName),
-              objectId: objectsBeforeUpdate.list[0].id
+            hasMany._deletedItems.forEach(function (item) {
+              deleteOperation.objects.push({
+                '__type': 'Pointer',
+                'className': item.type,
+                'objectId': item.id
+              });
             });
+
+            json[key] = { '__op': 'Batch', 'ops': [addOperation, deleteOperation] };
           }
 
-          // Determine if we are adding or removing a relationship
-          objectsForKey.forEach(function (item) {
-            if (objectsForKey.length < objectsBeforeUpdate.size) {
-              // Remove existing relation
-              //
-              // Parse needs an array of the objects we want
-              // to remove so we have to invert the object list
-              // to contain items to remove
-              operation = 'RemoveRelation';
+          if (options.array) {
+            json[key].deleteds = { '__op': 'Remove', 'objects': [] };
 
-              var objectsToKeepIds = objectsForKey.map(function (obj) {
-                return obj.id;
+            hasMany._deletedItems.forEach(function (item) {
+              json[key].deleteds.objects.push({
+                '__type': 'Pointer',
+                'className': item.type,
+                'objectId': item.id
               });
-
-              objectsBeforeUpdate.list.forEach(function (obj) {
-                if (objectsToKeepIds.indexOf(obj.id) < 0) {
-                  objects.push({
-                    __type: 'Pointer',
-                    className: _this.parseClassName(item.modelName),
-                    objectId: obj.id
-                  });
-                }
-              });
-            } else {
-              // Add a new relation
-              // (objectsForKey.length > objectsBeforeUpdate.size)
-              objects.push({
-                __type: 'Pointer',
-                className: _this.parseClassName(item.modelName),
-                objectId: item.id
-              });
-            }
-          });
-
-          json[payloadKey] = {
-            __op: operation,
-            objects: objects,
-            className: this.parseClassName(snapshot.type.modelName)
-          };
-          // TODO support for polymorphic manyToNone and manyToMany relationships
+            });
+          }
         }
-      }
-    }
-
-  });
-
-});
-define('ember-parse/services/cloud', ['exports', 'ember'], function (exports, Ember) {
-
-  'use strict';
-
-  exports['default'] = Ember['default'].Service.extend({
-    /*
-     * Makes a call to a cloud function.
-     * @param {String} name The function name.
-     * @param {Object} data The parameters to send to the cloud function.
-     */
-    run: function run(name, data) {
-      var store = this.container.lookup('service:store'),
-          adapter = store.adapterFor('application');
-
-      return adapter.ajax(adapter.buildURL('functions', name), 'POST', { data: data });
-    }
-  });
-
-});
-define('ember-parse/services/session', ['exports', 'ember'], function (exports, Ember) {
-
-  'use strict';
-
-  exports['default'] = Ember['default'].Service.extend({
-    user: null,
-    userId: null,
-    sessionToken: null,
-    sessionStoreKey: Ember['default'].computed(function () {
-      var store = this.container.lookup('service:store'),
-          adapter = store.adapterFor('application');
-
-      return 'ember-parse/' + adapter.get('applicationId') + '/session';
-    }),
-
-    init: function init() {
-      var _this = this;
-
-      Ember['default'].Logger.debug('DEBUG: Parse session service: init()');
-
-      var key = this.get('sessionStoreKey'),
-          store = this.container.lookup('service:store'),
-          model = store.modelFor('user'),
-          adapter = store.adapterFor('application'),
-          serializer = store.serializerFor('user');
-
-      this.sessionStore.get(key).then(function (sessionData) {
-        if (sessionData && sessionData.userId && sessionData.sessionToken && sessionData._response) {
-
-          _this.setProperties({
-            userId: sessionData.userId,
-            sessionToken: sessionData.sessionToken
-          });
-
-          // Create a user instance and push to store
-          serializer.normalize(model, sessionData._response);
-          var record = store.push('user', sessionData._response);
-          _this.user = record;
-
-          // Set adapter properties
-          delete sessionData._response;
-          adapter.setProperties(sessionData);
-        }
-      });
-    },
-
-    isAuthenticated: Ember['default'].computed('userId', 'sessionToken', function () {
-      if (this.get('userId') || this.get('sessionToken')) {
-        return true;
       } else {
-        return false;
-      }
-    }),
-
-    authenticate: function authenticate(username, password) {
-      var _this2 = this;
-
-      var key = this.get('sessionStoreKey'),
-          store = this.container.lookup('service:store'),
-          model = store.modelFor('user'),
-          adapter = store.adapterFor('application'),
-          serializer = store.serializerFor('user');
-
-      var data = {
-        _method: 'GET',
-        username: username,
-        password: password
-      };
-
-      return adapter.ajax(adapter.buildURL('login'), 'POST', { data: data }).then(function (response) {
-        var sessionData = {
-          userId: response.objectId,
-          sessionToken: response.sessionToken,
-          _response: response
-        };
-
-        _this2.setProperties(sessionData);
-        _this2.sessionStore.save(key, sessionData);
-
-        // Set adapter properties
-        delete sessionData._response;
-        adapter.setProperties(sessionData);
-
-        serializer.normalize(model, response);
-        var record = store.push('user', response);
-        _this2.user = record;
-
-        return record;
-      });
-    },
-
-    invalidate: function invalidate() {
-      var _this3 = this;
-
-      if (this.get('isAuthenticated')) {
-        var store = this.container.lookup('service:store'),
-            adapter = store.adapterFor('application');
-
-        // Call logout on Parse
-        return adapter.ajax(adapter.buildURL('logout'), 'POST').then(function () {
-          return _this3.resetSession();
-        });
-      } else {
-        return Ember['default'].RSVP.resolve();
-      }
-    },
-
-    resetSession: function resetSession() {
-      var key = this.get('sessionStoreKey'),
-          store = this.container.lookup('service:store'),
-          adapter = store.adapterFor('application');
-
-      // Remove user from store
-      store.find('user', this.get('userId')).then(function (user) {
-        user.unloadRecord();
-      });
-
-      var sessionData = {
-        userId: null,
-        sessionToken: null
-      };
-
-      this.setProperties(sessionData);
-      adapter.setProperties(sessionData);
-
-      return this.sessionStore.destroy(key);
-    },
-
-    signup: function signup(userData) {
-      var store = this.container.lookup('service:store'),
-          model = store.modelFor('user'),
-          adapter = store.adapterFor('user'),
-          serializer = store.serializerFor('user');
-
-      return adapter.ajax(adapter.buildURL(model.modelName), 'POST', { data: userData }).then(function (response) {
-        serializer.normalize(model, response);
-        response.email = response.email || userData.email;
-        response.username = response.username || userData.username;
-
-        return store.push('user', response);
-      });
-    },
-
-    requestPasswordReset: function requestPasswordReset(email) {
-      var store = this.container.lookup('service:store'),
-          adapter = store.adapterFor('application'),
-          data = {
-        _method: 'POST',
-        email: email
-      };
-
-      return adapter.ajax(adapter.buildURL('requestPasswordReset'), 'POST', { data: data });
-    },
-
-    sessionStore: {
-      save: function save(key, data) {
-        return new Ember['default'].RSVP.Promise(function (resolve) {
-          resolve(localStorage.setItem(key, JSON.stringify(data)));
-        });
-      },
-
-      get: function get(key) {
-        return new Ember['default'].RSVP.Promise(function (resolve) {
-          resolve(JSON.parse(localStorage.getItem(key)));
-        });
-      },
-
-      destroy: function destroy(key) {
-        return new Ember['default'].RSVP.Promise(function (resolve) {
-          resolve(localStorage.removeItem(key));
-        });
+        json[key] = null;
       }
     }
+
   });
 
 });
-define('ember-parse/transforms/date', ['exports', 'ember-data'], function (exports, DS) {
+define('ember-parse-adapter/transforms/date', ['exports', 'ember-data'], function (exports, DS) {
 
   'use strict';
 
@@ -80131,7 +79230,7 @@ define('ember-parse/transforms/date', ['exports', 'ember-data'], function (expor
   });
 
 });
-define('ember-parse/transforms/file', ['exports', 'ember-data', 'ember-parse/transforms/file'], function (exports, DS, File) {
+define('ember-parse-adapter/transforms/file', ['exports', 'ember-data', 'ember-parse-adapter/transforms/file'], function (exports, DS, File) {
 
   'use strict';
 
@@ -80163,7 +79262,7 @@ define('ember-parse/transforms/file', ['exports', 'ember-data', 'ember-parse/tra
   });
 
 });
-define('ember-parse/transforms/geopoint', ['exports', 'ember-data', 'ember-parse/transforms/geopoint'], function (exports, DS, GeoPoint) {
+define('ember-parse-adapter/transforms/geopoint', ['exports', 'ember-data', 'ember-parse-adapter/transforms/geopoint'], function (exports, DS, GeoPoint) {
 
   'use strict';
 

@@ -1,5 +1,7 @@
-<input id="email" type="text" placeholder="Email"/>
-<input id="password" type="password" placeholder="Password"/>
-<input id="password2" type="password" placeholder="Confirm Password"/>
+<form>
+  {{input value=model.username id="username" placeholder="Username"}}
+  {{input value=model.email id="email" placeholder="Email"}}
+  {{input value=model.password id="password" placeholder="Password"}}
 
-<button type="submit" {{action 'signup'}}>Signup</button>
+  <button type="submit" {{action 'signup' model}}>Signup</button>
+</form>

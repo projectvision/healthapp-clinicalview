@@ -37,7 +37,6 @@
     "ember-data": "1.13.8",
     "ember-disable-proxy-controllers": "^1.0.0",
     "ember-export-application-global": "^1.0.3",
-    "ember-parse": "0.0.11-alpha",
-    "ember-parse-adapter": "0.5.3"
+    "ember-parse-adapter": "git://github.com/joshfester/ember-parse-adapter.git"
   }
 }
