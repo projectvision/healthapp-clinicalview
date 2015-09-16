@@ -16,16 +16,16 @@
  * BUTTONS
  *****************************************************************************/
 /* Nav Button */
-.nav-button, input[type="submit"] {
+.nav-button, button[type="submit"] {
   color: white !important;
   background: #3DB549;
   text-decoration: none;
-  font-size: 1.2em;
+  font-size: 1em;
   padding: 7px 10px;
   display: inline-block;
   border: none;
   border-radius: 5px; }
-  .nav-button:hover, input[type="submit"]:hover {
+  .nav-button:hover, button[type="submit"]:hover {
     background: #54cc60;
     cursor: pointer; }
 
@@ -45,7 +45,8 @@ input {
 /******************************************************************************
  * BUTTONS *
  ******************************************************************************/
-input[type="submit"] {
+button[type="submit"] {
+  width: 100%;
   padding: 15px 20px !important;
   background: #3DB549; }
 
@@ -61,8 +62,9 @@ input[type="submit"] {
   #session input[type="text"],
   #session input[type="password"] {
     margin-bottom: 5px; }
-  #session input[type="submit"] {
-    margin-top: 10px; }
+
+#session button {
+  margin-top: 10px; }
 
 /******************************************************************************
  * Render Config *

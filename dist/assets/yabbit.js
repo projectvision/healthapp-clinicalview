@@ -154,23 +154,24 @@ define('yabbit/initializers/initialize', ['exports', 'ember-parse-adapter/initia
   };
 
 });
-define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS) {
-
-  'use strict';
-
-  exports['default'] = DS['default'].Model.extend({
-    physician: DS['default'].belongsTo('physician')
-  });
-
-});
-define('yabbit/models/physician', ['exports', 'ember-data'], function (exports, DS) {
+define('yabbit/models/parse-user', ['exports', 'ember-data'], function (exports, DS) {
 
   'use strict';
 
   exports['default'] = DS['default'].Model.extend({
     firstName: DS['default'].attr('string'),
     lastName: DS['default'].attr('string'),
-    patients: DS['default'].hasMany('patient')
+    createdAt: DS['default'].attr('date'),
+    patients: DS['default'].hasMany('patient', { async: true })
+  });
+
+});
+define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS) {
+
+  'use strict';
+
+  exports['default'] = DS['default'].Model.extend({
+    physician: DS['default'].belongsTo('physician', { async: true })
   });
 
 });
@@ -319,9 +320,9 @@ define('yabbit/routes/session/signup', ['exports', 'ember'], function (exports, 
   'use strict';
 
   exports['default'] = Ember['default'].Route.extend({
-    //setupController(controller) {
-    //  controller.set('title', 'Signup');
-    //}
+    model: function model() {
+      return this.get('store').createRecord('parse-user');
+    }
   });
 
 });
@@ -1314,7 +1315,7 @@ define('yabbit/templates/session/login', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 4,
+            "line": 5,
             "column": 0
           }
         },
@@ -1337,11 +1338,12 @@ define('yabbit/templates/session/login', ['exports'], function (exports) {
         dom.setAttribute(el1,"type","password");
         dom.setAttribute(el1,"placeholder","Password");
         dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n");
+        var el1 = dom.createTextNode("\n\n");
         dom.appendChild(el0, el1);
-        var el1 = dom.createElement("input");
+        var el1 = dom.createElement("button");
         dom.setAttribute(el1,"type","submit");
-        dom.setAttribute(el1,"value","Login");
+        var el2 = dom.createTextNode("Login");
+        dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
@@ -1372,7 +1374,7 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 5,
+            "line": 6,
             "column": 0
           }
         },
@@ -1402,24 +1404,40 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
         dom.setAttribute(el1,"type","password");
         dom.setAttribute(el1,"placeholder","Confirm Password");
         dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n");
+        var el1 = dom.createTextNode("\n\n");
         dom.appendChild(el0, el1);
-        var el1 = dom.createElement("input");
+        var el1 = dom.createElement("button");
         dom.setAttribute(el1,"type","submit");
-        dom.setAttribute(el1,"value","Signup");
+        var el2 = dom.createTextNode("Signup");
+        dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         return el0;
       },
-      buildRenderNodes: function buildRenderNodes() { return []; },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [6]);
+        var morphs = new Array(1);
+        morphs[0] = dom.createElementMorph(element0);
+        return morphs;
+      },
       statements: [
-
+        ["element","action",["signup"],[],["loc",[null,[5,22],[5,41]]]]
       ],
       locals: [],
       templates: []
     };
   }()));
+
+});
+define('yabbit/tests/adapters/application.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - adapters');
+  QUnit.test('adapters/application.js should pass jshint', function(assert) { 
+    assert.ok(true, 'adapters/application.js should pass jshint.'); 
+  });
 
 });
 define('yabbit/tests/app.jshint', function () {
@@ -1509,6 +1527,16 @@ define('yabbit/tests/helpers/start-app.jshint', function () {
   });
 
 });
+define('yabbit/tests/models/parse-user.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - models');
+  QUnit.test('models/parse-user.js should pass jshint', function(assert) { 
+    assert.ok(true, 'models/parse-user.js should pass jshint.'); 
+  });
+
+});
 define('yabbit/tests/models/patient.jshint', function () {
 
   'use strict';
@@ -1516,16 +1544,6 @@ define('yabbit/tests/models/patient.jshint', function () {
   QUnit.module('JSHint - models');
   QUnit.test('models/patient.js should pass jshint', function(assert) { 
     assert.ok(true, 'models/patient.js should pass jshint.'); 
-  });
-
-});
-define('yabbit/tests/models/physician.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - models');
-  QUnit.test('models/physician.js should pass jshint', function(assert) { 
-    assert.ok(true, 'models/physician.js should pass jshint.'); 
   });
 
 });
@@ -1603,6 +1621,32 @@ define('yabbit/tests/test-helper.jshint', function () {
   QUnit.module('JSHint - .');
   QUnit.test('test-helper.js should pass jshint', function(assert) { 
     assert.ok(true, 'test-helper.js should pass jshint.'); 
+  });
+
+});
+define('yabbit/tests/unit/adapters/application-test', ['ember-qunit'], function (ember_qunit) {
+
+  'use strict';
+
+  ember_qunit.moduleFor('adapter:application', 'Unit | Adapter | application', {
+    // Specify the other units that are required for this test.
+    // needs: ['serializer:foo']
+  });
+
+  // Replace this with your real tests.
+  ember_qunit.test('it exists', function (assert) {
+    var adapter = this.subject();
+    assert.ok(adapter);
+  });
+
+});
+define('yabbit/tests/unit/adapters/application-test.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - unit/adapters');
+  QUnit.test('unit/adapters/application-test.js should pass jshint', function(assert) { 
+    assert.ok(true, 'unit/adapters/application-test.js should pass jshint.'); 
   });
 
 });
@@ -1783,7 +1827,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"name":"yabbit","version":"0.0.0+2de277aa"});
+  require("yabbit/app")["default"].create({"name":"yabbit","version":"0.0.0+53cf64b7"});
 }
 
 /* jshint ignore:end */

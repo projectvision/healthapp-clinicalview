@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-  //setupController(controller) {
-  //  controller.set('title', 'Signup');
-  //}
+  model: function() {
+    return this.get('store').createRecord('parse-user');
+  }
 });

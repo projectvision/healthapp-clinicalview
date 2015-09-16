@@ -3,5 +3,6 @@ import DS from 'ember-data';
 export default DS.Model.extend({
   firstName: DS.attr('string'),
   lastName: DS.attr('string'),
-  patients: DS.hasMany('patient')
+  createdAt: DS.attr( 'date' ),  
+  patients: DS.hasMany('patient', {async: true})
 });

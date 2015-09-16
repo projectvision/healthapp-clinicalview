@@ -4,10 +4,6 @@
 
 # Ember
 
-## Parse
-
-https://github.com/getblimp/ember-parse/issues
-
 ## Prerequisites
 
 You will need the following things properly installed on your computer.

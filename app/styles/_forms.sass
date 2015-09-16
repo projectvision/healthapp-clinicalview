@@ -12,8 +12,9 @@ input
  * BUTTONS *
  ******************************************************************************/
 
-input[type="submit"]
+button[type="submit"]
   @extend .nav-button
+  width: 100%
   padding: 15px 20px !important
   background: $nav_button_bg
 
@@ -32,5 +33,5 @@ input[type="submit"]
     &[type="text"],
     &[type="password"]
       margin-bottom: $margin
-    &[type="submit"]
-      margin-top: $margin * 2
+  button
+    margin-top: $margin * 2
