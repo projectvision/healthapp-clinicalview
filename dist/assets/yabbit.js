@@ -159,18 +159,18 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
   'use strict';
 
   exports['default'] = DS['default'].Model.extend({
-    physician: belongsTo('physician')
+    physician: DS['default'].belongsTo('physician')
   });
 
 });
-define('yabbit/models/physician', ['exports', 'ember-data'], function (exports, ember_data) {
+define('yabbit/models/physician', ['exports', 'ember-data'], function (exports, DS) {
 
   'use strict';
 
-  exports['default'] = ember_data['default'].Model.extend({
-    firstName: attr('string'),
-    lastName: attr('string'),
-    patients: hasMany('patient')
+  exports['default'] = DS['default'].Model.extend({
+    firstName: DS['default'].attr('string'),
+    lastName: DS['default'].attr('string'),
+    patients: DS['default'].hasMany('patient')
   });
 
 });
@@ -1515,7 +1515,7 @@ define('yabbit/tests/models/patient.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/patient.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/patient.js should pass jshint.\nmodels/patient.js: line 4, col 14, \'belongsTo\' is not defined.\n\n1 error'); 
+    assert.ok(true, 'models/patient.js should pass jshint.'); 
   });
 
 });
@@ -1525,7 +1525,7 @@ define('yabbit/tests/models/physician.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/physician.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/physician.js should pass jshint.\nmodels/physician.js: line 4, col 14, \'attr\' is not defined.\nmodels/physician.js: line 5, col 13, \'attr\' is not defined.\nmodels/physician.js: line 6, col 13, \'hasMany\' is not defined.\nmodels/physician.js: line 1, col 14, \'belongsTo\' is defined but never used.\n\n4 errors'); 
+    assert.ok(true, 'models/physician.js should pass jshint.'); 
   });
 
 });

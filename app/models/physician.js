@@ -1,7 +1,7 @@
-import DS, { belongsTo } from 'ember-data';
+import DS from 'ember-data';
 
 export default DS.Model.extend({
-  firstName: attr('string'),
-  lastName: attr('string'),
-  patients: hasMany('patient')
+  firstName: DS.attr('string'),
+  lastName: DS.attr('string'),
+  patients: DS.hasMany('patient')
 });
