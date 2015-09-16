@@ -73,6 +73,41 @@ define('yabbit/controllers/patients/index/show', ['exports', 'ember'], function 
 	exports['default'] = Ember['default'].Controller.extend({});
 
 });
+define('yabbit/controllers/session/signup', ['exports', 'ember'], function (exports, Ember) {
+
+  'use strict';
+
+  exports['default'] = Ember['default'].Controller.extend({
+    username: null,
+    password: null,
+    email: null,
+    loggedIn: false,
+    loginMessage: null,
+
+    actions: {
+      signup: function signup() {
+        var controller = this;
+        var ParseUser = this.store.modelFor('parse-user');
+        var data = {
+          username: this.get('username'),
+          password: this.get('password'),
+          email: this.get('email')
+        };
+
+        console.log(this.store);
+
+        ParseUser.signup(this.store, data).then(function (user) {
+          controller.set('loggedIn', true);
+          controller.set('loginMessage', 'Welcome!');
+        }, function (error) {
+          controller.set('loggedIn', false);
+          controller.set('loginMessage', error.message || error.error);
+        });
+      }
+    }
+  });
+
+});
 define('yabbit/file', ['exports', 'ember-parse-adapter/file'], function (exports, file) {
 
 	'use strict';
@@ -1467,6 +1502,16 @@ define('yabbit/tests/controllers/patients/index/show.jshint', function () {
   QUnit.module('JSHint - controllers/patients/index');
   QUnit.test('controllers/patients/index/show.js should pass jshint', function(assert) { 
     assert.ok(true, 'controllers/patients/index/show.js should pass jshint.'); 
+  });
+
+});
+define('yabbit/tests/controllers/session/signup.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - controllers/session');
+  QUnit.test('controllers/session/signup.js should pass jshint', function(assert) { 
+    assert.ok(false, 'controllers/session/signup.js should pass jshint.\ncontrollers/session/signup.js: line 23, col 18, \'user\' is defined but never used.\n\n1 error'); 
   });
 
 });
