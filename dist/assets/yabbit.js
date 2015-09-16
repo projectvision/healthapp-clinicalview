@@ -86,26 +86,34 @@ define('yabbit/controllers/session/signup', ['exports', 'ember'], function (expo
 
     actions: {
       signup: function signup() {
-        var controller = this;
+
+        // Build User
+
+        // model
         var user = this.store.modelFor('parse-user');
+        // controller
         var data = {
           username: this.get('username'),
           password: this.get('password'),
           email: this.get('email')
         };
 
-        console.log('controller:');
+        console.log('user data:');
         console.log(user);
         console.log(data);
-        console.log(this);
-        console.log(this.store);
+
+        // Save User
+
+        var controller = this;
 
         user.signup(this.store, data).then(function (user) {
-          controller.set('logged-in', true);
-          controller.set('login-message', 'Welcome!');
+          console.log('user server:');
+          console.log(user);
+          controller.set('loggedIn', true);
+          controller.set('loginMessage', 'Welcome!');
         }, function (error) {
-          controller.set('logged-in', false);
-          controller.set('login-message', error.message || error.error);
+          controller.set('loggedIn', false);
+          controller.set('loginMessage', error.message || error.error);
         });
       }
     }
@@ -359,9 +367,9 @@ define('yabbit/routes/session/signup', ['exports', 'ember'], function (exports, 
   'use strict';
 
   exports['default'] = Ember['default'].Route.extend({
-    model: function model() {
-      return this.get('store').createRecord('parse-user');
-    }
+    //model: function() {
+    //  return this.get('store').createRecord('parse-user');
+    //}
   });
 
 });
@@ -1462,9 +1470,9 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
         return morphs;
       },
       statements: [
-        ["inline","input",[],["value",["subexpr","@mut",[["get","model.username",["loc",[null,[2,16],[2,30]]]]],[],[]],"id","username","placeholder","Username"],["loc",[null,[2,2],[2,69]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","model.email",["loc",[null,[3,16],[3,27]]]]],[],[]],"id","email","placeholder","Email"],["loc",[null,[3,2],[3,60]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","model.password",["loc",[null,[4,16],[4,30]]]]],[],[]],"id","password","placeholder","Password"],["loc",[null,[4,2],[4,69]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","username",["loc",[null,[2,16],[2,24]]]]],[],[]],"id","username","placeholder","Username"],["loc",[null,[2,2],[2,63]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","email",["loc",[null,[3,16],[3,21]]]]],[],[]],"id","email","placeholder","Email"],["loc",[null,[3,2],[3,54]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","password",["loc",[null,[4,16],[4,24]]]]],[],[]],"id","password","placeholder","Password"],["loc",[null,[4,2],[4,63]]]],
         ["element","action",["signup",["get","model",["loc",[null,[6,42],[6,47]]]]],[],["loc",[null,[6,24],[6,49]]]]
       ],
       locals: [],
@@ -1519,7 +1527,7 @@ define('yabbit/tests/controllers/session/signup.jshint', function () {
 
   QUnit.module('JSHint - controllers/session');
   QUnit.test('controllers/session/signup.js should pass jshint', function(assert) { 
-    assert.ok(false, 'controllers/session/signup.js should pass jshint.\ncontrollers/session/signup.js: line 27, col 18, \'user\' is defined but never used.\n\n1 error'); 
+    assert.ok(true, 'controllers/session/signup.js should pass jshint.'); 
   });
 
 });
@@ -1880,7 +1888,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"name":"yabbit","version":"0.0.0+4e1af2e2"});
+  require("yabbit/app")["default"].create({"applicationId":"vNmHb7Gvkgji498TMTEARjDB2oRJhgDZb04I3hNW","restApiId":"2I8w9D0u7GCp2dIhH7Vd1pRNaWG9yuhHn7LNXn1S","name":"yabbit","version":"0.0.0+446526be"});
 }
 
 /* jshint ignore:end */

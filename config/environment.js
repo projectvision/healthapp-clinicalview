@@ -19,14 +19,14 @@ module.exports = function(environment) {
       }
     },
     APP: {
-      // Here you can pass flags/options to your application instance
-      // when it is created
+      applicationId: 'vNmHb7Gvkgji498TMTEARjDB2oRJhgDZb04I3hNW',
+      restApiId: '2I8w9D0u7GCp2dIhH7Vd1pRNaWG9yuhHn7LNXn1S'
     }
   };
 
   ENV['ember-parse'] = {
-    PARSE_APPLICATION_ID: 'vNmHb7Gvkgji498TMTEARjDB2oRJhgDZb04I3hNW',
-    PARSE_JAVASCRIPT_KEY: 'RZWWKdgQQ9x8Mr57Dl8ZMUp4nQOh8U5IpoKIBw4o',
+    //PARSE_APPLICATION_ID: 'vNmHb7Gvkgji498TMTEARjDB2oRJhgDZb04I3hNW',
+    //PARSE_JAVASCRIPT_KEY: 'RZWWKdgQQ9x8Mr57Dl8ZMUp4nQOh8U5IpoKIBw4o',
     session: {
       authenticationRoute: 'session',
       ifAlreadyAuthenticatedRoute: 'patients'
