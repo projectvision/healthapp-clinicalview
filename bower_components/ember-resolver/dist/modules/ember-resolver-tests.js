@@ -196,7 +196,55 @@ test("can lookup something in another namespace", function(){
   adapter();
 });
 
+test("can lookup something with an @ sign", function(){
+  expect(2);
+
+  define('appkit/helpers/@content-helper', [], function(){
+    ok(true, "helper was invoked properly");
+
+    return Ember.K;
+  });
+
+  var helper = resolver.resolve('helper:@content-helper');
+
+  ok(helper, 'helper was returned');
+
+  helper();
+});
+
+test("can lookup something in another namespace with different syntax", function(){
+  expect(2);
+
+  define('other/adapters/post', [], function(){
+    ok(true, "adapter was invoked properly");
+
+    return Ember.K;
+  });
+
+  var adapter = resolver.resolve('adapter:other@post');
+
+  ok(adapter, 'adapter was returned');
+
+  adapter();
+});
+
 test("can lookup a view in another namespace", function() {
+  expect(2);
+
+  define('other/views/post', [], function(){
+    ok(true, "view was invoked properly");
+
+    return Ember.K;
+  });
+
+  var view = resolver.resolve('other@view:post');
+
+  ok(view, 'view was returned');
+
+  view();
+});
+
+test("can lookup a view in another namespace with different syntax", function() {
   expect(2);
 
   define('other/views/post', [], function(){
@@ -587,12 +635,12 @@ test("will not lookup routes in components/", function() {
 
   define('appkit/components/foo-bar/route', [], function(){
     ok(false, 'appkit/components was used');
-    return 'whatever';
+    return { isRouteFactory: true };
   });
 
   define('appkit/routes/foo-bar', [], function(){
     ok(true, 'appkit/routes was used');
-    return 'whatever';
+    return { isRouteFactory: true };
   });
 
   resolver.resolve('route:foo-bar');

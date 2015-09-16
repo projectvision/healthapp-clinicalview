@@ -156,9 +156,22 @@ define('yabbit/initializers/initialize', ['exports', 'ember-parse-adapter/initia
 });
 define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS) {
 
-	'use strict';
+  'use strict';
 
-	exports['default'] = DS['default'].Model.extend({});
+  exports['default'] = DS['default'].Model.extend({
+    physician: belongsTo('physician')
+  });
+
+});
+define('yabbit/models/physician', ['exports', 'ember-data'], function (exports, ember_data) {
+
+  'use strict';
+
+  exports['default'] = ember_data['default'].Model.extend({
+    firstName: attr('string'),
+    lastName: attr('string'),
+    patients: hasMany('patient')
+  });
 
 });
 define('yabbit/router', ['exports', 'ember', 'yabbit/config/environment'], function (exports, Ember, config) {
@@ -1502,7 +1515,17 @@ define('yabbit/tests/models/patient.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/patient.js should pass jshint', function(assert) { 
-    assert.ok(true, 'models/patient.js should pass jshint.'); 
+    assert.ok(false, 'models/patient.js should pass jshint.\nmodels/patient.js: line 4, col 14, \'belongsTo\' is not defined.\n\n1 error'); 
+  });
+
+});
+define('yabbit/tests/models/physician.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - models');
+  QUnit.test('models/physician.js should pass jshint', function(assert) { 
+    assert.ok(false, 'models/physician.js should pass jshint.\nmodels/physician.js: line 4, col 14, \'attr\' is not defined.\nmodels/physician.js: line 5, col 13, \'attr\' is not defined.\nmodels/physician.js: line 6, col 13, \'hasMany\' is not defined.\nmodels/physician.js: line 1, col 14, \'belongsTo\' is defined but never used.\n\n4 errors'); 
   });
 
 });
@@ -1635,6 +1658,32 @@ define('yabbit/tests/unit/models/patient-test.jshint', function () {
   });
 
 });
+define('yabbit/tests/unit/models/physician-test', ['ember-qunit'], function (ember_qunit) {
+
+  'use strict';
+
+  ember_qunit.moduleForModel('physician', 'Unit | Model | physician', {
+    // Specify the other units that are required for this test.
+    needs: []
+  });
+
+  ember_qunit.test('it exists', function (assert) {
+    var model = this.subject();
+    // var store = this.store();
+    assert.ok(!!model);
+  });
+
+});
+define('yabbit/tests/unit/models/physician-test.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - unit/models');
+  QUnit.test('unit/models/physician-test.js should pass jshint', function(assert) { 
+    assert.ok(true, 'unit/models/physician-test.js should pass jshint.'); 
+  });
+
+});
 define('yabbit/tests/unit/routes/index-test', ['ember-qunit'], function (ember_qunit) {
 
   'use strict';
@@ -1734,7 +1783,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"name":"yabbit","version":"0.0.0+fa7a9d3d"});
+  require("yabbit/app")["default"].create({"name":"yabbit","version":"0.0.0+2de277aa"});
 }
 
 /* jshint ignore:end */
