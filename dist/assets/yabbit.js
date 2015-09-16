@@ -1880,7 +1880,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"name":"yabbit","version":"0.0.0+9d307604"});
+  require("yabbit/app")["default"].create({"name":"yabbit","version":"0.0.0+4e1af2e2"});
 }
 
 /* jshint ignore:end */
