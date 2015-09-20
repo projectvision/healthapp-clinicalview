@@ -9,33 +9,24 @@ export default Ember.Controller.extend({
   loginMessage: null,
 
   actions: {
-    signup: function() {
+    login: function() {
+      var controller = this,
+        ParseUser  = this.store.modelFor('parse-user'),
+        data       = {
+          username: this.get('username'),
+          password: this.get('password')
+        };
 
-      // Build User
-
-      // model
-      var user = this.store.modelFor('parse-user');
-      // controller
-      var data = {
-        username: this.get('username'),
-        password: this.get('password'),
-        email: this.get('email')
-      };
-
-      // Save User
-
-      var controller = this;
-
-      user.signup(this.store, data).then(
-        function(user) {
+      ParseUser.login( this.store, data ).then(
+        function( user ) {
           controller.set('loggedIn', true);
           controller.set('loginMessage', 'Welcome!');
         },
-        function(error) {
+        function( error ) {
           controller.set('loggedIn', false);
           controller.set('loginMessage', error.message || error.error);
         }
       );
-    }
+    },
   }
 });
