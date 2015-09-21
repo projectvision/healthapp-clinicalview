@@ -87912,6 +87912,7 @@ define('ember-parse-adapter/models/parse-user', ['exports', 'ember', 'ember-data
 
         return record;
       }, function (response) {
+        console.log(response);
         return Ember['default'].RSVP.reject(response.responseJSON);
       });
     }

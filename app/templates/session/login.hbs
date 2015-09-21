@@ -1,4 +1,6 @@
-<input id="email" type="text" placeholder="Email"/>
-<input id="password" type="password" placeholder="Password"/>
+<form>
+  {{input value=email id="email" placeholder="Email"}}
+  {{input value=password id="password" placeholder="Password"}}
 
-<button type="submit">Login</button>
+  <button type="submit" {{action 'login'}}>Login</button>
+</form>

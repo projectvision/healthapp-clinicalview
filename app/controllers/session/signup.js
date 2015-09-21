@@ -2,11 +2,11 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
+  email: null,
   username: null,
   password: null,
-  email: null,
   loggedIn: false,
-  loginMessage: null,
+  message: null,
 
   actions: {
     signup: function() {
@@ -29,11 +29,12 @@ export default Ember.Controller.extend({
       user.signup(this.store, data).then(
         function(user) {
           controller.set('loggedIn', true);
-          controller.set('loginMessage', 'Welcome!');
+          controller.set('message', 'Welcome!');
         },
         function(error) {
+          console.log(error);
           controller.set('loggedIn', false);
-          controller.set('loginMessage', error.message || error.error);
+          controller.set('message', error.error || error.message);
         }
       );
     }

@@ -79,17 +79,16 @@ define('yabbit/controllers/session/login', ['exports', 'ember'], function (expor
 
   exports['default'] = Ember['default'].Controller.extend({
 
-    username: null,
-    password: null,
     email: null,
+    password: null,
     loggedIn: false,
     loginMessage: null,
 
     actions: {
       login: function login() {
-        var controller = this,
-            ParseUser = this.store.modelFor('parse-user'),
-            data = {
+        var controller = this;
+        var ParseUser = this.store.modelFor('parse-user');
+        var data = {
           username: this.get('username'),
           password: this.get('password')
         };
@@ -112,11 +111,11 @@ define('yabbit/controllers/session/signup', ['exports', 'ember'], function (expo
 
   exports['default'] = Ember['default'].Controller.extend({
 
+    email: null,
     username: null,
     password: null,
-    email: null,
     loggedIn: false,
-    loginMessage: null,
+    message: null,
 
     actions: {
       signup: function signup() {
@@ -138,10 +137,11 @@ define('yabbit/controllers/session/signup', ['exports', 'ember'], function (expo
 
         user.signup(this.store, data).then(function (user) {
           controller.set('loggedIn', true);
-          controller.set('loginMessage', 'Welcome!');
+          controller.set('message', 'Welcome!');
         }, function (error) {
+          console.log(error);
           controller.set('loggedIn', false);
-          controller.set('loginMessage', error.message || error.error);
+          controller.set('message', error.error || error.message);
         });
       }
     }
@@ -1480,7 +1480,7 @@ define('yabbit/templates/session/login', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 5,
+            "line": 7,
             "column": 0
           }
         },
@@ -1491,32 +1491,42 @@ define('yabbit/templates/session/login', ['exports'], function (exports) {
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("input");
-        dom.setAttribute(el1,"id","email");
-        dom.setAttribute(el1,"type","text");
-        dom.setAttribute(el1,"placeholder","Email");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createElement("input");
-        dom.setAttribute(el1,"id","password");
-        dom.setAttribute(el1,"type","password");
-        dom.setAttribute(el1,"placeholder","Password");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n\n");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createElement("button");
-        dom.setAttribute(el1,"type","submit");
-        var el2 = dom.createTextNode("Login");
+        var el1 = dom.createElement("form");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("button");
+        dom.setAttribute(el2,"type","submit");
+        var el3 = dom.createTextNode("Login");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         return el0;
       },
-      buildRenderNodes: function buildRenderNodes() { return []; },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0]);
+        var element1 = dom.childAt(element0, [5]);
+        var morphs = new Array(3);
+        morphs[0] = dom.createMorphAt(element0,1,1);
+        morphs[1] = dom.createMorphAt(element0,3,3);
+        morphs[2] = dom.createElementMorph(element1);
+        return morphs;
+      },
       statements: [
-
+        ["inline","input",[],["value",["subexpr","@mut",[["get","email",["loc",[null,[2,16],[2,21]]]]],[],[]],"id","email","placeholder","Email"],["loc",[null,[2,2],[2,54]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","password",["loc",[null,[3,16],[3,24]]]]],[],[]],"id","password","placeholder","Password"],["loc",[null,[3,2],[3,63]]]],
+        ["element","action",["login"],[],["loc",[null,[5,24],[5,42]]]]
       ],
       locals: [],
       templates: []
@@ -1529,6 +1539,55 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
   'use strict';
 
   exports['default'] = Ember.HTMLBars.template((function() {
+    var child0 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.10",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 5,
+              "column": 0
+            }
+          },
+          "moduleName": "yabbit/templates/session/signup.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("  ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("div");
+          dom.setAttribute(el1,"class","message");
+          var el2 = dom.createTextNode("\n    ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createComment("");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n  ");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]),1,1);
+          return morphs;
+        },
+        statements: [
+          ["content","message",["loc",[null,[3,4],[3,15]]]]
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
     return {
       meta: {
         "revision": "Ember@1.13.10",
@@ -1539,7 +1598,7 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 8,
+            "line": 14,
             "column": 0
           }
         },
@@ -1550,6 +1609,10 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
         var el1 = dom.createElement("form");
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
@@ -1578,23 +1641,26 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0]);
+        var element0 = dom.childAt(fragment, [2]);
         var element1 = dom.childAt(element0, [7]);
-        var morphs = new Array(4);
-        morphs[0] = dom.createMorphAt(element0,1,1);
-        morphs[1] = dom.createMorphAt(element0,3,3);
-        morphs[2] = dom.createMorphAt(element0,5,5);
-        morphs[3] = dom.createElementMorph(element1);
+        var morphs = new Array(5);
+        morphs[0] = dom.createMorphAt(fragment,0,0,contextualElement);
+        morphs[1] = dom.createMorphAt(element0,1,1);
+        morphs[2] = dom.createMorphAt(element0,3,3);
+        morphs[3] = dom.createMorphAt(element0,5,5);
+        morphs[4] = dom.createElementMorph(element1);
+        dom.insertBoundary(fragment, 0);
         return morphs;
       },
       statements: [
-        ["inline","input",[],["value",["subexpr","@mut",[["get","username",["loc",[null,[2,16],[2,24]]]]],[],[]],"id","username","placeholder","Username"],["loc",[null,[2,2],[2,63]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","email",["loc",[null,[3,16],[3,21]]]]],[],[]],"id","email","placeholder","Email"],["loc",[null,[3,2],[3,54]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","password",["loc",[null,[4,16],[4,24]]]]],[],[]],"id","password","placeholder","Password"],["loc",[null,[4,2],[4,63]]]],
-        ["element","action",["signup"],[],["loc",[null,[6,24],[6,43]]]]
+        ["block","if",[["get","message",["loc",[null,[1,6],[1,13]]]]],[],0,null,["loc",[null,[1,0],[5,7]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","username",["loc",[null,[8,16],[8,24]]]]],[],[]],"id","username","placeholder","Username"],["loc",[null,[8,2],[8,63]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","email",["loc",[null,[9,16],[9,21]]]]],[],[]],"id","email","placeholder","Email"],["loc",[null,[9,2],[9,54]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","password",["loc",[null,[10,16],[10,24]]]]],[],[]],"id","password","placeholder","Password"],["loc",[null,[10,2],[10,63]]]],
+        ["element","action",["signup"],[],["loc",[null,[12,24],[12,43]]]]
       ],
       locals: [],
-      templates: []
+      templates: [child0]
     };
   }()));
 
@@ -1645,7 +1711,7 @@ define('yabbit/tests/controllers/session/login.jshint', function () {
 
   QUnit.module('JSHint - controllers/session');
   QUnit.test('controllers/session/login.js should pass jshint', function(assert) { 
-    assert.ok(false, 'controllers/session/login.js should pass jshint.\ncontrollers/session/login.js: line 21, col 19, \'user\' is defined but never used.\n\n1 error'); 
+    assert.ok(false, 'controllers/session/login.js should pass jshint.\ncontrollers/session/login.js: line 20, col 18, \'user\' is defined but never used.\n\n1 error'); 
   });
 
 });
