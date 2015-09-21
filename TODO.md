@@ -1,5 +1,11 @@
 # TODO
 
+## User
+
+Authenticate session
+- https://gist.github.com/joshfester/66265dbefd910862d2f1
+- https://gist.github.com/joshfester/5258acd02513313178ff
+
 ## Concepts
 
 ### Nested UI
