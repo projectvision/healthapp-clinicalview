@@ -1,5 +1,11 @@
+{{#if message}}
+  <div class="message">
+    {{message}}
+  </div>
+{{/if}}
+
 <form>
-  {{input value=email id="email" placeholder="Email"}}
+  {{input value=username id="username" placeholder="Email"}}
   {{input value=password id="password" placeholder="Password"}}
 
   <button type="submit" {{action 'login'}}>Login</button>

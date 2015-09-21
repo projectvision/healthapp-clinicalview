@@ -2,28 +2,34 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
-  email: null,
+  username: null,
   password: null,
   loggedIn: false,
-  loginMessage: null,
+  message: null,
 
   actions: {
     login: function() {
-      var controller = this;
-      var ParseUser  = this.store.modelFor('parse-user');
-      var data       = {
+
+      // Get Login Details
+
+      var user = this.store.modelFor('parse-user');
+      var data = {
         username: this.get('username'),
         password: this.get('password')
       };
 
-      ParseUser.login(this.store, data).then(
+      // Load User
+
+      var controller = this;
+
+      user.login(this.store, data).then(
         function(user) {
           controller.set('loggedIn', true);
-          controller.set('loginMessage', 'Welcome!');
+          controller.set('message', 'Welcome!');
         },
         function(error) {
           controller.set('loggedIn', false);
-          controller.set('loginMessage', error.message || error.error);
+          controller.set('message', error.message || error.error);
         }
       );
     },

@@ -9,6 +9,7 @@
 /* Widths */
 /* Heights */
 /* Borders */
+/* Regions */
 /******************************************************************************
  * BACKGROUNDS
  *****************************************************************************/
@@ -65,6 +66,22 @@ button[type="submit"] {
 
 #session button {
   margin-top: 10px; }
+
+/******************************************************************************
+ * ALERTS
+ ******************************************************************************/
+.message {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  box-shadow: 1px 1px 10px #eee;
+  background: white;
+  padding: 10px;
+  margin-bottom: 10px; }
+  .message p {
+    font-size: 1em; }
+    .message p:first-child {
+      margin: 0; }
 
 /******************************************************************************
  * Render Config *

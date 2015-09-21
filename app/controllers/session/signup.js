@@ -3,7 +3,6 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
 
   email: null,
-  username: null,
   password: null,
   loggedIn: false,
   message: null,
@@ -13,13 +12,11 @@ export default Ember.Controller.extend({
 
       // Build User
 
-      // model
       var user = this.store.modelFor('parse-user');
-      // controller
       var data = {
-        username: this.get('username'),
+        email: this.get('email'),
+        username: this.get('email'),
         password: this.get('password'),
-        email: this.get('email')
       };
 
       // Save User
@@ -29,7 +26,7 @@ export default Ember.Controller.extend({
       user.signup(this.store, data).then(
         function(user) {
           controller.set('loggedIn', true);
-          controller.set('message', 'Welcome!');
+          controller.set('message', 'You are now signed up!');
         },
         function(error) {
           console.log(error);
