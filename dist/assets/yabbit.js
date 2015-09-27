@@ -111,16 +111,28 @@ define('yabbit/controllers/session/login', ['exports', 'ember'], function (expor
   });
 
 });
-define('yabbit/controllers/session/signup', ['exports', 'ember'], function (exports, Ember) {
+define('yabbit/controllers/session/signup', ['exports', 'ember', 'ember-validations'], function (exports, Ember, EmberValidations) {
 
   'use strict';
 
-  exports['default'] = Ember['default'].Controller.extend({
+  exports['default'] = Ember['default'].Controller.extend(EmberValidations['default'], {
 
     email: null,
     password: null,
+    passwordConfirmation: null,
     loggedIn: false,
     message: null,
+
+    validations: {
+      password: {
+        presence: { message: 'password required' },
+        length: { minimum: 5 },
+        confirmation: true
+      },
+      passwordConfirmation: {
+        presence: { message: 'please confirm password' }
+      }
+    },
 
     actions: {
       signup: function signup() {
@@ -148,96 +160,6 @@ define('yabbit/controllers/session/signup', ['exports', 'ember'], function (expo
         });
       }
     }
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/adapters/application.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/adapters');
-  QUnit.test('modules/ember-parse-adapter/adapters/application.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/adapters/application.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/file.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter');
-  QUnit.test('modules/ember-parse-adapter/file.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/file.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/geopoint.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter');
-  QUnit.test('modules/ember-parse-adapter/geopoint.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/geopoint.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/initializers/initialize.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/initializers');
-  QUnit.test('modules/ember-parse-adapter/initializers/initialize.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/initializers/initialize.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/models/parse-user.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/models');
-  QUnit.test('modules/ember-parse-adapter/models/parse-user.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/models/parse-user.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/serializers/application.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/serializers');
-  QUnit.test('modules/ember-parse-adapter/serializers/application.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/serializers/application.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/transforms/date.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/transforms');
-  QUnit.test('modules/ember-parse-adapter/transforms/date.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/transforms/date.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/transforms/file.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/transforms');
-  QUnit.test('modules/ember-parse-adapter/transforms/file.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/transforms/file.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/transforms/geopoint.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/transforms');
-  QUnit.test('modules/ember-parse-adapter/transforms/geopoint.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/transforms/geopoint.js should pass jshint.');
   });
 
 });
@@ -512,6 +434,19 @@ define('yabbit/serializers/application', ['exports', 'ember-parse-adapter/serial
 	'use strict';
 
 	exports['default'] = serializer['default'];
+
+});
+define('yabbit/services/validations', ['exports', 'ember'], function (exports, Ember) {
+
+  'use strict';
+
+  var set = Ember['default'].set;
+
+  exports['default'] = Ember['default'].Service.extend({
+    init: function init() {
+      set(this, 'cache', {});
+    }
+  });
 
 });
 define('yabbit/templates/application', ['exports'], function (exports) {
@@ -1670,7 +1605,7 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 13,
+            "line": 14,
             "column": 0
           }
         },
@@ -1686,6 +1621,10 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         var el1 = dom.createElement("form");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createComment("");
@@ -1710,12 +1649,13 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var element0 = dom.childAt(fragment, [2]);
-        var element1 = dom.childAt(element0, [5]);
-        var morphs = new Array(4);
+        var element1 = dom.childAt(element0, [7]);
+        var morphs = new Array(5);
         morphs[0] = dom.createMorphAt(fragment,0,0,contextualElement);
         morphs[1] = dom.createMorphAt(element0,1,1);
         morphs[2] = dom.createMorphAt(element0,3,3);
-        morphs[3] = dom.createElementMorph(element1);
+        morphs[3] = dom.createMorphAt(element0,5,5);
+        morphs[4] = dom.createElementMorph(element1);
         dom.insertBoundary(fragment, 0);
         return morphs;
       },
@@ -1723,7 +1663,8 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
         ["block","if",[["get","message",["loc",[null,[1,6],[1,13]]]]],[],0,null,["loc",[null,[1,0],[5,7]]]],
         ["inline","input",[],["value",["subexpr","@mut",[["get","email",["loc",[null,[8,16],[8,21]]]]],[],[]],"id","email","placeholder","Email"],["loc",[null,[8,2],[8,54]]]],
         ["inline","input",[],["value",["subexpr","@mut",[["get","password",["loc",[null,[9,16],[9,24]]]]],[],[]],"id","password","placeholder","Password"],["loc",[null,[9,2],[9,63]]]],
-        ["element","action",["signup"],[],["loc",[null,[11,24],[11,43]]]]
+        ["inline","input",[],["value",["subexpr","@mut",[["get","passwordConfirmation",["loc",[null,[10,16],[10,36]]]]],[],[]],"id","password-confirmation","placeholder","Confirm Password"],["loc",[null,[10,2],[10,96]]]],
+        ["element","action",["signup"],[],["loc",[null,[12,24],[12,43]]]]
       ],
       locals: [],
       templates: [child0]
@@ -1787,7 +1728,7 @@ define('yabbit/tests/controllers/session/signup.jshint', function () {
 
   QUnit.module('JSHint - controllers/session');
   QUnit.test('controllers/session/signup.js should pass jshint', function(assert) { 
-    assert.ok(false, 'controllers/session/signup.js should pass jshint.\ncontrollers/session/signup.js: line 27, col 18, \'user\' is defined but never used.\n\n1 error'); 
+    assert.ok(false, 'controllers/session/signup.js should pass jshint.\ncontrollers/session/signup.js: line 40, col 18, \'user\' is defined but never used.\n\n1 error'); 
   });
 
 });
@@ -1846,6 +1787,76 @@ define('yabbit/tests/helpers/start-app.jshint', function () {
   QUnit.test('helpers/start-app.js should pass jshint', function(assert) { 
     assert.ok(true, 'helpers/start-app.js should pass jshint.'); 
   });
+
+});
+define('yabbit/tests/helpers/validate-properties', ['exports', 'ember', 'ember-qunit'], function (exports, Ember, ember_qunit) {
+
+  'use strict';
+
+  exports.testValidPropertyValues = testValidPropertyValues;
+  exports.testInvalidPropertyValues = testInvalidPropertyValues;
+
+  var run = Ember['default'].run;
+
+  function validateValues(object, propertyName, values, isTestForValid) {
+    var promise = null;
+    var validatedValues = [];
+
+    values.forEach(function (value) {
+      function handleValidation(errors) {
+        var hasErrors = object.get('errors.' + propertyName + '.firstObject');
+        if (hasErrors && !isTestForValid || !hasErrors && isTestForValid) {
+          validatedValues.push(value);
+        }
+      }
+
+      run(object, 'set', propertyName, value);
+
+      var objectPromise = null;
+      run(function () {
+        objectPromise = object.validate().then(handleValidation, handleValidation);
+      });
+
+      // Since we are setting the values in a different run loop as we are validating them,
+      // we need to chain the promises so that they run sequentially. The wrong value will
+      // be validated if the promises execute concurrently
+      promise = promise ? promise.then(objectPromise) : objectPromise;
+    });
+
+    return promise.then(function () {
+      return validatedValues;
+    });
+  }
+
+  function testPropertyValues(propertyName, values, isTestForValid, context) {
+    var validOrInvalid = isTestForValid ? 'Valid' : 'Invalid';
+    var testName = validOrInvalid + ' ' + propertyName;
+
+    ember_qunit.test(testName, function (assert) {
+      var object = this.subject();
+
+      if (context && typeof context === 'function') {
+        context(object);
+      }
+
+      // Use QUnit.dump.parse so null and undefined can be printed as literal 'null' and
+      // 'undefined' strings in the assert message.
+      var valuesString = QUnit.dump.parse(values).replace(/\n(\s+)?/g, '').replace(/,/g, ', ');
+      var assertMessage = 'Expected ' + propertyName + ' to have ' + validOrInvalid.toLowerCase() + ' values: ' + valuesString;
+
+      return validateValues(object, propertyName, values, isTestForValid).then(function (validatedValues) {
+        assert.deepEqual(validatedValues, values, assertMessage);
+      });
+    });
+  }
+
+  function testValidPropertyValues(propertyName, values, context) {
+    testPropertyValues(propertyName, values, true, context);
+  }
+
+  function testInvalidPropertyValues(propertyName, values, context) {
+    testPropertyValues(propertyName, values, false, context);
+  }
 
 });
 define('yabbit/tests/models/patient.jshint', function () {
@@ -2148,7 +2159,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+fc1ff747"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+3d40eaf2"});
 }
 
 /* jshint ignore:end */

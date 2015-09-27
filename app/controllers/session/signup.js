@@ -1,11 +1,24 @@
 import Ember from 'ember';
+import EmberValidations from 'ember-validations';
 
-export default Ember.Controller.extend({
+export default Ember.Controller.extend(EmberValidations, {
 
   email: null,
   password: null,
+  passwordConfirmation: null,
   loggedIn: false,
   message: null,
+
+  validations: {
+    password: {
+      presence: {message: 'password required'},
+      length: {minimum: 5},
+      confirmation: true
+    },
+    passwordConfirmation: {
+      presence: {message: 'please confirm password'}
+    }
+  },
 
   actions: {
     signup: function() {
