@@ -2,9 +2,10 @@
 
 ## User
 
-Authenticate session
-- https://gist.github.com/joshfester/66265dbefd910862d2f1
-- https://gist.github.com/joshfester/5258acd02513313178ff
+- Fix validation https://github.com/dockyard/ember-validations/issues/343
+- Authenticate session
+  https://gist.github.com/joshfester/66265dbefd910862d2f1
+  https://gist.github.com/joshfester/5258acd02513313178ff
 
 ## Concepts
 
