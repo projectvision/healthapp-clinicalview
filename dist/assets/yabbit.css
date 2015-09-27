@@ -197,8 +197,8 @@ section#patients {
         section#patients aside ul li a {
           display: block;
           padding: 0 20px;
-          height: 60px;
-          line-height: 60px;
+          height: 63px;
+          line-height: 63px;
           text-shadow: 1px 1px 1px white; }
           section#patients aside ul li a.active {
             background: white;
@@ -209,8 +209,6 @@ section#patients {
     overflow: auto;
     border: 1px solid #7F7F7F;
     border-top: 0; }
-    section#patients #patients-overview table tr td {
-      height: 60px; }
   section#patients .pane {
     position: absolute;
     top: 0;
@@ -242,11 +240,14 @@ section#patients {
         section#patients table thead th.activity-level {
           width: 30%; }
     section#patients table tbody tr td {
-      padding: 0;
+      padding: 0 10px;
       border: 1px solid #ccc; }
+      section#patients table tbody tr td:first-child {
+        padding: 0; }
       section#patients table tbody tr td .bar {
         color: white;
-        height: 20px;
+        height: 21px;
+        padding: 2px 3px;
         background: #EFEFEF; }
         section#patients table tbody tr td .bar.fitness {
           background: #F9BDD3; }

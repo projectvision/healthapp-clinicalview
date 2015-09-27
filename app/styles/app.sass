@@ -136,10 +136,6 @@ section#patients
     overflow: auto
     border: 1px solid #7F7F7F
     border-top: 0
-    table
-      tr
-        td
-          height: $row_height
 
   .pane
     position: absolute
@@ -175,11 +171,14 @@ section#patients
     tbody
       tr
         td
-          padding: 0
+          padding: 0 $padding
           border: 1px solid #ccc
+          &:first-child
+            padding: 0          
           .bar
             color: white
             height: $row_height / 3
+            padding: 2px 3px
             background: #EFEFEF
             &.fitness
               background: #F9BDD3
