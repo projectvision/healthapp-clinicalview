@@ -322,6 +322,19 @@ define('yabbit/initializers/initialize', ['exports', 'ember-parse-adapter/initia
   };
 
 });
+define('yabbit/initializers/simple-auth', ['exports', 'simple-auth/configuration', 'simple-auth/setup', 'yabbit/config/environment'], function (exports, Configuration, setup, ENV) {
+
+  'use strict';
+
+  exports['default'] = {
+    name: 'simple-auth',
+    initialize: function initialize(container, application) {
+      Configuration['default'].load(container, ENV['default']['simple-auth'] || {});
+      setup['default'](container, application);
+    }
+  };
+
+});
 define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS) {
 
   'use strict';
@@ -2135,7 +2148,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+99818bc8"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+fc1ff747"});
 }
 
 /* jshint ignore:end */
