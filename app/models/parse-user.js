@@ -7,7 +7,7 @@ ParseUser.reopenClass({
 
   current: function() {
     var model = this,
-      store = application.container.lookup('service:store'),
+      store = Ember.inject.service('store'),
       adapter = store.adapterFor('parse-user'),
       serializer = store.serializerFor('parse-user');
 

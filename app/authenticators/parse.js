@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import Base from 'simple-auth/authenticators/base';
 import ParseUser from 'ember-parse-adapter/models/parse-user';
 
@@ -10,7 +11,7 @@ export default Base.extend({
     }
 
     sessionToken = data.sessionToken;
-    store = this.container.lookup('service:store');
+    store = Ember.inject.service('store');
     adapter = store.adapterFor('parse-user');
 
     adapter.set('sessionToken', sessionToken);
@@ -32,13 +33,16 @@ export default Base.extend({
     var store, adapter, user,
       authenticator = this;
 
+    console.log('authenticate data');
+    console.log(data);
+
     // Ember-Simple-Auth uses "identification", Parse uses "username"
     if (data.identification) {
       data.username = data.identification;
     }
 
     // Get the store and adapter
-    store = this.container.lookup('service:store');
+    store = Ember.inject.service('store');
     adapter = store.adapterFor('parse-user');
 
     // If user data is already set
@@ -75,8 +79,8 @@ export default Base.extend({
 
   invalidate: function() {
     // Get the store and adapter
-    var store = this.container.lookup('service:store'),
-      adapter = store.adapterFor('parse-user');
+    var store = Ember.inject.service('store');
+    var adapter = store.adapterFor('parse-user');
 
     return new Ember.RSVP.Promise(function(resolve, reject) {
       adapter.set('sessionToken', null);
