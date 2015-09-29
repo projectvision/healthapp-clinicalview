@@ -1,5 +1,8 @@
 import ParseUser from 'ember-parse-adapter/models/parse-user';
 
+// ParseUser is created by Ember Parse Adapter and signup/login functions
+// are located in 'node_modules/ember-parse-adapter/addon/models/parse-user.js'
+
 ParseUser.reopenClass({
 
   current: function() {

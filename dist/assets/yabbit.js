@@ -2092,7 +2092,7 @@ define('yabbit/tests/models/parse-user.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/parse-user.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 7, col 15, \'application\' is not defined.\nmodels/parse-user.js: line 28, col 17, \'application\' is not defined.\nmodels/parse-user.js: line 6, col 9, \'model\' is defined but never used.\nmodels/parse-user.js: line 9, col 7, \'serializer\' is defined but never used.\n\n4 errors'); 
+    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 10, col 15, \'application\' is not defined.\nmodels/parse-user.js: line 31, col 17, \'application\' is not defined.\nmodels/parse-user.js: line 9, col 9, \'model\' is defined but never used.\nmodels/parse-user.js: line 12, col 7, \'serializer\' is defined but never used.\n\n4 errors'); 
   });
 
 });
@@ -2396,7 +2396,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+e9392ae2"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+beb18ebb"});
 }
 
 /* jshint ignore:end */
