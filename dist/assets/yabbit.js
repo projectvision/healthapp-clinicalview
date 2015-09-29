@@ -347,11 +347,11 @@ define('yabbit/initializers/simple-auth', ['exports', 'simple-auth/configuration
   };
 
 });
-define('yabbit/models/parse-user', function () {
+define('yabbit/models/parse-user', ['exports', 'ember-parse-adapter/models/parse-user'], function (exports, ParseUser) {
 
   'use strict';
 
-  ParseUser.reopenClass({
+  ParseUser['default'].reopenClass({
 
     current: function current() {
       var model = this,
@@ -380,6 +380,8 @@ define('yabbit/models/parse-user', function () {
       return this.login(store, data);
     }
   });
+
+  exports['default'] = ParseUser['default'];
 
 });
 define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS) {
@@ -2090,7 +2092,7 @@ define('yabbit/tests/models/parse-user.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/parse-user.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 1, col 1, \'ParseUser\' is not defined.\nmodels/parse-user.js: line 5, col 15, \'application\' is not defined.\nmodels/parse-user.js: line 26, col 17, \'application\' is not defined.\nmodels/parse-user.js: line 4, col 9, \'model\' is defined but never used.\nmodels/parse-user.js: line 7, col 7, \'serializer\' is defined but never used.\n\n5 errors'); 
+    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 7, col 15, \'application\' is not defined.\nmodels/parse-user.js: line 28, col 17, \'application\' is not defined.\nmodels/parse-user.js: line 6, col 9, \'model\' is defined but never used.\nmodels/parse-user.js: line 9, col 7, \'serializer\' is defined but never used.\n\n4 errors'); 
   });
 
 });

@@ -1,3 +1,5 @@
+import ParseUser from 'ember-parse-adapter/models/parse-user';
+
 ParseUser.reopenClass({
 
   current: function() {
@@ -27,3 +29,5 @@ ParseUser.reopenClass({
     return this.login(store, data);
   }
 });
+
+export default ParseUser;
