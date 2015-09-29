@@ -13,6 +13,9 @@ ParseUser.reopenClass({
       serializer = store.serializerFor('parse-user');
 
     return adapter.ajax(adapter.buildURL("parse-user", "me"), "GET", {}).then(function(user) {
+      console.log('ParseUser current');
+      console.log(user);
+
       return store.push({
         data: {
           id: user.objectId,
@@ -29,8 +32,8 @@ ParseUser.reopenClass({
   },
 
   loginProxy: function(data) {
-    //var store = this.container.lookup('service:store');
-    var store = Ember.inject.service('store');
+    var store = this.container.lookup('service:store');
+    //var store = Ember.inject.service('store');
     return this.login(store, data);
   }
 });

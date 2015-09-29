@@ -5,8 +5,8 @@
 {{/if}}
 
 <form>
-  {{input value=username id="username" placeholder="Email"}}
+  {{input value=identification id="identification" placeholder="Email"}}
   {{input value=password id="password" placeholder="Password"}}
 
-  <button type="submit" {{action 'login'}}>Login</button>
+  <button type="submit" {{action 'authenticate'}}>Login</button>
 </form>

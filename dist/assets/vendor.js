@@ -89532,7 +89532,7 @@ define('ember-parse-adapter/models/parse-user', ['exports', 'ember', 'ember-data
     },
 
     login: function login(store, data) {
-      console.log('store');
+      console.log('ParseUser login: store');
       console.log(store);
 
       var model = this,

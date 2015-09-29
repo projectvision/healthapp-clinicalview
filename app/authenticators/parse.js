@@ -4,6 +4,9 @@ import ParseUser from 'ember-parse-adapter/models/parse-user';
 
 export default Base.extend({
   restore: function(data) {
+    console.log('restore');
+    console.log(data);
+
     var sessionToken, adapter, store;
 
     if (!data.sessionToken) {
@@ -32,9 +35,9 @@ export default Base.extend({
   authenticate: function(data) {
     var store, adapter, user;
 
-    // Ember-Simple-Auth uses "id", Parse uses "username"
-    if (data.id) {
-      data.username = data.id;
+    // Ember-Simple-Auth uses "identification", Parse uses "username"
+    if (data.identification) {
+      data.username = data.identification;
     }
 
     // Get the store and adapter
