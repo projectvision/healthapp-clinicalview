@@ -1,5 +1,3 @@
-/* jshint node: true */
-
 module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'yabbit',
@@ -19,23 +17,21 @@ module.exports = function(environment) {
       'style-src': "'self' 'unsafe-inline'",
     },
     APP: {
-      // yabbit
+      // Yabbit
       // applicationId: 'vNmHb7Gvkgji498TMTEARjDB2oRJhgDZb04I3hNW',
       // restApiId: '2I8w9D0u7GCp2dIhH7Vd1pRNaWG9yuhHn7LNXn1S'
-      // test
+      // Sandbox
       applicationId: 'kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9',
       restApiId: '1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN'
     }
   };
 
-  //ENV['ember-parse'] = {
-  //  //PARSE_APPLICATION_ID: 'vNmHb7Gvkgji498TMTEARjDB2oRJhgDZb04I3hNW',
-  //  //PARSE_JAVASCRIPT_KEY: 'RZWWKdgQQ9x8Mr57Dl8ZMUp4nQOh8U5IpoKIBw4o',
-  //  session: {
-  //    authenticationRoute: 'session',
-  //    ifAlreadyAuthenticatedRoute: 'patients'
-  //  }
-  //};
+  ENV['simple-auth'] = {
+    authorizer: 'authorizer:parse',
+    authenticationRoute: 'session/login',
+    routeIfAlreadyAuthenticated: 'patients/index',
+    store: 'simple-auth-session-store:local-storage'
+  }
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;

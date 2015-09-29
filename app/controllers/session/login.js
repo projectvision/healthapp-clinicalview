@@ -11,7 +11,6 @@ export default Ember.Controller.extend({
     login: function() {
 
       // Get Login Details
-
       var user = this.store.modelFor('parse-user');
       var data = {
         username: this.get('username'),
@@ -19,7 +18,6 @@ export default Ember.Controller.extend({
       };
 
       // Load User
-
       var controller = this;
 
       user.login(this.store, data).then(
