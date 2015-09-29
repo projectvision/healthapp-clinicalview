@@ -89337,8 +89337,6 @@ define('ember-parse-adapter/adapters/application', ['exports', 'ember', 'ember-d
     * latest data.
     */
     createRecord: function createRecord(store, type, snapshot) {
-      console.log('ADAPTER ADAPTER createRecord:');
-
       var serializer = store.serializerFor(type.modelName),
           data = {},
           adapter = this;
@@ -89347,11 +89345,6 @@ define('ember-parse-adapter/adapters/application', ['exports', 'ember', 'ember-d
 
       return new Ember['default'].RSVP.Promise(function (resolve, reject) {
         adapter.ajax(adapter.buildURL(type.modelName), 'POST', { data: data }).then(function (json) {
-
-          console.log('Promise: data and json');
-          console.log(data);
-          console.log(json);
-
           var completed = Ember['default'].merge(data, json);
           resolve(completed);
         }, function (reason) {
@@ -89539,6 +89532,9 @@ define('ember-parse-adapter/models/parse-user', ['exports', 'ember', 'ember-data
     },
 
     login: function login(store, data) {
+      console.log('store');
+      console.log(store);
+
       var model = this,
           adapter = store.adapterFor('parse-user'),
           serializer = store.serializerFor('parse-user');

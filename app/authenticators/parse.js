@@ -30,19 +30,16 @@ export default Base.extend({
   },
 
   authenticate: function(data) {
-    var store, adapter, user,
-      authenticator = this;
+    var store, adapter, user;
 
-    console.log('authenticate data');
-    console.log(data);
-
-    // Ember-Simple-Auth uses "identification", Parse uses "username"
-    if (data.identification) {
-      data.username = data.identification;
+    // Ember-Simple-Auth uses "id", Parse uses "username"
+    if (data.id) {
+      data.username = data.id;
     }
 
     // Get the store and adapter
-    store = Ember.inject.service('store');
+    store = this.container.lookup('service:store');
+    //store = Ember.inject.service('store');
     adapter = store.adapterFor('parse-user');
 
     // If user data is already set
@@ -79,7 +76,8 @@ export default Base.extend({
 
   invalidate: function() {
     // Get the store and adapter
-    var store = Ember.inject.service('store');
+    var store = this.container.lookup('service:store');
+    //var store = Ember.inject.service('store');
     var adapter = store.adapterFor('parse-user');
 
     return new Ember.RSVP.Promise(function(resolve, reject) {

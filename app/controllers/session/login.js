@@ -2,8 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
-  username: null,
-  password: null,
+  username: "maediprichard@gmail.com",
+  password: "m",
   loggedIn: false,
   message: null,
 
@@ -24,13 +24,8 @@ export default Ember.Controller.extend({
         function(user) {
           controller.set('loggedIn', true);
           controller.set('message', 'Welcome!');
-
-          console.log('user.login session');
-          console.log(controller.get('session'));
-          controller.get('session').authenticate('authenticator:parse', {data: user});
-          console.log('user.login authenticated session');
-          console.log(controller.get('session'));
-          console.log(controller.get('session.isAuthenticated'));
+          //controller.get('session').authenticate('authenticator:parse', user);
+          console.log(controller.get('session.isAuthenticated'));          
         },
         function(error) {
           controller.set('loggedIn', false);

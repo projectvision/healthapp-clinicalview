@@ -61,21 +61,16 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
     },
 
     authenticate: function authenticate(data) {
-      var store,
-          adapter,
-          user,
-          authenticator = this;
+      var store, adapter, user;
 
-      console.log('authenticate data');
-      console.log(data);
-
-      // Ember-Simple-Auth uses "identification", Parse uses "username"
-      if (data.identification) {
-        data.username = data.identification;
+      // Ember-Simple-Auth uses "id", Parse uses "username"
+      if (data.id) {
+        data.username = data.id;
       }
 
       // Get the store and adapter
-      store = Ember['default'].inject.service('store');
+      store = this.container.lookup('service:store');
+      //store = Ember.inject.service('store');
       adapter = store.adapterFor('parse-user');
 
       // If user data is already set
@@ -112,7 +107,8 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
 
     invalidate: function invalidate() {
       // Get the store and adapter
-      var store = Ember['default'].inject.service('store');
+      var store = this.container.lookup('service:store');
+      //var store = Ember.inject.service('store');
       var adapter = store.adapterFor('parse-user');
 
       return new Ember['default'].RSVP.Promise(function (resolve, reject) {
@@ -123,17 +119,22 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
   });
 
 });
-define('yabbit/authorizers/parse', ['exports', 'simple-auth/authorizers/base'], function (exports, Base) {
+define('yabbit/authorizers/parse', function () {
 
-  'use strict';
+	'use strict';
 
-  exports['default'] = Base['default'].extend({
-    authorize: function authorize(jqXHR, requestOptions) {
-      if (this.get('session.isAuthenticated') && !Ember.isEmpty(this.get('session.secure.token'))) {
-        jqXHR.setRequestHeader('Authorization', 'Token: ' + this.get('session.secure.token'));
-      }
-    }
-  });
+	//import Base from 'simple-auth/authorizers/base';
+	//
+	//// @TODO: Configure for use with Parse
+	//
+	//export default Base.extend({
+	//  authorize: function(jqXHR, requestOptions) {
+	//    if (this.get('session.isAuthenticated') && !Ember.isEmpty(this.get('session.secure.token'))) {
+	//      jqXHR.setRequestHeader('Authorization', 'Token: ' + this.get('session.secure.token'));
+	//    }
+	//  }
+	//});
+	//
 
 });
 define('yabbit/components/app-version', ['exports', 'ember-cli-app-version/components/app-version', 'yabbit/config/environment'], function (exports, AppVersionComponent, config) {
@@ -186,8 +187,8 @@ define('yabbit/controllers/session/login', ['exports', 'ember'], function (expor
 
   exports['default'] = Ember['default'].Controller.extend({
 
-    username: null,
-    password: null,
+    username: "maediprichard@gmail.com",
+    password: "m",
     loggedIn: false,
     message: null,
 
@@ -207,12 +208,7 @@ define('yabbit/controllers/session/login', ['exports', 'ember'], function (expor
         user.login(this.store, data).then(function (user) {
           controller.set('loggedIn', true);
           controller.set('message', 'Welcome!');
-
-          console.log('user.login session');
-          console.log(controller.get('session'));
-          controller.get('session').authenticate('authenticator:parse', { data: user });
-          console.log('user.login authenticated session');
-          console.log(controller.get('session'));
+          //controller.get('session').authenticate('authenticator:parse', user);
           console.log(controller.get('session.isAuthenticated'));
         }, function (error) {
           controller.set('loggedIn', false);
@@ -272,6 +268,96 @@ define('yabbit/controllers/session/signup', ['exports', 'ember', 'ember-validati
         });
       }
     }
+  });
+
+});
+define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/adapters/application.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - modules/ember-parse-adapter/adapters');
+  QUnit.test('modules/ember-parse-adapter/adapters/application.js should pass jshint', function (assert) {
+    assert.ok(true, 'modules/ember-parse-adapter/adapters/application.js should pass jshint.');
+  });
+
+});
+define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/file.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - modules/ember-parse-adapter');
+  QUnit.test('modules/ember-parse-adapter/file.js should pass jshint', function (assert) {
+    assert.ok(true, 'modules/ember-parse-adapter/file.js should pass jshint.');
+  });
+
+});
+define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/geopoint.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - modules/ember-parse-adapter');
+  QUnit.test('modules/ember-parse-adapter/geopoint.js should pass jshint', function (assert) {
+    assert.ok(true, 'modules/ember-parse-adapter/geopoint.js should pass jshint.');
+  });
+
+});
+define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/initializers/initialize.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - modules/ember-parse-adapter/initializers');
+  QUnit.test('modules/ember-parse-adapter/initializers/initialize.js should pass jshint', function (assert) {
+    assert.ok(true, 'modules/ember-parse-adapter/initializers/initialize.js should pass jshint.');
+  });
+
+});
+define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/models/parse-user.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - modules/ember-parse-adapter/models');
+  QUnit.test('modules/ember-parse-adapter/models/parse-user.js should pass jshint', function (assert) {
+    assert.ok(true, 'modules/ember-parse-adapter/models/parse-user.js should pass jshint.');
+  });
+
+});
+define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/serializers/application.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - modules/ember-parse-adapter/serializers');
+  QUnit.test('modules/ember-parse-adapter/serializers/application.js should pass jshint', function (assert) {
+    assert.ok(true, 'modules/ember-parse-adapter/serializers/application.js should pass jshint.');
+  });
+
+});
+define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/transforms/date.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - modules/ember-parse-adapter/transforms');
+  QUnit.test('modules/ember-parse-adapter/transforms/date.js should pass jshint', function (assert) {
+    assert.ok(true, 'modules/ember-parse-adapter/transforms/date.js should pass jshint.');
+  });
+
+});
+define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/transforms/file.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - modules/ember-parse-adapter/transforms');
+  QUnit.test('modules/ember-parse-adapter/transforms/file.js should pass jshint', function (assert) {
+    assert.ok(true, 'modules/ember-parse-adapter/transforms/file.js should pass jshint.');
+  });
+
+});
+define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/transforms/geopoint.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - modules/ember-parse-adapter/transforms');
+  QUnit.test('modules/ember-parse-adapter/transforms/geopoint.js should pass jshint', function (assert) {
+    assert.ok(true, 'modules/ember-parse-adapter/transforms/geopoint.js should pass jshint.');
   });
 
 });
@@ -377,8 +463,10 @@ define('yabbit/models/parse-user', ['exports', 'ember-parse-adapter/models/parse
 
     current: function current() {
       var model = this,
-          store = Ember.inject.service('store'),
-          adapter = store.adapterFor('parse-user'),
+          store = this.container.lookup('service:store'),
+
+      //store = Ember.inject.service('store'),
+      adapter = store.adapterFor('parse-user'),
           serializer = store.serializerFor('parse-user');
 
       return adapter.ajax(adapter.buildURL("parse-user", "me"), "GET", {}).then(function (user) {
@@ -398,7 +486,8 @@ define('yabbit/models/parse-user', ['exports', 'ember-parse-adapter/models/parse
     },
 
     loginProxy: function loginProxy(data) {
-      var store = application.container.lookup('service:store');
+      //var store = this.container.lookup('service:store');
+      var store = Ember.inject.service('store');
       return this.login(store, data);
     }
   });
@@ -1937,7 +2026,7 @@ define('yabbit/tests/authenticators/parse.jshint', function () {
 
   QUnit.module('JSHint - authenticators');
   QUnit.test('authenticators/parse.js should pass jshint', function(assert) { 
-    assert.ok(false, 'authenticators/parse.js should pass jshint.\nauthenticators/parse.js: line 34, col 7, \'authenticator\' is defined but never used.\nauthenticators/parse.js: line 85, col 53, \'reject\' is defined but never used.\n\n2 errors'); 
+    assert.ok(false, 'authenticators/parse.js should pass jshint.\nauthenticators/parse.js: line 83, col 53, \'reject\' is defined but never used.\n\n1 error'); 
   });
 
 });
@@ -1947,7 +2036,7 @@ define('yabbit/tests/authorizers/parse.jshint', function () {
 
   QUnit.module('JSHint - authorizers');
   QUnit.test('authorizers/parse.js should pass jshint', function(assert) { 
-    assert.ok(false, 'authorizers/parse.js should pass jshint.\nauthorizers/parse.js: line 7, col 49, \'Ember\' is not defined.\nauthorizers/parse.js: line 6, col 30, \'requestOptions\' is defined but never used.\n\n2 errors'); 
+    assert.ok(true, 'authorizers/parse.js should pass jshint.'); 
   });
 
 });
@@ -1977,7 +2066,7 @@ define('yabbit/tests/controllers/session/login.jshint', function () {
 
   QUnit.module('JSHint - controllers/session');
   QUnit.test('controllers/session/login.js should pass jshint', function(assert) { 
-    assert.ok(true, 'controllers/session/login.js should pass jshint.'); 
+    assert.ok(false, 'controllers/session/login.js should pass jshint.\ncontrollers/session/login.js: line 24, col 18, \'user\' is defined but never used.\n\n1 error'); 
   });
 
 });
@@ -2124,7 +2213,7 @@ define('yabbit/tests/models/parse-user.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/parse-user.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 10, col 15, \'Ember\' is not defined.\nmodels/parse-user.js: line 31, col 17, \'application\' is not defined.\nmodels/parse-user.js: line 9, col 9, \'model\' is defined but never used.\nmodels/parse-user.js: line 12, col 7, \'serializer\' is defined but never used.\n\n4 errors'); 
+    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 33, col 17, \'Ember\' is not defined.\nmodels/parse-user.js: line 9, col 9, \'model\' is defined but never used.\nmodels/parse-user.js: line 13, col 7, \'serializer\' is defined but never used.\n\n3 errors'); 
   });
 
 });
@@ -2428,7 +2517,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+a7ee2495"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+1e2f793f"});
 }
 
 /* jshint ignore:end */
