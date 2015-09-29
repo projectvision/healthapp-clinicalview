@@ -4,6 +4,7 @@
 
 - Fix validation https://github.com/dockyard/ember-validations/issues/343
 - Authenticate session
+  http://ember-simple-auth.com/ember-simple-auth-api-docs.html#SimpleAuth-Session
   https://gist.github.com/joshfester/66265dbefd910862d2f1
   https://gist.github.com/joshfester/5258acd02513313178ff
 

@@ -6,7 +6,7 @@
   {{#if session.isAuthenticated}}
     <button {{action 'invalidateSession'}}>Logout</button>
   {{else}}
-    <button {{action 'authenticateSession'}}>Login</button>
+    <button {{action 'sessionRequiresAuthentication'}}>Login</button>
   {{/if}}
 </header>
 

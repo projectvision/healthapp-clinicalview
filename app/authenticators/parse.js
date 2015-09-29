@@ -83,5 +83,4 @@ export default Base.extend({
       return resolve();
     });
   }
-
 });

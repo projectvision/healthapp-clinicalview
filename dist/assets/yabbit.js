@@ -29,7 +29,7 @@ define('yabbit/app', ['exports', 'ember', 'ember/resolver', 'ember/load-initiali
   exports['default'] = App;
 
 });
-define('yabbit/authorizers/parse', ['exports', 'simple-auth/authenticators/base', 'ember-parse-adapter/models/parse-user'], function (exports, Base, ParseUser) {
+define('yabbit/authenticators/parse', ['exports', 'simple-auth/authenticators/base', 'ember-parse-adapter/models/parse-user'], function (exports, Base, ParseUser) {
 
   'use strict';
 
@@ -117,7 +117,6 @@ define('yabbit/authorizers/parse', ['exports', 'simple-auth/authenticators/base'
         return resolve();
       });
     }
-
   });
 
 });
@@ -192,6 +191,12 @@ define('yabbit/controllers/session/login', ['exports', 'ember'], function (expor
         user.login(this.store, data).then(function (user) {
           controller.set('loggedIn', true);
           controller.set('message', 'Welcome!');
+
+          controller.get('session').authenticate('authenticator:parse');
+
+          console.log('user.login session');
+          console.log(controller.get('session'));
+          console.log(controller.get('session.isAuthenticated'));
         }, function (error) {
           controller.set('loggedIn', false);
           controller.set('message', error.message || error.error);
@@ -696,7 +701,7 @@ define('yabbit/templates/application', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["element","action",["authenticateSession"],[],["loc",[null,[9,12],[9,44]]]]
+          ["element","action",["sessionRequiresAuthentication"],[],["loc",[null,[9,12],[9,54]]]]
         ],
         locals: [],
         templates: []
@@ -1909,13 +1914,13 @@ define('yabbit/tests/app.jshint', function () {
   });
 
 });
-define('yabbit/tests/authorizers/parse.jshint', function () {
+define('yabbit/tests/authenticators/parse.jshint', function () {
 
   'use strict';
 
-  QUnit.module('JSHint - authorizers');
-  QUnit.test('authorizers/parse.js should pass jshint', function(assert) { 
-    assert.ok(false, 'authorizers/parse.js should pass jshint.\nauthorizers/parse.js: line 55, col 14, \'Ember\' is not defined.\nauthorizers/parse.js: line 81, col 16, \'Ember\' is not defined.\nauthorizers/parse.js: line 33, col 7, \'authenticator\' is defined but never used.\nauthorizers/parse.js: line 81, col 53, \'reject\' is defined but never used.\n\n4 errors'); 
+  QUnit.module('JSHint - authenticators');
+  QUnit.test('authenticators/parse.js should pass jshint', function(assert) { 
+    assert.ok(false, 'authenticators/parse.js should pass jshint.\nauthenticators/parse.js: line 55, col 14, \'Ember\' is not defined.\nauthenticators/parse.js: line 81, col 16, \'Ember\' is not defined.\nauthenticators/parse.js: line 33, col 7, \'authenticator\' is defined but never used.\nauthenticators/parse.js: line 81, col 53, \'reject\' is defined but never used.\n\n4 errors'); 
   });
 
 });
@@ -2396,7 +2401,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+beb18ebb"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+8b74a6b1"});
 }
 
 /* jshint ignore:end */
