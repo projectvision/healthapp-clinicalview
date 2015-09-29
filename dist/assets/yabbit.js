@@ -119,22 +119,20 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
   });
 
 });
-define('yabbit/authorizers/parse', function () {
+define('yabbit/authorizers/parse', ['exports', 'simple-auth/authorizers/base'], function (exports, Base) {
 
-	'use strict';
+  'use strict';
 
-	//import Base from 'simple-auth/authorizers/base';
-	//
-	//// @TODO: Configure for use with Parse
-	//
-	//export default Base.extend({
-	//  authorize: function(jqXHR, requestOptions) {
-	//    if (this.get('session.isAuthenticated') && !Ember.isEmpty(this.get('session.secure.token'))) {
-	//      jqXHR.setRequestHeader('Authorization', 'Token: ' + this.get('session.secure.token'));
-	//    }
-	//  }
-	//});
-	//
+  exports['default'] = Base['default'].extend({
+    authorize: function authorize(jqXHR, requestOptions) {
+      console.log('authorizer 2');
+      console.log(jqXHR);
+      console.log(requestOptions);
+      //if (this.get('session.isAuthenticated') && !Ember.isEmpty(this.get('session.secure.token'))) {
+      //  jqXHR.setRequestHeader('Authorization', 'Token: ' + this.get('session.secure.token'));
+      //}
+    }
+  });
 
 });
 define('yabbit/components/app-version', ['exports', 'ember-cli-app-version/components/app-version', 'yabbit/config/environment'], function (exports, AppVersionComponent, config) {
@@ -2517,7 +2515,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+1e2f793f"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+db09f713"});
 }
 
 /* jshint ignore:end */
