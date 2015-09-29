@@ -25,9 +25,10 @@ export default Ember.Controller.extend({
           controller.set('loggedIn', true);
           controller.set('message', 'Welcome!');
 
-          controller.get('session').authenticate('authenticator:parse');
-
           console.log('user.login session');
+          console.log(controller.get('session'));
+          controller.get('session').authenticate('authenticator:parse', {data: user});
+          console.log('user.login authenticated session');
           console.log(controller.get('session'));
           console.log(controller.get('session.isAuthenticated'));
         },

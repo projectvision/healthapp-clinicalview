@@ -7,6 +7,8 @@
   http://ember-simple-auth.com/ember-simple-auth-api-docs.html#SimpleAuth-Session
   https://gist.github.com/joshfester/66265dbefd910862d2f1
   https://gist.github.com/joshfester/5258acd02513313178ff
+- Authorize session
+  https://github.com/simplabs/ember-simple-auth/blob/master/examples/6-custom-server.html#L163
 
 ## Concepts
 
