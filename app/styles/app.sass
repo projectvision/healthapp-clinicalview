@@ -29,11 +29,61 @@ header
   background: #55C2E7
   border-bottom: 1px solid #76A9BA
 
-#logo
-  height: 37px
-  margin-top: 2px
-  border: 2px solid white
-  border-radius: 3px
+  #logo
+    height: 37px
+    margin-top: 3px
+    border: 2px solid white
+    border-radius: 3px
+
+  /* dropdown icon */
+  ul#user
+    margin: 0
+    padding: 0
+    float: right
+    list-style: none
+    position: relative
+    li
+      margin: 0
+      padding: 0
+      position: relative
+      &:hover > ul
+        display: block
+      a#user-icon
+        width: 30px
+        height: 28px
+        display: block
+        margin-top: 8px
+        background-size: 30px
+        background-image: url('/assets/icons/user.png')
+        &:hover
+          cursor: pointer
+          background-image: url('/assets/icons/user-hover.png')
+      /* dropdown menu */
+      ul
+        top: 100%
+        left: -$dropdown_width + 30px
+        padding: 0
+        display: none
+        overflow: hidden
+        position: absolute
+        background: white
+        border-radius: 5px
+        border: $border
+        li
+          float: none
+          list-style: none
+          line-height: 1em
+          width: $dropdown_width
+          border-bottom: $border
+          &:last-child
+            border-bottom: none
+          a
+            display: block
+            font-size: 0.9em
+            padding: ($padding / 2) $padding
+            &:hover
+              cursor: pointer
+              background: #F7F7F7
 
 /******************************************************************************
  * LINKS *
@@ -174,7 +224,7 @@ section#patients
           padding: 0 $padding
           border: 1px solid #ccc
           &:first-child
-            padding: 0          
+            padding: 0
           .bar
             color: white
             height: $row_height / 3

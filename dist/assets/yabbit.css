@@ -108,13 +108,61 @@ body {
 header {
   height: 45px;
   background: #55C2E7;
-  border-bottom: 1px solid #76A9BA; }
-
-#logo {
-  height: 37px;
-  margin-top: 2px;
-  border: 2px solid white;
-  border-radius: 3px; }
+  border-bottom: 1px solid #76A9BA;
+  /* dropdown icon */ }
+  header #logo {
+    height: 37px;
+    margin-top: 3px;
+    border: 2px solid white;
+    border-radius: 3px; }
+  header ul#user {
+    margin: 0;
+    padding: 0;
+    float: right;
+    list-style: none;
+    position: relative; }
+    header ul#user li {
+      margin: 0;
+      padding: 0;
+      position: relative;
+      /* dropdown menu */ }
+      header ul#user li:hover > ul {
+        display: block; }
+      header ul#user li a#user-icon {
+        width: 30px;
+        height: 28px;
+        display: block;
+        margin-top: 8px;
+        background-size: 30px;
+        background-image: url("/assets/icons/user.png"); }
+        header ul#user li a#user-icon:hover {
+          cursor: pointer;
+          background-image: url("/assets/icons/user-hover.png"); }
+      header ul#user li ul {
+        top: 100%;
+        left: -120px;
+        padding: 0;
+        display: none;
+        overflow: hidden;
+        position: absolute;
+        background: white;
+        border-radius: 5px;
+        border: 1px solid #ccc; }
+        header ul#user li ul li {
+          float: none;
+          list-style: none;
+          line-height: 1em;
+          width: 150px;
+          border-bottom: 1px solid #ccc; }
+          header ul#user li ul li:last-child {
+            border-bottom: none; }
+          header ul#user li ul li a {
+            display: block;
+            font-size: 0.9em;
+            padding: 5px 10px; }
+            header ul#user li ul li a:hover {
+              cursor: pointer;
+              background: #F7F7F7; }
 
 /******************************************************************************
  * LINKS *

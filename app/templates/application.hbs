@@ -1,13 +1,22 @@
 <header>
   <div class="container">
-    {{#link-to 'index'}}<img id="logo" src="assets/logo.png"/>{{/link-to}}
-  </div>
 
-  {{#if session.isAuthenticated}}
-    <button {{action 'invalidateSession'}}>Logout</button>
-  {{else}}
-    <button {{action 'sessionRequiresAuthentication'}}>Login</button>
-  {{/if}}
+    {{#link-to 'index'}}<img id="logo" src="assets/logo.png"/>{{/link-to}}
+
+    <ul id="user">
+      <li><a id="user-icon"></a>
+        <ul>
+          {{#if session.isAuthenticated}}
+            <li><a {{action 'invalidateSession'}}>Logout</a></li>
+          {{else}}
+            <li><a {{action 'sessionRequiresAuthentication'}}>Login</a></li>
+          {{/if}}
+          <li><a href="#">Help</a></li>
+        </ul>
+      </li>
+    </ul>
+
+  </div>
 </header>
 
 <div id="main">

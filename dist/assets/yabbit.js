@@ -74,6 +74,7 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
     /* Authenticate - used by the login controller to login the user */
     authenticate: function authenticate(data) {
 
+      // Get parse adapter and user login details
       var adapter = this.get('db').adapterFor('parse-user');
       var user = data.user;
 
@@ -700,11 +701,11 @@ define('yabbit/templates/application', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 3,
+              "line": 4,
               "column": 4
             },
             "end": {
-              "line": 3,
+              "line": 4,
               "column": 62
             }
           },
@@ -736,12 +737,12 @@ define('yabbit/templates/application', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 6,
-              "column": 2
+              "line": 9,
+              "column": 10
             },
             "end": {
-              "line": 8,
-              "column": 2
+              "line": 11,
+              "column": 10
             }
           },
           "moduleName": "yabbit/templates/application.hbs"
@@ -751,10 +752,12 @@ define('yabbit/templates/application', ['exports'], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("    ");
+          var el1 = dom.createTextNode("            ");
           dom.appendChild(el0, el1);
-          var el1 = dom.createElement("button");
-          var el2 = dom.createTextNode("Logout");
+          var el1 = dom.createElement("li");
+          var el2 = dom.createElement("a");
+          var el3 = dom.createTextNode("Logout");
+          dom.appendChild(el2, el3);
           dom.appendChild(el1, el2);
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n");
@@ -762,13 +765,13 @@ define('yabbit/templates/application', ['exports'], function (exports) {
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element1 = dom.childAt(fragment, [1]);
+          var element1 = dom.childAt(fragment, [1, 0]);
           var morphs = new Array(1);
           morphs[0] = dom.createElementMorph(element1);
           return morphs;
         },
         statements: [
-          ["element","action",["invalidateSession"],[],["loc",[null,[7,12],[7,42]]]]
+          ["element","action",["invalidateSession"],[],["loc",[null,[10,19],[10,49]]]]
         ],
         locals: [],
         templates: []
@@ -781,12 +784,12 @@ define('yabbit/templates/application', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 8,
-              "column": 2
+              "line": 11,
+              "column": 10
             },
             "end": {
-              "line": 10,
-              "column": 2
+              "line": 13,
+              "column": 10
             }
           },
           "moduleName": "yabbit/templates/application.hbs"
@@ -796,10 +799,12 @@ define('yabbit/templates/application', ['exports'], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("    ");
+          var el1 = dom.createTextNode("            ");
           dom.appendChild(el0, el1);
-          var el1 = dom.createElement("button");
-          var el2 = dom.createTextNode("Login");
+          var el1 = dom.createElement("li");
+          var el2 = dom.createElement("a");
+          var el3 = dom.createTextNode("Login");
+          dom.appendChild(el2, el3);
           dom.appendChild(el1, el2);
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n");
@@ -807,13 +812,13 @@ define('yabbit/templates/application', ['exports'], function (exports) {
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element0 = dom.childAt(fragment, [1]);
+          var element0 = dom.childAt(fragment, [1, 0]);
           var morphs = new Array(1);
           morphs[0] = dom.createElementMorph(element0);
           return morphs;
         },
         statements: [
-          ["element","action",["sessionRequiresAuthentication"],[],["loc",[null,[9,12],[9,54]]]]
+          ["element","action",["sessionRequiresAuthentication"],[],["loc",[null,[12,19],[12,61]]]]
         ],
         locals: [],
         templates: []
@@ -829,7 +834,7 @@ define('yabbit/templates/application', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 16,
+            "line": 25,
             "column": 0
           }
         },
@@ -845,16 +850,49 @@ define('yabbit/templates/application', ['exports'], function (exports) {
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("div");
         dom.setAttribute(el2,"class","container");
-        var el3 = dom.createTextNode("\n    ");
+        var el3 = dom.createTextNode("\n\n    ");
         dom.appendChild(el2, el3);
         var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n  ");
+        var el3 = dom.createTextNode("\n\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("ul");
+        dom.setAttribute(el3,"id","user");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("li");
+        var el5 = dom.createElement("a");
+        dom.setAttribute(el5,"id","user-icon");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("ul");
+        var el6 = dom.createTextNode("\n");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("li");
+        var el7 = dom.createElement("a");
+        dom.setAttribute(el7,"href","#");
+        var el8 = dom.createTextNode("Help");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n\n  ");
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n\n");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createComment("");
+        var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n\n");
@@ -873,17 +911,17 @@ define('yabbit/templates/application', ['exports'], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element2 = dom.childAt(fragment, [0]);
+        var element2 = dom.childAt(fragment, [0, 1]);
         var morphs = new Array(3);
-        morphs[0] = dom.createMorphAt(dom.childAt(element2, [1]),1,1);
-        morphs[1] = dom.createMorphAt(element2,3,3);
+        morphs[0] = dom.createMorphAt(element2,1,1);
+        morphs[1] = dom.createMorphAt(dom.childAt(element2, [3, 1, 2]),1,1);
         morphs[2] = dom.createMorphAt(dom.childAt(fragment, [2]),1,1);
         return morphs;
       },
       statements: [
-        ["block","link-to",["index"],[],0,null,["loc",[null,[3,4],[3,74]]]],
-        ["block","if",[["get","session.isAuthenticated",["loc",[null,[6,8],[6,31]]]]],[],1,2,["loc",[null,[6,2],[10,9]]]],
-        ["content","outlet",["loc",[null,[14,2],[14,12]]]]
+        ["block","link-to",["index"],[],0,null,["loc",[null,[4,4],[4,74]]]],
+        ["block","if",[["get","session.isAuthenticated",["loc",[null,[9,16],[9,39]]]]],[],1,2,["loc",[null,[9,10],[13,17]]]],
+        ["content","outlet",["loc",[null,[23,2],[23,12]]]]
       ],
       locals: [],
       templates: [child0, child1, child2]
@@ -2032,7 +2070,7 @@ define('yabbit/tests/authenticators/parse.jshint', function () {
 
   QUnit.module('JSHint - authenticators');
   QUnit.test('authenticators/parse.js should pass jshint', function(assert) { 
-    assert.ok(false, 'authenticators/parse.js should pass jshint.\nauthenticators/parse.js: line 21, col 32, \'store\' is defined but never used.\nauthenticators/parse.js: line 87, col 53, \'reject\' is defined but never used.\n\n2 errors'); 
+    assert.ok(false, 'authenticators/parse.js should pass jshint.\nauthenticators/parse.js: line 21, col 32, \'store\' is defined but never used.\nauthenticators/parse.js: line 88, col 53, \'reject\' is defined but never used.\n\n2 errors'); 
   });
 
 });

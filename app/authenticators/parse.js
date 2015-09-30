@@ -43,6 +43,7 @@ export default Base.extend({
   /* Authenticate - used by the login controller to login the user */
   authenticate: function(data) {
 
+    // Get parse adapter and user login details
     var adapter = this.get('db').adapterFor('parse-user');
     var user = data.user;
 
