@@ -220,8 +220,8 @@ define('yabbit/controllers/session/login', ['exports', 'ember'], function (expor
     /* PROPERTIES
     /***************************************************************************/
 
-    identification: "maediprichard@gmail.com", // email
-    password: "m",
+    identification: null, // email
+    password: null,
     message: null,
 
     /****************************************************************************
@@ -237,17 +237,13 @@ define('yabbit/controllers/session/login', ['exports', 'ember'], function (expor
 
         // Authenticate with parse
         controller.get('session').authenticate('authenticator:parse', data).then(function (response) {
-
-          //console.log('session.isAuthenticated');
-          //console.log(controller.get('session.isAuthenticated'));
-
-          // redirect physician to their patients
+          // once logged in redirect user to their patients
           controller.transitionToRoute('patients.index');
         },
         // Handle errors
         function (error) {
           // show message to the user
-          controller.set('message', error.message || error.error);
+          controller.set('message', error.message);
           console.log(error);
         });
       }
