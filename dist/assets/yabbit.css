@@ -141,6 +141,7 @@ header {
       header ul#user li ul {
         top: 100%;
         left: -120px;
+        z-index: 500;
         padding: 0;
         display: none;
         overflow: hidden;
@@ -227,10 +228,12 @@ section#patients {
   position: relative;
   /* remove outside table border */ }
   section#patients aside {
-    margin-top: 40px;
+    margin-top: 46px;
     float: left;
     width: 300px;
+    border: 1px solid #e2e2e2;
     border-right: 1px solid #ccc;
+    border-top: 1px solid #efefef;
     background: #efefef; }
     section#patients aside ul {
       list-style: none;
@@ -250,9 +253,9 @@ section#patients {
           text-shadow: 1px 1px 1px white; }
           section#patients aside ul li a.active {
             background: white;
-            border: 1px solid #424242;
+            border: 1px solid #777;
             border-right: none;
-            margin: -1px -1px -1px 0; }
+            margin: -1px; }
   section#patients #patients-overview {
     overflow: auto;
     border: 1px solid #7F7F7F;
@@ -262,14 +265,15 @@ section#patients {
     top: 0;
     right: 0;
     left: 300px;
-    border: 1px solid #424242;
+    border: 1px solid #777;
     border-top: 0;
     background: white;
     min-height: 500px; }
   section#patients #view-all.button {
     position: absolute;
-    top: 5px;
+    top: 6px;
     left: 5px;
+    padding: 7px;
     width: 290px; }
   section#patients table {
     width: 100%;
@@ -280,7 +284,7 @@ section#patients {
       font-weight: bold;
       background: linear-gradient(#f9f9f9, #e6e6e6); }
       section#patients table thead th {
-        line-height: 20px;
+        line-height: 23px;
         text-shadow: 1px 1px 1px #fefefe; }
         section#patients table thead th.challenge-completion {
           width: 40%; }
@@ -306,7 +310,7 @@ section#patients {
   section#patients table thead th {
     border: 1px solid #ccc;
     border-top: 0;
-    padding: 10px; }
+    padding: 12px 15px; }
     section#patients table thead th:first-child {
       border-left: 0; }
     section#patients table thead th:last-child {

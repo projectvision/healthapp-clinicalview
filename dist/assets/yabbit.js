@@ -194,7 +194,7 @@ define('yabbit/controllers/session/login', ['exports', 'ember'], function (expor
     /* PROPERTIES
     /***************************************************************************/
 
-    identification: "maediprichard@gmail.com",
+    identification: "maediprichard@gmail.com", // email
     password: "m",
     message: null,
 
@@ -205,14 +205,22 @@ define('yabbit/controllers/session/login', ['exports', 'ember'], function (expor
     actions: {
       authenticate: function authenticate() {
 
+        // Get controller and user details
         var controller = this;
         var data = this.getProperties('identification', 'password');
 
+        // Authenticate with parse
         controller.get('session').authenticate('authenticator:parse', data).then(function (response) {
 
           console.log('session.isAuthenticated');
           console.log(controller.get('session.isAuthenticated'));
-        }, function (error) {
+
+          // redirect physician to their patients
+          controller.transitionTo('patients.index');
+        },
+        // Handle errors
+        function (error) {
+          // show message to the user
           controller.set('message', error.message || error.error);
           console.log(error);
         });
@@ -1679,40 +1687,6 @@ define('yabbit/templates/session', ['exports'], function (exports) {
         templates: []
       };
     }());
-    var child2 = (function() {
-      return {
-        meta: {
-          "revision": "Ember@1.13.10",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 9,
-              "column": 0
-            },
-            "end": {
-              "line": 9,
-              "column": 35
-            }
-          },
-          "moduleName": "yabbit/templates/session.hbs"
-        },
-        arity: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("Skip for now");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes() { return []; },
-        statements: [
-
-        ],
-        locals: [],
-        templates: []
-      };
-    }());
     return {
       meta: {
         "revision": "Ember@1.13.10",
@@ -1723,7 +1697,7 @@ define('yabbit/templates/session', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 10,
+            "line": 8,
             "column": 0
           }
         },
@@ -1758,10 +1732,6 @@ define('yabbit/templates/session', ['exports'], function (exports) {
         var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n\n");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createComment("");
-        dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         return el0;
@@ -1769,21 +1739,19 @@ define('yabbit/templates/session', ['exports'], function (exports) {
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var element0 = dom.childAt(fragment, [0]);
         var element1 = dom.childAt(element0, [1]);
-        var morphs = new Array(4);
+        var morphs = new Array(3);
         morphs[0] = dom.createMorphAt(element1,1,1);
         morphs[1] = dom.createMorphAt(element1,3,3);
         morphs[2] = dom.createMorphAt(element0,3,3);
-        morphs[3] = dom.createMorphAt(fragment,2,2,contextualElement);
         return morphs;
       },
       statements: [
         ["block","link-to",["session.login"],["id","login"],0,null,["loc",[null,[3,4],[3,60]]]],
         ["block","link-to",["session.signup"],["id","signup"],1,null,["loc",[null,[4,4],[4,63]]]],
-        ["content","outlet",["loc",[null,[6,2],[6,12]]]],
-        ["block","link-to",["patients"],[],2,null,["loc",[null,[9,0],[9,47]]]]
+        ["content","outlet",["loc",[null,[6,2],[6,12]]]]
       ],
       locals: [],
-      templates: [child0, child1, child2]
+      templates: [child0, child1]
     };
   }()));
 
@@ -2110,7 +2078,7 @@ define('yabbit/tests/controllers/session/login.jshint', function () {
 
   QUnit.module('JSHint - controllers/session');
   QUnit.test('controllers/session/login.js should pass jshint', function(assert) { 
-    assert.ok(false, 'controllers/session/login.js should pass jshint.\ncontrollers/session/login.js: line 23, col 89, \'response\' is defined but never used.\n\n1 error'); 
+    assert.ok(false, 'controllers/session/login.js should pass jshint.\ncontrollers/session/login.js: line 25, col 89, \'response\' is defined but never used.\n\n1 error'); 
   });
 
 });
