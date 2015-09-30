@@ -1,16 +1,26 @@
+import Ember from 'ember';
 import ParseUser from 'ember-parse-adapter/models/parse-user';
 
-// ParseUser is created by Ember Parse Adapter. Signup and login actions
-// are located in 'node_modules/ember-parse-adapter/addon/models/parse-user.js'
+// ParseUser is created by the Ember Parse Adapter.
+// @see: 'node_modules/ember-parse-adapter/addon/models/parse-user.js'
 
 ParseUser.reopenClass({
 
+  /****************************************************************************
+  /* PROPERTIES
+  /***************************************************************************/
+
+  db: Ember.inject.service('store'),
+
+  /****************************************************************************
+  /* ACTIONS
+  /***************************************************************************/
+
+  /* Current User - used by the parse authenticator */
   current: function() {
     var model = this,
-      store = this.container.lookup('service:store'),
-      //store = Ember.inject.service('store'),
-      adapter = store.adapterFor('parse-user'),
-      serializer = store.serializerFor('parse-user');
+      adapter = this.get('db').adapterFor('parse-user'),
+      serializer = this.get('db').serializerFor('parse-user');
 
     return adapter.ajax(adapter.buildURL("parse-user", "me"), "GET", {}).then(function(user) {
       console.log('ParseUser current');
@@ -29,14 +39,6 @@ ParseUser.reopenClass({
         }
       });
     });
-  },
-
-  loginProxy: function(data) {
-    console.log('this');
-    console.log(this);
-    var store = this.container.lookup('service:store');
-    //var store = Ember.inject.service('store');
-    return this.login(store, data);
   }
 });
 

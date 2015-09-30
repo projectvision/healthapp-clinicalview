@@ -89521,6 +89521,10 @@ define('ember-parse-adapter/models/parse-user', ['exports', 'ember', 'ember-data
     updatedAt: DS['default'].attr('date')
   });
 
+  /****************************************************************************
+  /* ACTIONS
+  /***************************************************************************/
+
   ParseUser.reopenClass({
     requestPasswordReset: function requestPasswordReset(email) {
       var adapter = this.get('store').adapterFor('parse-user'),
@@ -89532,9 +89536,6 @@ define('ember-parse-adapter/models/parse-user', ['exports', 'ember', 'ember-data
     },
 
     login: function login(store, data) {
-      console.log('ParseUser login: store');
-      console.log(store);
-
       var model = this,
           adapter = store.adapterFor('parse-user'),
           serializer = store.serializerFor('parse-user');

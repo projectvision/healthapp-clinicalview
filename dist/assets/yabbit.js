@@ -34,6 +34,17 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
   'use strict';
 
   exports['default'] = Base['default'].extend({
+
+    /****************************************************************************
+    /* PROPERTIES
+    /***************************************************************************/
+
+    db: Ember['default'].inject.service('store'),
+
+    /****************************************************************************
+    /* ACTIONS
+    /***************************************************************************/
+
     restore: function restore(data) {
       console.log('restore');
       console.log(data);
@@ -45,14 +56,11 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
       }
 
       sessionToken = data.sessionToken;
-      store = Ember['default'].inject.service('store');
-      adapter = store.adapterFor('parse-user');
-
+      adapter = this.get('db').adapterFor('parse-user');
       adapter.set('sessionToken', sessionToken);
 
+      // Get current user
       return ParseUser['default'].current().then(function (user) {
-        // identify the user
-
         return {
           userId: user.get('id'),
           sessionToken: user.get('sessionToken'),
@@ -63,21 +71,18 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
       });
     },
 
+    /* Authenticate - used by the login controller to login the user */
     authenticate: function authenticate(data) {
-      var store, adapter, user;
 
-      // Ember-Simple-Auth uses "identification", Parse uses "username"
+      var adapter = this.get('db').adapterFor('parse-user');
+      var user = data.user;
+
+      // Rename ember simple auth "identification" to parse "username"
       if (data.identification) {
         data.username = data.identification;
       }
 
-      // Get the store and adapter
-      store = this.container.lookup('service:store');
-      //store = Ember.inject.service('store');
-      adapter = store.adapterFor('parse-user');
-
-      // If user data is already set
-      user = data.user;
+      // Handle previously logged in user
       if (user) {
         adapter.set('sessionToken', user.get('sessionToken'));
         data = {
@@ -89,17 +94,10 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
         };
         return Ember['default'].RSVP.resolve(data);
       }
-      // login a user
+      // Authenticate user
       else {
-          console.log('.');
-          console.log(store);
-          console.log(store.modelFor('parse-user'));
-
-          return store.modelFor('parse-user').loginProxy(data).then(function (user) {
-            console.log('Authenticator authenticate: login');
-            console.log(data);
-
-            // set the session up with Parse response
+          return this.get('db').modelFor('parse-user').login(this.get('db'), data).then(function (user) {
+            // set the session up with parse response
             adapter.set('sessionToken', user.get('sessionToken'));
             data = {
               userId: user.get('id'),
@@ -108,21 +106,18 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
               firstName: user.get('firstName'),
               lastName: user.get('lastName')
             };
-
             return data;
           });
         }
     },
 
     invalidate: function invalidate() {
-      // Get the store and adapter
-      var store = this.container.lookup('service:store');
-      //var store = Ember.inject.service('store');
-      var adapter = store.adapterFor('parse-user');
+
+      var adapter = this.get('db').adapterFor('parse-user');
 
       return new Ember['default'].RSVP.Promise(function (resolve, reject) {
         adapter.set('sessionToken', null);
-        return resolve();
+        return resolve(); // https://github.com/simplabs/ember-simple-auth/issues/663
       });
     }
   });
@@ -194,35 +189,32 @@ define('yabbit/controllers/session/login', ['exports', 'ember'], function (expor
 
   exports['default'] = Ember['default'].Controller.extend({
 
+    /****************************************************************************
+    /* PROPERTIES
+    /***************************************************************************/
+
     identification: "maediprichard@gmail.com",
     password: "m",
-    loggedIn: false,
     message: null,
+
+    /****************************************************************************
+    /* ACTIONS
+    /***************************************************************************/
 
     actions: {
       authenticate: function authenticate() {
 
-        // Get Login Details
-        var user = this.store.modelFor('parse-user');
+        var controller = this;
         var data = this.getProperties('identification', 'password');
 
-        this.get('session').authenticate('authenticator:parse', data);
+        controller.get('session').authenticate('authenticator:parse', data).then(function (response) {
 
-        // Load User
-        //var controller = this;
-
-        //user.login(this.store, data).then(
-        //  function(user) {
-        //    controller.set('loggedIn', true);
-        //    controller.set('message', 'Welcome!');
-        //    //controller.get('session').authenticate('authenticator:parse', user);
-        //    console.log(controller.get('session.isAuthenticated'));
-        //  },
-        //  function(error) {
-        //    controller.set('loggedIn', false);
-        //    controller.set('message', error.message || error.error);
-        //  }
-        //);
+          console.log('session.isAuthenticated');
+          console.log(controller.get('session.isAuthenticated'));
+        }, function (error) {
+          controller.set('message', error.message || error.error);
+          console.log(error);
+        });
       }
     }
   });
@@ -464,19 +456,27 @@ define('yabbit/initializers/simple-auth', ['exports', 'simple-auth/configuration
   };
 
 });
-define('yabbit/models/parse-user', ['exports', 'ember-parse-adapter/models/parse-user'], function (exports, ParseUser) {
+define('yabbit/models/parse-user', ['exports', 'ember', 'ember-parse-adapter/models/parse-user'], function (exports, Ember, ParseUser) {
 
   'use strict';
 
   ParseUser['default'].reopenClass({
 
+    /****************************************************************************
+    /* PROPERTIES
+    /***************************************************************************/
+
+    db: Ember['default'].inject.service('store'),
+
+    /****************************************************************************
+    /* ACTIONS
+    /***************************************************************************/
+
+    /* Current User - used by the parse authenticator */
     current: function current() {
       var model = this,
-          store = this.container.lookup('service:store'),
-
-      //store = Ember.inject.service('store'),
-      adapter = store.adapterFor('parse-user'),
-          serializer = store.serializerFor('parse-user');
+          adapter = this.get('db').adapterFor('parse-user'),
+          serializer = this.get('db').serializerFor('parse-user');
 
       return adapter.ajax(adapter.buildURL("parse-user", "me"), "GET", {}).then(function (user) {
         console.log('ParseUser current');
@@ -495,14 +495,6 @@ define('yabbit/models/parse-user', ['exports', 'ember-parse-adapter/models/parse
           }
         });
       });
-    },
-
-    loginProxy: function loginProxy(data) {
-      console.log('this');
-      console.log(this);
-      var store = this.container.lookup('service:store');
-      //var store = Ember.inject.service('store');
-      return this.login(store, data);
     }
   });
 
@@ -2040,7 +2032,7 @@ define('yabbit/tests/authenticators/parse.jshint', function () {
 
   QUnit.module('JSHint - authenticators');
   QUnit.test('authenticators/parse.js should pass jshint', function(assert) { 
-    assert.ok(false, 'authenticators/parse.js should pass jshint.\nauthenticators/parse.js: line 92, col 53, \'reject\' is defined but never used.\n\n1 error'); 
+    assert.ok(false, 'authenticators/parse.js should pass jshint.\nauthenticators/parse.js: line 21, col 32, \'store\' is defined but never used.\nauthenticators/parse.js: line 87, col 53, \'reject\' is defined but never used.\n\n2 errors'); 
   });
 
 });
@@ -2080,7 +2072,7 @@ define('yabbit/tests/controllers/session/login.jshint', function () {
 
   QUnit.module('JSHint - controllers/session');
   QUnit.test('controllers/session/login.js should pass jshint', function(assert) { 
-    assert.ok(false, 'controllers/session/login.js should pass jshint.\ncontrollers/session/login.js: line 14, col 11, \'user\' is defined but never used.\n\n1 error'); 
+    assert.ok(false, 'controllers/session/login.js should pass jshint.\ncontrollers/session/login.js: line 23, col 89, \'response\' is defined but never used.\n\n1 error'); 
   });
 
 });
@@ -2227,7 +2219,7 @@ define('yabbit/tests/models/parse-user.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/parse-user.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 9, col 9, \'model\' is defined but never used.\nmodels/parse-user.js: line 13, col 7, \'serializer\' is defined but never used.\n\n2 errors'); 
+    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 29, col 14, \'store\' is not defined.\nmodels/parse-user.js: line 21, col 9, \'model\' is defined but never used.\nmodels/parse-user.js: line 23, col 7, \'serializer\' is defined but never used.\n\n3 errors'); 
   });
 
 });
@@ -2531,7 +2523,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+db09f713"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+0683ed65"});
 }
 
 /* jshint ignore:end */
