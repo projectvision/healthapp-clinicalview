@@ -44,7 +44,7 @@ export default Ember.Controller.extend(EmberValidations, {
         function(error) {
           console.log(error);
           controller.set('loggedIn', false);
-          controller.set('message', error.error || error.message);
+          controller.set('message', error || error.message);
         }
       );
     }

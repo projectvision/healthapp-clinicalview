@@ -27,10 +27,10 @@ module.exports = function(environment) {
   };
 
   ENV['simple-auth'] = {
-    authorizer: 'authorizer:parse',
+    //authorizer: 'authorizer:parse',
     authenticationRoute: 'session.login',
     routeIfAlreadyAuthenticated: 'patients.index',
-    //crossOriginWhitelist: ['https://api.parse.com'], // https://github.com/simplabs/ember-simple-auth/issues/495
+    crossOriginWhitelist: ['https://api.parse.com'], // https://github.com/simplabs/ember-simple-auth/issues/495
     store: 'simple-auth-session-store:local-storage'
   }
 

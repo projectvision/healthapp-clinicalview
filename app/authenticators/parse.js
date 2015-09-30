@@ -14,22 +14,48 @@ export default Base.extend({
   /* ACTIONS
   /***************************************************************************/
 
-  restore: function(data) {
-    console.log('restore');
-    console.log(data);
+  //restore: function(data) {
+  //  return new Ember.RSVP.Promise(function(resolve, reject) {
+  //    console.log('restore');
+  //    console.log(data);
 
-    var sessionToken, adapter, store;
+  //    if (!Ember.isEmpty(data.sessionToken)) {
+  //      console.log('sdf');
+  //      adapter = this.get('db').adapterFor('parse-user');
+  //      adapter.set('sessionToken', data.sessionToken);
+
+  //      var useruser = ParseUser.current().then(function(user) {
+  //        console.log('ParseUser.current() was returned');
+  //        return {
+  //          userId: user.get('id'),
+  //          sessionToken: user.get('sessionToken'),
+  //          email: user.get('email'),
+  //          firstName: user.get('firstName'),
+  //          lastName: user.get('lastName')
+  //        };
+  //      });
+
+  //      resolve(useruser);
+  //    } else {
+  //      reject();
+  //    }
+  //  });
+  //},
+
+  restore: function(data) {
+
+    var store = this.get('db');
+    var adapter = store.adapterFor('parse-user');
 
     if (!data.sessionToken) {
       return {};
     }
 
-    sessionToken = data.sessionToken;
-    adapter = this.get('db').adapterFor('parse-user');
-    adapter.set('sessionToken', sessionToken);
+    // Set session token
+    adapter.set('sessionToken', data.sessionToken);
 
     // Get current user
-    return ParseUser.current().then(function(user) {
+    return store.modelFor('parse-user').current(store).then(function(user) {
       return {
         userId: user.get('id'),
         sessionToken: user.get('sessionToken'),

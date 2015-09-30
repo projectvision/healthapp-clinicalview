@@ -1,7 +1,9 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-  //setupController(controller) {
-  //  controller.set('title', 'Login');
-  //}
+  beforeModel: function(transition) {
+    if (this.get('session.isAuthenticated')) {
+      this.transitionTo('patients.index');
+    }
+  }
 });

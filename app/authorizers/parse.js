@@ -8,7 +8,7 @@ export default Base.extend({
     console.log(jqXHR);
     console.log(requestOptions);
     //if (this.get('session.isAuthenticated') && !Ember.isEmpty(this.get('session.secure.token'))) {
-    //  jqXHR.setRequestHeader('Authorization', 'Token: ' + this.get('session.secure.token'));
+    //  jqXHR.setRequestHeader('Authorization', 'X-Parse-Session-Token:' + this.get('session.secure.token'));
     //}
   }
 });

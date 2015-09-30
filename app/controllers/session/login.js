@@ -24,11 +24,11 @@ export default Ember.Controller.extend({
       // Authenticate with parse
       controller.get('session').authenticate('authenticator:parse', data).then(function(response) {
 
-        console.log('session.isAuthenticated');
-        console.log(controller.get('session.isAuthenticated'));
+        //console.log('session.isAuthenticated');
+        //console.log(controller.get('session.isAuthenticated'));
 
         // redirect physician to their patients
-        controller.transitionTo('patients.index');
+        controller.transitionToRoute('patients.index');
 
       },
       // Handle errors

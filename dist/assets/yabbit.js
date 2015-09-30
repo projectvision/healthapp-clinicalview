@@ -45,22 +45,48 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
     /* ACTIONS
     /***************************************************************************/
 
-    restore: function restore(data) {
-      console.log('restore');
-      console.log(data);
+    //restore: function(data) {
+    //  return new Ember.RSVP.Promise(function(resolve, reject) {
+    //    console.log('restore');
+    //    console.log(data);
 
-      var sessionToken, adapter, store;
+    //    if (!Ember.isEmpty(data.sessionToken)) {
+    //      console.log('sdf');
+    //      adapter = this.get('db').adapterFor('parse-user');
+    //      adapter.set('sessionToken', data.sessionToken);
+
+    //      var useruser = ParseUser.current().then(function(user) {
+    //        console.log('ParseUser.current() was returned');
+    //        return {
+    //          userId: user.get('id'),
+    //          sessionToken: user.get('sessionToken'),
+    //          email: user.get('email'),
+    //          firstName: user.get('firstName'),
+    //          lastName: user.get('lastName')
+    //        };
+    //      });
+
+    //      resolve(useruser);
+    //    } else {
+    //      reject();
+    //    }
+    //  });
+    //},
+
+    restore: function restore(data) {
+
+      var store = this.get('db');
+      var adapter = store.adapterFor('parse-user');
 
       if (!data.sessionToken) {
         return {};
       }
 
-      sessionToken = data.sessionToken;
-      adapter = this.get('db').adapterFor('parse-user');
-      adapter.set('sessionToken', sessionToken);
+      // Set session token
+      adapter.set('sessionToken', data.sessionToken);
 
       // Get current user
-      return ParseUser['default'].current().then(function (user) {
+      return store.modelFor('parse-user').current(store).then(function (user) {
         return {
           userId: user.get('id'),
           sessionToken: user.get('sessionToken'),
@@ -134,7 +160,7 @@ define('yabbit/authorizers/parse', ['exports', 'simple-auth/authorizers/base'], 
       console.log(jqXHR);
       console.log(requestOptions);
       //if (this.get('session.isAuthenticated') && !Ember.isEmpty(this.get('session.secure.token'))) {
-      //  jqXHR.setRequestHeader('Authorization', 'Token: ' + this.get('session.secure.token'));
+      //  jqXHR.setRequestHeader('Authorization', 'X-Parse-Session-Token:' + this.get('session.secure.token'));
       //}
     }
   });
@@ -212,11 +238,11 @@ define('yabbit/controllers/session/login', ['exports', 'ember'], function (expor
         // Authenticate with parse
         controller.get('session').authenticate('authenticator:parse', data).then(function (response) {
 
-          console.log('session.isAuthenticated');
-          console.log(controller.get('session.isAuthenticated'));
+          //console.log('session.isAuthenticated');
+          //console.log(controller.get('session.isAuthenticated'));
 
           // redirect physician to their patients
-          controller.transitionTo('patients.index');
+          controller.transitionToRoute('patients.index');
         },
         // Handle errors
         function (error) {
@@ -274,7 +300,7 @@ define('yabbit/controllers/session/signup', ['exports', 'ember', 'ember-validati
         }, function (error) {
           console.log(error);
           controller.set('loggedIn', false);
-          controller.set('message', error.error || error.message);
+          controller.set('message', error || error.message);
         });
       }
     }
@@ -472,25 +498,17 @@ define('yabbit/models/parse-user', ['exports', 'ember', 'ember-parse-adapter/mod
   ParseUser['default'].reopenClass({
 
     /****************************************************************************
-    /* PROPERTIES
-    /***************************************************************************/
-
-    db: Ember['default'].inject.service('store'),
-
-    /****************************************************************************
     /* ACTIONS
     /***************************************************************************/
 
-    /* Current User - used by the parse authenticator */
-    current: function current() {
-      var model = this,
-          adapter = this.get('db').adapterFor('parse-user'),
-          serializer = this.get('db').serializerFor('parse-user');
+    /* Current User - called by 'authenticators/parse.js' */
+    current: function current(store) {
+
+      // Get adapter and serializer
+      var adapter = store.adapterFor('parse-user');
+      var serializer = store.serializerFor('parse-user');
 
       return adapter.ajax(adapter.buildURL("parse-user", "me"), "GET", {}).then(function (user) {
-        console.log('ParseUser current');
-        console.log(user);
-
         return store.push({
           data: {
             id: user.objectId,
@@ -660,9 +678,11 @@ define('yabbit/routes/session/login', ['exports', 'ember'], function (exports, E
   'use strict';
 
   exports['default'] = Ember['default'].Route.extend({
-    //setupController(controller) {
-    //  controller.set('title', 'Login');
-    //}
+    beforeModel: function beforeModel(transition) {
+      if (this.get('session.isAuthenticated')) {
+        this.transitionTo('patients.index');
+      }
+    }
   });
 
 });
@@ -2038,7 +2058,7 @@ define('yabbit/tests/authenticators/parse.jshint', function () {
 
   QUnit.module('JSHint - authenticators');
   QUnit.test('authenticators/parse.js should pass jshint', function(assert) { 
-    assert.ok(false, 'authenticators/parse.js should pass jshint.\nauthenticators/parse.js: line 21, col 32, \'store\' is defined but never used.\nauthenticators/parse.js: line 88, col 53, \'reject\' is defined but never used.\n\n2 errors'); 
+    assert.ok(false, 'authenticators/parse.js should pass jshint.\nauthenticators/parse.js: line 3, col 8, \'ParseUser\' is defined but never used.\nauthenticators/parse.js: line 114, col 53, \'reject\' is defined but never used.\n\n2 errors'); 
   });
 
 });
@@ -2225,7 +2245,7 @@ define('yabbit/tests/models/parse-user.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/parse-user.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 29, col 14, \'store\' is not defined.\nmodels/parse-user.js: line 21, col 9, \'model\' is defined but never used.\nmodels/parse-user.js: line 23, col 7, \'serializer\' is defined but never used.\n\n3 errors'); 
+    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 1, col 8, \'Ember\' is defined but never used.\nmodels/parse-user.js: line 18, col 9, \'serializer\' is defined but never used.\n\n2 errors'); 
   });
 
 });
@@ -2295,7 +2315,7 @@ define('yabbit/tests/routes/session/login.jshint', function () {
 
   QUnit.module('JSHint - routes/session');
   QUnit.test('routes/session/login.js should pass jshint', function(assert) { 
-    assert.ok(true, 'routes/session/login.js should pass jshint.'); 
+    assert.ok(false, 'routes/session/login.js should pass jshint.\nroutes/session/login.js: line 4, col 25, \'transition\' is defined but never used.\n\n1 error'); 
   });
 
 });
@@ -2529,7 +2549,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+0683ed65"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+f5abf505"});
 }
 
 /* jshint ignore:end */
