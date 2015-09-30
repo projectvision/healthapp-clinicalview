@@ -91,7 +91,13 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
       }
       // login a user
       else {
+          console.log('.');
+          console.log(store);
+          console.log(store.modelFor('parse-user'));
+
           return store.modelFor('parse-user').loginProxy(data).then(function (user) {
+            console.log('Authenticator authenticate: login');
+            console.log(data);
 
             // set the session up with Parse response
             adapter.set('sessionToken', user.get('sessionToken'));
@@ -492,6 +498,8 @@ define('yabbit/models/parse-user', ['exports', 'ember-parse-adapter/models/parse
     },
 
     loginProxy: function loginProxy(data) {
+      console.log('this');
+      console.log(this);
       var store = this.container.lookup('service:store');
       //var store = Ember.inject.service('store');
       return this.login(store, data);
@@ -2032,7 +2040,7 @@ define('yabbit/tests/authenticators/parse.jshint', function () {
 
   QUnit.module('JSHint - authenticators');
   QUnit.test('authenticators/parse.js should pass jshint', function(assert) { 
-    assert.ok(false, 'authenticators/parse.js should pass jshint.\nauthenticators/parse.js: line 86, col 53, \'reject\' is defined but never used.\n\n1 error'); 
+    assert.ok(false, 'authenticators/parse.js should pass jshint.\nauthenticators/parse.js: line 92, col 53, \'reject\' is defined but never used.\n\n1 error'); 
   });
 
 });

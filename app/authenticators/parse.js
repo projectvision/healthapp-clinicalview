@@ -60,7 +60,13 @@ export default Base.extend({
     }
     // login a user
     else {
+      console.log('.');
+      console.log(store);
+      console.log(store.modelFor('parse-user'));
+      
       return store.modelFor('parse-user').loginProxy(data).then(function(user) {
+        console.log('Authenticator authenticate: login');
+        console.log(data);
 
         // set the session up with Parse response
         adapter.set('sessionToken', user.get('sessionToken'));

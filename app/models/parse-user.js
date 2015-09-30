@@ -32,6 +32,8 @@ ParseUser.reopenClass({
   },
 
   loginProxy: function(data) {
+    console.log('this');
+    console.log(this);
     var store = this.container.lookup('service:store');
     //var store = Ember.inject.service('store');
     return this.login(store, data);
