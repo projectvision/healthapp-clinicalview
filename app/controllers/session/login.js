@@ -6,7 +6,7 @@ export default Ember.Controller.extend({
   /* PROPERTIES
   /***************************************************************************/
 
-  identification: "maediprichard@gmail.com",
+  identification: "maediprichard@gmail.com", // email
   password: "m",
   message: null,
 
@@ -17,15 +17,23 @@ export default Ember.Controller.extend({
   actions: {
     authenticate: function() {
 
+      // Get controller and user details
       var controller = this;
       var data = this.getProperties('identification', 'password');
 
+      // Authenticate with parse
       controller.get('session').authenticate('authenticator:parse', data).then(function(response) {
 
         console.log('session.isAuthenticated');
         console.log(controller.get('session.isAuthenticated'));
 
-      }, function(error) {
+        // redirect physician to their patients
+        controller.transitionTo('patients.index');
+
+      },
+      // Handle errors
+      function(error) {
+        // show message to the user
         controller.set('message', error.message || error.error);
         console.log(error);
       });
