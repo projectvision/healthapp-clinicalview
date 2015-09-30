@@ -6,7 +6,7 @@ export default Ember.Controller.extend({
   /* PROPERTIES
   /***************************************************************************/
 
-  identification: null, // email
+  identification: null, // email/username
   password: null,
   message: null,
 

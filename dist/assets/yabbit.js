@@ -220,7 +220,7 @@ define('yabbit/controllers/session/login', ['exports', 'ember'], function (expor
     /* PROPERTIES
     /***************************************************************************/
 
-    identification: null, // email
+    identification: null, // email/username
     password: null,
     message: null,
 
@@ -260,7 +260,6 @@ define('yabbit/controllers/session/signup', ['exports', 'ember', 'ember-validati
     email: null,
     password: null,
     passwordConfirmation: null,
-    loggedIn: false,
     message: null,
 
     validations: {
@@ -278,25 +277,24 @@ define('yabbit/controllers/session/signup', ['exports', 'ember', 'ember-validati
       signup: function signup() {
 
         // Build User
-
         var user = this.store.modelFor('parse-user');
         var data = {
           email: this.get('email'),
           username: this.get('email'),
-          password: this.get('password')
+          password: this.get('password'),
+          isPhysician: true
         };
 
         // Save User
-
         var controller = this;
-
         user.signup(this.store, data).then(function (user) {
-          controller.set('loggedIn', true);
           controller.set('message', 'You are now signed up!');
-        }, function (error) {
+        },
+        // Handle errors
+        function (error) {
+          // show message to the user
+          controller.set('message', error.message);
           console.log(error);
-          controller.set('loggedIn', false);
-          controller.set('message', error || error.message);
         });
       }
     }
@@ -492,6 +490,12 @@ define('yabbit/models/parse-user', ['exports', 'ember', 'ember-parse-adapter/mod
   'use strict';
 
   ParseUser['default'].reopenClass({
+
+    /****************************************************************************
+    /* PROPERTIES
+    /***************************************************************************/
+
+    isPhysician: DS.attr('boolean'),
 
     /****************************************************************************
     /* ACTIONS
@@ -2104,7 +2108,7 @@ define('yabbit/tests/controllers/session/signup.jshint', function () {
 
   QUnit.module('JSHint - controllers/session');
   QUnit.test('controllers/session/signup.js should pass jshint', function(assert) { 
-    assert.ok(false, 'controllers/session/signup.js should pass jshint.\ncontrollers/session/signup.js: line 40, col 18, \'user\' is defined but never used.\n\n1 error'); 
+    assert.ok(false, 'controllers/session/signup.js should pass jshint.\ncontrollers/session/signup.js: line 37, col 18, \'user\' is defined but never used.\n\n1 error'); 
   });
 
 });
@@ -2241,7 +2245,7 @@ define('yabbit/tests/models/parse-user.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/parse-user.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 1, col 8, \'Ember\' is defined but never used.\nmodels/parse-user.js: line 18, col 9, \'serializer\' is defined but never used.\n\n2 errors'); 
+    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 13, col 17, \'DS\' is not defined.\nmodels/parse-user.js: line 1, col 8, \'Ember\' is defined but never used.\nmodels/parse-user.js: line 24, col 9, \'serializer\' is defined but never used.\n\n3 errors'); 
   });
 
 });

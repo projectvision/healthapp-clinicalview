@@ -6,7 +6,6 @@ export default Ember.Controller.extend(EmberValidations, {
   email: null,
   password: null,
   passwordConfirmation: null,
-  loggedIn: false,
   message: null,
 
   validations: {
@@ -24,27 +23,25 @@ export default Ember.Controller.extend(EmberValidations, {
     signup: function() {
 
       // Build User
-
       var user = this.store.modelFor('parse-user');
       var data = {
         email: this.get('email'),
         username: this.get('email'),
         password: this.get('password'),
+        isPhysician: true
       };
 
       // Save User
-
       var controller = this;
-
       user.signup(this.store, data).then(
         function(user) {
-          controller.set('loggedIn', true);
           controller.set('message', 'You are now signed up!');
         },
+        // Handle errors
         function(error) {
+          // show message to the user
+          controller.set('message', error.message);
           console.log(error);
-          controller.set('loggedIn', false);
-          controller.set('message', error || error.message);
         }
       );
     }
