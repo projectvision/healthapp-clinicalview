@@ -228,7 +228,7 @@ section#patients {
   position: relative;
   /* remove outside table border */ }
   section#patients aside {
-    margin-top: 46px;
+    margin-top: 47px;
     float: left;
     width: 300px;
     border: 1px solid #e2e2e2;
@@ -269,6 +269,9 @@ section#patients {
     border-top: 0;
     background: white;
     min-height: 500px; }
+    section#patients .pane #graphs {
+      width: 100%;
+      padding: 20px; }
   section#patients #view-all.button {
     position: absolute;
     top: 6px;
@@ -277,14 +280,13 @@ section#patients {
     width: 290px; }
   section#patients table {
     width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 10px; }
+    border-collapse: collapse; }
     section#patients table thead {
       text-align: left;
       font-weight: bold;
       background: linear-gradient(#f9f9f9, #e6e6e6); }
       section#patients table thead th {
-        line-height: 23px;
+        line-height: 23.5px;
         text-shadow: 1px 1px 1px #fefefe; }
         section#patients table thead th.challenge-completion {
           width: 40%; }

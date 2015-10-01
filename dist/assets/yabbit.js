@@ -1439,11 +1439,11 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 28,
+              "line": 30,
               "column": 0
             },
             "end": {
-              "line": 28,
+              "line": 30,
               "column": 66
             }
           },
@@ -1476,7 +1476,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 29,
+            "line": 31,
             "column": 0
           }
         },
@@ -1588,6 +1588,12 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         var el3 = dom.createTextNode("\n  ");
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("img");
+        dom.setAttribute(el2,"id","graphs");
+        dom.setAttribute(el2,"src","assets/graphs.png");
+        dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
@@ -1626,7 +1632,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         ["content","model.challengeCompletion.stress",["loc",[null,[14,87],[14,123]]]],
         ["content","model.healthRisk.status",["loc",[null,[17,10],[17,37]]]],
         ["content","model.activityLevel.status",["loc",[null,[20,10],[20,40]]]],
-        ["block","link-to",["patients.index"],["id","view-all","class","button"],0,null,["loc",[null,[28,0],[28,78]]]]
+        ["block","link-to",["patients.index"],["id","view-all","class","button"],0,null,["loc",[null,[30,0],[30,78]]]]
       ],
       locals: [],
       templates: [child0]
