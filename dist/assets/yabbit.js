@@ -765,11 +765,11 @@ define('yabbit/templates/application', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 9,
+              "line": 10,
               "column": 10
             },
             "end": {
-              "line": 11,
+              "line": 12,
               "column": 10
             }
           },
@@ -799,7 +799,7 @@ define('yabbit/templates/application', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["element","action",["invalidateSession"],[],["loc",[null,[10,19],[10,49]]]]
+          ["element","action",["invalidateSession"],[],["loc",[null,[11,19],[11,49]]]]
         ],
         locals: [],
         templates: []
@@ -812,11 +812,11 @@ define('yabbit/templates/application', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 11,
+              "line": 12,
               "column": 10
             },
             "end": {
-              "line": 13,
+              "line": 14,
               "column": 10
             }
           },
@@ -846,7 +846,7 @@ define('yabbit/templates/application', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["element","action",["sessionRequiresAuthentication"],[],["loc",[null,[12,19],[12,61]]]]
+          ["element","action",["sessionRequiresAuthentication"],[],["loc",[null,[13,19],[13,61]]]]
         ],
         locals: [],
         templates: []
@@ -895,20 +895,20 @@ define('yabbit/templates/application', ['exports'], function (exports) {
         var el5 = dom.createTextNode("\n        ");
         dom.appendChild(el4, el5);
         var el5 = dom.createElement("ul");
-        var el6 = dom.createTextNode("\n");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createComment("");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("          ");
+        var el6 = dom.createTextNode("\n          ");
         dom.appendChild(el5, el6);
         var el6 = dom.createElement("li");
         var el7 = dom.createElement("a");
         dom.setAttribute(el7,"href","#");
-        var el8 = dom.createTextNode("Help");
+        var el8 = dom.createTextNode("Settings");
         dom.appendChild(el7, el8);
         dom.appendChild(el6, el7);
         dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n        ");
+        var el6 = dom.createTextNode("\n");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("        ");
         dom.appendChild(el5, el6);
         dom.appendChild(el4, el5);
         var el5 = dom.createTextNode("\n      ");
@@ -942,13 +942,13 @@ define('yabbit/templates/application', ['exports'], function (exports) {
         var element2 = dom.childAt(fragment, [0, 1]);
         var morphs = new Array(3);
         morphs[0] = dom.createMorphAt(element2,1,1);
-        morphs[1] = dom.createMorphAt(dom.childAt(element2, [3, 1, 2]),1,1);
+        morphs[1] = dom.createMorphAt(dom.childAt(element2, [3, 1, 2]),3,3);
         morphs[2] = dom.createMorphAt(dom.childAt(fragment, [2]),1,1);
         return morphs;
       },
       statements: [
         ["block","link-to",["index"],[],0,null,["loc",[null,[4,4],[4,74]]]],
-        ["block","if",[["get","session.isAuthenticated",["loc",[null,[9,16],[9,39]]]]],[],1,2,["loc",[null,[9,10],[13,17]]]],
+        ["block","if",[["get","session.isAuthenticated",["loc",[null,[10,16],[10,39]]]]],[],1,2,["loc",[null,[10,10],[14,17]]]],
         ["content","outlet",["loc",[null,[23,2],[23,12]]]]
       ],
       locals: [],
