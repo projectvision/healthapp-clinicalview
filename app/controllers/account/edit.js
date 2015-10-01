@@ -8,9 +8,15 @@ export default Ember.Controller.extend({
 
   actions: {
     update: function() {
-      console.log('user edit');
-      console.log(this.get('model'));
-      console.log(user);
+
+      // Get current user
+      var user = this.get('model');
+
+      // Sync username with email
+      user.set('username', user.get('email'));
+
+      // Update user to parse
+      user.save();
     }
   }
 });

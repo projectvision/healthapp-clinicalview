@@ -165,9 +165,15 @@ define('yabbit/controllers/account/edit', ['exports', 'ember'], function (export
 
     actions: {
       update: function update() {
-        console.log('user edit');
-        console.log(this.get('model'));
-        console.log(user);
+
+        // Get current user
+        var user = this.get('model');
+
+        // Sync username with email
+        user.set('username', user.get('email'));
+
+        // Update user to parse
+        user.save();
       }
     }
   });
@@ -745,7 +751,7 @@ define('yabbit/templates/account/edit', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 12,
+            "line": 15,
             "column": 0
           }
         },
@@ -756,9 +762,15 @@ define('yabbit/templates/account/edit', ['exports'], function (exports) {
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("h1");
+        var el2 = dom.createTextNode("Edit Account");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
         var el1 = dom.createElement("div");
         dom.setAttribute(el1,"id","edit");
-        var el2 = dom.createTextNode("\n  ");
+        var el2 = dom.createTextNode("\n\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("form");
         var el3 = dom.createTextNode("\n    ");
@@ -799,7 +811,7 @@ define('yabbit/templates/account/edit', ['exports'], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0, 1]);
+        var element0 = dom.childAt(fragment, [2, 1]);
         var element1 = dom.childAt(element0, [11]);
         var morphs = new Array(6);
         morphs[0] = dom.createMorphAt(element0,1,1);
@@ -811,12 +823,12 @@ define('yabbit/templates/account/edit', ['exports'], function (exports) {
         return morphs;
       },
       statements: [
-        ["inline","input",[],["value",["subexpr","@mut",[["get","model.email",["loc",[null,[3,18],[3,29]]]]],[],[]],"id","email","placeholder","Email"],["loc",[null,[3,4],[3,62]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","model.firstName",["loc",[null,[4,18],[4,33]]]]],[],[]],"id","firstname","placeholder","First name"],["loc",[null,[4,4],[4,75]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","model.lastName",["loc",[null,[5,18],[5,32]]]]],[],[]],"id","lastname","placeholder","Last name"],["loc",[null,[5,4],[5,72]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","model.password",["loc",[null,[6,18],[6,32]]]]],[],[]],"id","password","placeholder","Password"],["loc",[null,[6,4],[6,71]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","model.passwordConfirmation",["loc",[null,[7,18],[7,44]]]]],[],[]],"id","password-confirmation","placeholder","Confirm Password"],["loc",[null,[7,4],[7,104]]]],
-        ["element","action",["update"],[],["loc",[null,[9,26],[9,45]]]]
+        ["inline","input",[],["value",["subexpr","@mut",[["get","model.email",["loc",[null,[6,18],[6,29]]]]],[],[]],"id","email","placeholder","Email"],["loc",[null,[6,4],[6,62]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","model.firstName",["loc",[null,[7,18],[7,33]]]]],[],[]],"id","firstname","placeholder","First name"],["loc",[null,[7,4],[7,75]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","model.lastName",["loc",[null,[8,18],[8,32]]]]],[],[]],"id","lastname","placeholder","Last name"],["loc",[null,[8,4],[8,72]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","model.password",["loc",[null,[9,18],[9,32]]]]],[],[]],"id","password","placeholder","Password"],["loc",[null,[9,4],[9,71]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","model.passwordConfirmation",["loc",[null,[10,18],[10,44]]]]],[],[]],"id","password-confirmation","placeholder","Confirm Password"],["loc",[null,[10,4],[10,104]]]],
+        ["element","action",["update"],[],["loc",[null,[12,26],[12,45]]]]
       ],
       locals: [],
       templates: []
@@ -2236,7 +2248,7 @@ define('yabbit/tests/controllers/account/edit.jshint', function () {
 
   QUnit.module('JSHint - controllers/account');
   QUnit.test('controllers/account/edit.js should pass jshint', function(assert) { 
-    assert.ok(false, 'controllers/account/edit.js should pass jshint.\ncontrollers/account/edit.js: line 13, col 19, \'user\' is not defined.\n\n1 error'); 
+    assert.ok(true, 'controllers/account/edit.js should pass jshint.'); 
   });
 
 });
