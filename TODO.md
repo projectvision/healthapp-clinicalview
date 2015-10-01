@@ -11,6 +11,10 @@
 - Authorize session
   https://github.com/simplabs/ember-simple-auth/blob/master/examples/6-custom-server.html#L163
   http://ember-simple-auth.com/ember-simple-auth-api-docs.html#SimpleAuth-Configuration-authorizer
+- Get current user
+  http://stackoverflow.com/questions/30872684/ember-simple-auth-injecting-current-user-into-every-route
+- Save user to Parse on account.edit
+  http://localhost:4200/account/edit
 
 ## Concepts
 

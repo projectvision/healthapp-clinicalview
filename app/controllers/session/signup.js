@@ -25,8 +25,10 @@ export default Ember.Controller.extend(EmberValidations, {
       // Build User
       var user = this.store.modelFor('parse-user');
       var data = {
-        email: this.get('email'),
-        username: this.get('email'),
+        email: this.get('identification'),
+        username: this.get('identification'),
+        firstName: this.get('firstName'),
+        lastName: this.get('lastName'),
         password: this.get('password'),
         isPhysician: true
       };

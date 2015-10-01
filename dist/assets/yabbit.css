@@ -35,6 +35,14 @@
  *****************************************************************************/
 /* Radio Tabs */
 /******************************************************************************
+ * BUTTONS *
+ ******************************************************************************/
+button[type="submit"] {
+  width: 100%;
+  padding: 15px 20px !important;
+  background: #3DB549; }
+
+/******************************************************************************
  * GENERAL *
  ******************************************************************************/
 input {
@@ -44,28 +52,25 @@ input {
   border-radius: 3px; }
 
 /******************************************************************************
- * BUTTONS *
+ * LAYOUT *
  ******************************************************************************/
-button[type="submit"] {
-  width: 100%;
-  padding: 15px 20px !important;
-  background: #3DB549; }
-
-/******************************************************************************
- * SECTIONS *
- ******************************************************************************/
-/* Login */
-#session input {
-  width: 100%;
-  display: block;
+#edit {
   padding: 10px;
-  font-size: 1em; }
-  #session input[type="text"],
-  #session input[type="password"] {
-    margin-bottom: 5px; }
-
-#session button {
-  margin-top: 10px; }
+  border: 1px solid #ccc;
+  overflow: hidden;
+  max-width: 300px;
+  border-radius: 4px;
+  margin: 10px auto; }
+  #edit input {
+    width: 100%;
+    display: block;
+    padding: 10px;
+    font-size: 1em; }
+    #edit input[type="text"],
+    #edit input[type="password"] {
+      margin-bottom: 5px; }
+  #edit button {
+    margin-top: 10px; }
 
 /******************************************************************************
  * ALERTS
@@ -214,15 +219,6 @@ a.button {
 /******************************************************************************
  * SECTIONS *
  ******************************************************************************/
-/* Session */
-#session {
-  padding: 10px;
-  border: 1px solid #ccc;
-  overflow: hidden;
-  max-width: 300px;
-  border-radius: 4px;
-  margin: 10px auto; }
-
 /* Patients */
 section#patients {
   position: relative;

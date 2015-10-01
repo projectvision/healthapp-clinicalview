@@ -45,34 +45,6 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
     /* ACTIONS
     /***************************************************************************/
 
-    //restore: function(data) {
-    //  return new Ember.RSVP.Promise(function(resolve, reject) {
-    //    console.log('restore');
-    //    console.log(data);
-
-    //    if (!Ember.isEmpty(data.sessionToken)) {
-    //      console.log('sdf');
-    //      adapter = this.get('db').adapterFor('parse-user');
-    //      adapter.set('sessionToken', data.sessionToken);
-
-    //      var useruser = ParseUser.current().then(function(user) {
-    //        console.log('ParseUser.current() was returned');
-    //        return {
-    //          userId: user.get('id'),
-    //          sessionToken: user.get('sessionToken'),
-    //          email: user.get('email'),
-    //          firstName: user.get('firstName'),
-    //          lastName: user.get('lastName')
-    //        };
-    //      });
-
-    //      resolve(useruser);
-    //    } else {
-    //      reject();
-    //    }
-    //  });
-    //},
-
     restore: function restore(data) {
 
       var store = this.get('db');
@@ -91,6 +63,7 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
           userId: user.get('id'),
           sessionToken: user.get('sessionToken'),
           email: user.get('email'),
+          username: user.get('username'),
           firstName: user.get('firstName'),
           lastName: user.get('lastName')
         };
@@ -104,7 +77,7 @@ define('yabbit/authenticators/parse', ['exports', 'ember', 'simple-auth/authenti
       var adapter = this.get('db').adapterFor('parse-user');
       var user = data.user;
 
-      // Rename ember simple auth "identification" to parse "username"
+      // Use ember simple auth "identification" (email) as parse "username"
       if (data.identification) {
         data.username = data.identification;
       }
@@ -177,6 +150,26 @@ define('yabbit/components/app-version', ['exports', 'ember-cli-app-version/compo
   exports['default'] = AppVersionComponent['default'].extend({
     version: version,
     name: name
+  });
+
+});
+define('yabbit/controllers/account/edit', ['exports', 'ember'], function (exports, Ember) {
+
+  'use strict';
+
+  exports['default'] = Ember['default'].Controller.extend({
+
+    /****************************************************************************
+    /* ACTIONS
+    /***************************************************************************/
+
+    actions: {
+      update: function update() {
+        console.log('user edit');
+        console.log(this.get('model'));
+        console.log(user);
+      }
+    }
   });
 
 });
@@ -279,8 +272,10 @@ define('yabbit/controllers/session/signup', ['exports', 'ember', 'ember-validati
         // Build User
         var user = this.store.modelFor('parse-user');
         var data = {
-          email: this.get('email'),
-          username: this.get('email'),
+          email: this.get('identification'),
+          username: this.get('identification'),
+          firstName: this.get('firstName'),
+          lastName: this.get('lastName'),
           password: this.get('password'),
           isPhysician: true
         };
@@ -495,6 +490,8 @@ define('yabbit/models/parse-user', ['exports', 'ember', 'ember-parse-adapter/mod
     /* PROPERTIES
     /***************************************************************************/
 
+    firstName: DS.attr('string'),
+    lastName: DS.attr('string'),
     isPhysician: DS.attr('boolean'),
 
     /****************************************************************************
@@ -516,6 +513,7 @@ define('yabbit/models/parse-user', ['exports', 'ember', 'ember-parse-adapter/mod
             attributes: {
               sessionToken: user.sessionToken,
               email: user.email,
+              username: user.username,
               firstName: user.firstName,
               lastName: user.lastName
             }
@@ -552,6 +550,10 @@ define('yabbit/router', ['exports', 'ember', 'yabbit/config/environment'], funct
       this.route('signup');
     });
 
+    this.route('account', function () {
+      this.route('edit');
+    });
+
     this.route('patients', function () {
       this.route('index', function () {
         this.route('show', { path: ':id' });
@@ -560,6 +562,17 @@ define('yabbit/router', ['exports', 'ember', 'yabbit/config/environment'], funct
   });
 
   exports['default'] = Router;
+
+});
+define('yabbit/routes/account/edit', ['exports', 'ember'], function (exports, Ember) {
+
+  'use strict';
+
+  exports['default'] = Ember['default'].Route.extend({
+    model: function model() {
+      return this.get('store').modelFor('parse-user').current(this.get('store'));
+    }
+  });
 
 });
 define('yabbit/routes/application', ['exports', 'ember', 'simple-auth/mixins/application-route-mixin'], function (exports, Ember, ApplicationRouteMixin) {
@@ -717,6 +730,100 @@ define('yabbit/services/validations', ['exports', 'ember'], function (exports, E
   });
 
 });
+define('yabbit/templates/account/edit', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    return {
+      meta: {
+        "revision": "Ember@1.13.10",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 12,
+            "column": 0
+          }
+        },
+        "moduleName": "yabbit/templates/account/edit.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"id","edit");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("form");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("button");
+        dom.setAttribute(el3,"type","submit");
+        var el4 = dom.createTextNode("Update");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0, 1]);
+        var element1 = dom.childAt(element0, [11]);
+        var morphs = new Array(6);
+        morphs[0] = dom.createMorphAt(element0,1,1);
+        morphs[1] = dom.createMorphAt(element0,3,3);
+        morphs[2] = dom.createMorphAt(element0,5,5);
+        morphs[3] = dom.createMorphAt(element0,7,7);
+        morphs[4] = dom.createMorphAt(element0,9,9);
+        morphs[5] = dom.createElementMorph(element1);
+        return morphs;
+      },
+      statements: [
+        ["inline","input",[],["value",["subexpr","@mut",[["get","model.email",["loc",[null,[3,18],[3,29]]]]],[],[]],"id","email","placeholder","Email"],["loc",[null,[3,4],[3,62]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","model.firstName",["loc",[null,[4,18],[4,33]]]]],[],[]],"id","firstname","placeholder","First name"],["loc",[null,[4,4],[4,75]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","model.lastName",["loc",[null,[5,18],[5,32]]]]],[],[]],"id","lastname","placeholder","Last name"],["loc",[null,[5,4],[5,72]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","model.password",["loc",[null,[6,18],[6,32]]]]],[],[]],"id","password","placeholder","Password"],["loc",[null,[6,4],[6,71]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","model.passwordConfirmation",["loc",[null,[7,18],[7,44]]]]],[],[]],"id","password-confirmation","placeholder","Confirm Password"],["loc",[null,[7,4],[7,104]]]],
+        ["element","action",["update"],[],["loc",[null,[9,26],[9,45]]]]
+      ],
+      locals: [],
+      templates: []
+    };
+  }()));
+
+});
 define('yabbit/templates/application', ['exports'], function (exports) {
 
   'use strict';
@@ -759,13 +866,47 @@ define('yabbit/templates/application', ['exports'], function (exports) {
       };
     }());
     var child1 = (function() {
+      var child0 = (function() {
+        return {
+          meta: {
+            "revision": "Ember@1.13.10",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 10,
+                "column": 16
+              },
+              "end": {
+                "line": 10,
+                "column": 50
+              }
+            },
+            "moduleName": "yabbit/templates/application.hbs"
+          },
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("Account");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() { return []; },
+          statements: [
+
+          ],
+          locals: [],
+          templates: []
+        };
+      }());
       return {
         meta: {
           "revision": "Ember@1.13.10",
           "loc": {
             "source": null,
             "start": {
-              "line": 10,
+              "line": 9,
               "column": 10
             },
             "end": {
@@ -783,6 +924,12 @@ define('yabbit/templates/application', ['exports'], function (exports) {
           var el1 = dom.createTextNode("            ");
           dom.appendChild(el0, el1);
           var el1 = dom.createElement("li");
+          var el2 = dom.createComment("");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n            ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("li");
           var el2 = dom.createElement("a");
           var el3 = dom.createTextNode("Logout");
           dom.appendChild(el2, el3);
@@ -793,16 +940,18 @@ define('yabbit/templates/application', ['exports'], function (exports) {
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element1 = dom.childAt(fragment, [1, 0]);
-          var morphs = new Array(1);
-          morphs[0] = dom.createElementMorph(element1);
+          var element1 = dom.childAt(fragment, [3, 0]);
+          var morphs = new Array(2);
+          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]),0,0);
+          morphs[1] = dom.createElementMorph(element1);
           return morphs;
         },
         statements: [
+          ["block","link-to",["account.edit"],[],0,null,["loc",[null,[10,16],[10,62]]]],
           ["element","action",["invalidateSession"],[],["loc",[null,[11,19],[11,49]]]]
         ],
         locals: [],
-        templates: []
+        templates: [child0]
       };
     }());
     var child2 = (function() {
@@ -895,15 +1044,6 @@ define('yabbit/templates/application', ['exports'], function (exports) {
         var el5 = dom.createTextNode("\n        ");
         dom.appendChild(el4, el5);
         var el5 = dom.createElement("ul");
-        var el6 = dom.createTextNode("\n          ");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createElement("li");
-        var el7 = dom.createElement("a");
-        dom.setAttribute(el7,"href","#");
-        var el8 = dom.createTextNode("Settings");
-        dom.appendChild(el7, el8);
-        dom.appendChild(el6, el7);
-        dom.appendChild(el5, el6);
         var el6 = dom.createTextNode("\n");
         dom.appendChild(el5, el6);
         var el6 = dom.createComment("");
@@ -942,13 +1082,13 @@ define('yabbit/templates/application', ['exports'], function (exports) {
         var element2 = dom.childAt(fragment, [0, 1]);
         var morphs = new Array(3);
         morphs[0] = dom.createMorphAt(element2,1,1);
-        morphs[1] = dom.createMorphAt(dom.childAt(element2, [3, 1, 2]),3,3);
+        morphs[1] = dom.createMorphAt(dom.childAt(element2, [3, 1, 2]),1,1);
         morphs[2] = dom.createMorphAt(dom.childAt(fragment, [2]),1,1);
         return morphs;
       },
       statements: [
         ["block","link-to",["index"],[],0,null,["loc",[null,[4,4],[4,74]]]],
-        ["block","if",[["get","session.isAuthenticated",["loc",[null,[10,16],[10,39]]]]],[],1,2,["loc",[null,[10,10],[14,17]]]],
+        ["block","if",[["get","session.isAuthenticated",["loc",[null,[9,16],[9,39]]]]],[],1,2,["loc",[null,[9,10],[14,17]]]],
         ["content","outlet",["loc",[null,[23,2],[23,12]]]]
       ],
       locals: [],
@@ -1735,7 +1875,7 @@ define('yabbit/templates/session', ['exports'], function (exports) {
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createElement("div");
-        dom.setAttribute(el1,"id","session");
+        dom.setAttribute(el1,"id","edit");
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("div");
@@ -1971,7 +2111,7 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 14,
+            "line": 16,
             "column": 0
           }
         },
@@ -1987,6 +2127,14 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         var el1 = dom.createElement("form");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createComment("");
@@ -2015,22 +2163,26 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var element0 = dom.childAt(fragment, [2]);
-        var element1 = dom.childAt(element0, [7]);
-        var morphs = new Array(5);
+        var element1 = dom.childAt(element0, [11]);
+        var morphs = new Array(7);
         morphs[0] = dom.createMorphAt(fragment,0,0,contextualElement);
         morphs[1] = dom.createMorphAt(element0,1,1);
         morphs[2] = dom.createMorphAt(element0,3,3);
         morphs[3] = dom.createMorphAt(element0,5,5);
-        morphs[4] = dom.createElementMorph(element1);
+        morphs[4] = dom.createMorphAt(element0,7,7);
+        morphs[5] = dom.createMorphAt(element0,9,9);
+        morphs[6] = dom.createElementMorph(element1);
         dom.insertBoundary(fragment, 0);
         return morphs;
       },
       statements: [
         ["block","if",[["get","message",["loc",[null,[1,6],[1,13]]]]],[],0,null,["loc",[null,[1,0],[5,7]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","email",["loc",[null,[8,16],[8,21]]]]],[],[]],"id","email","placeholder","Email"],["loc",[null,[8,2],[8,54]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","password",["loc",[null,[9,16],[9,24]]]]],[],[]],"id","password","placeholder","Password"],["loc",[null,[9,2],[9,63]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","passwordConfirmation",["loc",[null,[10,16],[10,36]]]]],[],[]],"id","password-confirmation","placeholder","Confirm Password"],["loc",[null,[10,2],[10,96]]]],
-        ["element","action",["signup"],[],["loc",[null,[12,24],[12,43]]]]
+        ["inline","input",[],["value",["subexpr","@mut",[["get","identification",["loc",[null,[8,16],[8,30]]]]],[],[]],"id","identification","placeholder","Email"],["loc",[null,[8,2],[8,72]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","firstName",["loc",[null,[9,16],[9,25]]]]],[],[]],"id","firstname","placeholder","First name"],["loc",[null,[9,2],[9,67]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","lastName",["loc",[null,[10,16],[10,24]]]]],[],[]],"id","lastname","placeholder","Last name"],["loc",[null,[10,2],[10,64]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","password",["loc",[null,[11,16],[11,24]]]]],[],[]],"id","password","placeholder","Password"],["loc",[null,[11,2],[11,63]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","passwordConfirmation",["loc",[null,[12,16],[12,36]]]]],[],[]],"id","password-confirmation","placeholder","Confirm Password"],["loc",[null,[12,2],[12,96]]]],
+        ["element","action",["signup"],[],["loc",[null,[14,24],[14,43]]]]
       ],
       locals: [],
       templates: [child0]
@@ -2064,7 +2216,7 @@ define('yabbit/tests/authenticators/parse.jshint', function () {
 
   QUnit.module('JSHint - authenticators');
   QUnit.test('authenticators/parse.js should pass jshint', function(assert) { 
-    assert.ok(false, 'authenticators/parse.js should pass jshint.\nauthenticators/parse.js: line 3, col 8, \'ParseUser\' is defined but never used.\nauthenticators/parse.js: line 114, col 53, \'reject\' is defined but never used.\n\n2 errors'); 
+    assert.ok(false, 'authenticators/parse.js should pass jshint.\nauthenticators/parse.js: line 3, col 8, \'ParseUser\' is defined but never used.\nauthenticators/parse.js: line 87, col 53, \'reject\' is defined but never used.\n\n2 errors'); 
   });
 
 });
@@ -2075,6 +2227,16 @@ define('yabbit/tests/authorizers/parse.jshint', function () {
   QUnit.module('JSHint - authorizers');
   QUnit.test('authorizers/parse.js should pass jshint', function(assert) { 
     assert.ok(true, 'authorizers/parse.js should pass jshint.'); 
+  });
+
+});
+define('yabbit/tests/controllers/account/edit.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - controllers/account');
+  QUnit.test('controllers/account/edit.js should pass jshint', function(assert) { 
+    assert.ok(false, 'controllers/account/edit.js should pass jshint.\ncontrollers/account/edit.js: line 13, col 19, \'user\' is not defined.\n\n1 error'); 
   });
 
 });
@@ -2114,7 +2276,7 @@ define('yabbit/tests/controllers/session/signup.jshint', function () {
 
   QUnit.module('JSHint - controllers/session');
   QUnit.test('controllers/session/signup.js should pass jshint', function(assert) { 
-    assert.ok(false, 'controllers/session/signup.js should pass jshint.\ncontrollers/session/signup.js: line 37, col 18, \'user\' is defined but never used.\n\n1 error'); 
+    assert.ok(false, 'controllers/session/signup.js should pass jshint.\ncontrollers/session/signup.js: line 39, col 18, \'user\' is defined but never used.\n\n1 error'); 
   });
 
 });
@@ -2251,7 +2413,7 @@ define('yabbit/tests/models/parse-user.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/parse-user.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 13, col 17, \'DS\' is not defined.\nmodels/parse-user.js: line 1, col 8, \'Ember\' is defined but never used.\nmodels/parse-user.js: line 24, col 9, \'serializer\' is defined but never used.\n\n3 errors'); 
+    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 13, col 15, \'DS\' is not defined.\nmodels/parse-user.js: line 14, col 14, \'DS\' is not defined.\nmodels/parse-user.js: line 15, col 17, \'DS\' is not defined.\nmodels/parse-user.js: line 1, col 8, \'Ember\' is defined but never used.\nmodels/parse-user.js: line 26, col 9, \'serializer\' is defined but never used.\n\n5 errors'); 
   });
 
 });
@@ -2272,6 +2434,16 @@ define('yabbit/tests/router.jshint', function () {
   QUnit.module('JSHint - .');
   QUnit.test('router.js should pass jshint', function(assert) { 
     assert.ok(true, 'router.js should pass jshint.'); 
+  });
+
+});
+define('yabbit/tests/routes/account/edit.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - routes/account');
+  QUnit.test('routes/account/edit.js should pass jshint', function(assert) { 
+    assert.ok(true, 'routes/account/edit.js should pass jshint.'); 
   });
 
 });

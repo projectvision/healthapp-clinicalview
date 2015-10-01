@@ -1,0 +1,11 @@
+<div id="edit">
+  <form>
+    {{input value=model.email id="email" placeholder="Email"}}
+    {{input value=model.firstName id="firstname" placeholder="First name"}}
+    {{input value=model.lastName id="lastname" placeholder="Last name"}}
+    {{input value=model.password id="password" placeholder="Password"}}
+    {{input value=model.passwordConfirmation id="password-confirmation" placeholder="Confirm Password"}}
+
+    <button type="submit" {{action 'update'}}>Update</button>
+  </form>
+</div>

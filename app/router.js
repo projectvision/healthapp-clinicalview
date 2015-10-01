@@ -12,6 +12,10 @@ Router.map(function() {
     this.route('signup');
   });
 
+  this.route('account', function() {
+    this.route('edit');
+  });
+
   this.route('patients', function() {
     this.route('index', function() {
       this.route('show', { path: ':id' });

@@ -10,6 +10,8 @@ ParseUser.reopenClass({
   /* PROPERTIES
   /***************************************************************************/
 
+  firstName : DS.attr('string'),
+  lastName : DS.attr('string'),
   isPhysician : DS.attr('boolean'),
 
   /****************************************************************************
@@ -31,6 +33,7 @@ ParseUser.reopenClass({
           attributes: {
             sessionToken: user.sessionToken,
             email: user.email,
+            username: user.username,
             firstName: user.firstName,
             lastName: user.lastName
           }

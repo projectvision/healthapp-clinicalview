@@ -14,34 +14,6 @@ export default Base.extend({
   /* ACTIONS
   /***************************************************************************/
 
-  //restore: function(data) {
-  //  return new Ember.RSVP.Promise(function(resolve, reject) {
-  //    console.log('restore');
-  //    console.log(data);
-
-  //    if (!Ember.isEmpty(data.sessionToken)) {
-  //      console.log('sdf');
-  //      adapter = this.get('db').adapterFor('parse-user');
-  //      adapter.set('sessionToken', data.sessionToken);
-
-  //      var useruser = ParseUser.current().then(function(user) {
-  //        console.log('ParseUser.current() was returned');
-  //        return {
-  //          userId: user.get('id'),
-  //          sessionToken: user.get('sessionToken'),
-  //          email: user.get('email'),
-  //          firstName: user.get('firstName'),
-  //          lastName: user.get('lastName')
-  //        };
-  //      });
-
-  //      resolve(useruser);
-  //    } else {
-  //      reject();
-  //    }
-  //  });
-  //},
-
   restore: function(data) {
 
     var store = this.get('db');
@@ -60,6 +32,7 @@ export default Base.extend({
         userId: user.get('id'),
         sessionToken: user.get('sessionToken'),
         email: user.get('email'),
+        username: user.get('username'),
         firstName: user.get('firstName'),
         lastName: user.get('lastName')
       };
@@ -73,7 +46,7 @@ export default Base.extend({
     var adapter = this.get('db').adapterFor('parse-user');
     var user = data.user;
 
-    // Rename ember simple auth "identification" to parse "username"
+    // Use ember simple auth "identification" (email) as parse "username"
     if (data.identification) {
       data.username = data.identification;
     }
