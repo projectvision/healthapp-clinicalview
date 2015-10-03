@@ -11,12 +11,22 @@
 - Authorize session
   https://github.com/simplabs/ember-simple-auth/blob/master/examples/6-custom-server.html#L163
   http://ember-simple-auth.com/ember-simple-auth-api-docs.html#SimpleAuth-Configuration-authorizer
+  http://discuss.emberjs.com/t/ember-simple-auth-with-rest-api-and-session-cookie/7485
 - Get current user
+  https://github.com/simplabs/ember-simple-auth/blob/master/examples/4-authenticated-account.html#L137
   http://stackoverflow.com/questions/30872684/ember-simple-auth-injecting-current-user-into-every-route
 - Save user to Parse on account.edit
   http://localhost:4200/account/edit
 
-## Concepts
+### Graphs
+
+- http://codepen.io/anon/pen/ZbeaZZ
+- http://jsfiddle.net/maedi/uwvrgm4h/1/
+- Add graph data as well to patient model on patient route:  
+  http://guides.emberjs.com/v2.0.0/controllers/representing-multiple-models/#toc_representing-several-models
+- http://guides.emberjs.com/v2.0.0/models/frequently-asked-questions/#toc_how-do-i-inform-ember-data-about-new-records-created-on-the-backend
+- Loading data into a route model:  
+  http://stackoverflow.com/questions/23483313/emberjs-loading-a-child-url-directly-in-a-master-detail-app-with-an-sse-backed
 
 ### Nested UI
 
@@ -38,16 +48,6 @@ http://stackoverflow.com/questions/27724634/ember-restore-state-when-routing
 
 Reading controller properties/model from other controllers:  
 http://guides.emberjs.com/v2.0.0/controllers/dependencies-between-controllers/
-
-### Graphs
-
-Add graph data as well to patient model on patient route:  
-http://guides.emberjs.com/v2.0.0/controllers/representing-multiple-models/#toc_representing-several-models
-
-- http://guides.emberjs.com/v2.0.0/models/frequently-asked-questions/#toc_how-do-i-inform-ember-data-about-new-records-created-on-the-backend
-
-Loading data into a route model:  
-http://stackoverflow.com/questions/23483313/emberjs-loading-a-child-url-directly-in-a-master-detail-app-with-an-sse-backed
 
 ### REST and Parse
 

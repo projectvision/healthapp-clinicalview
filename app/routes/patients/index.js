@@ -2,6 +2,7 @@ import Ember from 'ember';
 import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixin';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
+  // Render Patient Index into master template
   renderTemplate: function() {
     this.render({
       outlet: 'master',
@@ -14,7 +15,30 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     //}
   },
   model: function(params) {
-    //return this.modelFor('patient').findBy('id', params.patient_id);
+
+    // @TODO: Load patients from Parse
+
+    //// Get adapter and serializer
+    //var store = this.get('store');
+    //var adapter = store.adapterFor('parse-user');
+    //var serializer = store.serializerFor('parse-user');
+
+    //var parsePatients = adapter.ajax(adapter.buildURL("parse-user", "me"), "GET", {}).then(function(user) {
+    //  return store.push({
+    //    data: {
+    //      id: user.objectId,
+    //      type: 'parse-user',
+    //      attributes: {
+    //        sessionToken: user.sessionToken,
+    //        email: user.email,
+    //        username: user.username,
+    //        firstName: user.firstName,
+    //        lastName: user.lastName
+    //      }
+    //    }
+    //  });
+    //});
+
     return [
       {
         "patientId": 123456789,

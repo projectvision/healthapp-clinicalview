@@ -1,12 +1,13 @@
 # Yabbit
 
-...
+# Parse
+
+Install Cloud Code on Mac/Linux:
+url -s https://www.parse.com/downloads/cloud_code/installer.sh | sudo /bin/bash
 
 # Ember
 
 ## Prerequisites
-
-You will need the following things properly installed on your computer.
 
 * [Git](http://git-scm.com/)
 * [Node.js](http://nodejs.org/) (with NPM)

@@ -537,7 +537,7 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
   'use strict';
 
   exports['default'] = DS['default'].Model.extend({
-    physician: DS['default'].belongsTo('physician', { async: true })
+    physician: DS['default'].belongsTo('parse-user', { async: true })
   });
 
 });
@@ -604,6 +604,7 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
   'use strict';
 
   exports['default'] = Ember['default'].Route.extend(AuthenticatedRouteMixin['default'], {
+    // Render Patient Index into master template
     renderTemplate: function renderTemplate() {
       this.render({
         outlet: 'master'
@@ -616,7 +617,30 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
       //}
     },
     model: function model(params) {
-      //return this.modelFor('patient').findBy('id', params.patient_id);
+
+      // @TODO: Load patients from Parse
+
+      //// Get adapter and serializer
+      //var store = this.get('store');
+      //var adapter = store.adapterFor('parse-user');
+      //var serializer = store.serializerFor('parse-user');
+
+      //var parsePatients = adapter.ajax(adapter.buildURL("parse-user", "me"), "GET", {}).then(function(user) {
+      //  return store.push({
+      //    data: {
+      //      id: user.objectId,
+      //      type: 'parse-user',
+      //      attributes: {
+      //        sessionToken: user.sessionToken,
+      //        email: user.email,
+      //        username: user.username,
+      //        firstName: user.firstName,
+      //        lastName: user.lastName
+      //      }
+      //    }
+      //  });
+      //});
+
       return [{
         "patientId": 123456789,
         "firstName": "John",
@@ -681,11 +705,13 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
   'use strict';
 
   exports['default'] = Ember['default'].Route.extend({
+    // Render Patient Show into detail template
     renderTemplate: function renderTemplate() {
       this.render({
         outlet: 'detail'
       });
     },
+    // Return the selected patient
     model: function model(params) {
       return this.modelFor('patients.index').findBy('patientId', parseInt(params.id));
     }
@@ -698,6 +724,7 @@ define('yabbit/routes/session/login', ['exports', 'ember'], function (exports, E
 
   exports['default'] = Ember['default'].Route.extend({
     beforeModel: function beforeModel(transition) {
+      // Redirect authenticated users to the Patients Index
       if (this.get('session.isAuthenticated')) {
         this.transitionTo('patients.index');
       }
@@ -2050,7 +2077,7 @@ define('yabbit/templates/session/login', ['exports'], function (exports) {
       statements: [
         ["block","if",[["get","message",["loc",[null,[1,6],[1,13]]]]],[],0,null,["loc",[null,[1,0],[5,7]]]],
         ["inline","input",[],["value",["subexpr","@mut",[["get","identification",["loc",[null,[8,16],[8,30]]]]],[],[]],"id","identification","placeholder","Email"],["loc",[null,[8,2],[8,72]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","password",["loc",[null,[9,16],[9,24]]]]],[],[]],"id","password","placeholder","Password"],["loc",[null,[9,2],[9,63]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","password",["loc",[null,[9,16],[9,24]]]]],[],[]],"type","password","id","password","placeholder","Password"],["loc",[null,[9,2],[9,79]]]],
         ["element","action",["authenticate"],[],["loc",[null,[11,24],[11,49]]]]
       ],
       locals: [],
@@ -2192,8 +2219,8 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
         ["inline","input",[],["value",["subexpr","@mut",[["get","identification",["loc",[null,[8,16],[8,30]]]]],[],[]],"id","identification","placeholder","Email"],["loc",[null,[8,2],[8,72]]]],
         ["inline","input",[],["value",["subexpr","@mut",[["get","firstName",["loc",[null,[9,16],[9,25]]]]],[],[]],"id","firstname","placeholder","First name"],["loc",[null,[9,2],[9,67]]]],
         ["inline","input",[],["value",["subexpr","@mut",[["get","lastName",["loc",[null,[10,16],[10,24]]]]],[],[]],"id","lastname","placeholder","Last name"],["loc",[null,[10,2],[10,64]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","password",["loc",[null,[11,16],[11,24]]]]],[],[]],"id","password","placeholder","Password"],["loc",[null,[11,2],[11,63]]]],
-        ["inline","input",[],["value",["subexpr","@mut",[["get","passwordConfirmation",["loc",[null,[12,16],[12,36]]]]],[],[]],"id","password-confirmation","placeholder","Confirm Password"],["loc",[null,[12,2],[12,96]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","password",["loc",[null,[11,16],[11,24]]]]],[],[]],"type","password","id","password","placeholder","Password"],["loc",[null,[11,2],[11,79]]]],
+        ["inline","input",[],["value",["subexpr","@mut",[["get","passwordConfirmation",["loc",[null,[12,16],[12,36]]]]],[],[]],"type","password","id","password-confirmation","placeholder","Confirm Password"],["loc",[null,[12,2],[12,112]]]],
         ["element","action",["signup"],[],["loc",[null,[14,24],[14,43]]]]
       ],
       locals: [],
@@ -2485,7 +2512,7 @@ define('yabbit/tests/routes/patients/index.jshint', function () {
 
   QUnit.module('JSHint - routes/patients');
   QUnit.test('routes/patients/index.js should pass jshint', function(assert) { 
-    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 16, col 19, \'params\' is defined but never used.\n\n1 error'); 
+    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 17, col 19, \'params\' is defined but never used.\n\n1 error'); 
   });
 
 });
