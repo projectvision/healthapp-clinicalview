@@ -1,8 +1,8 @@
 <aside>
   <ul>
-    {{#each model as |patient|}}
+    {{#each model as |model|}}
       <li>
-        {{#link-to 'patients.index.show' patient.patientId}}{{patient.firstName}} {{patient.lastName}}{{/link-to}}
+        {{#link-to 'patients.index.show' model.patientId}}{{model.firstName}} {{model.lastName}}{{/link-to}}
       </li>
     {{else}}
       <li>Empty</li>
@@ -16,20 +16,20 @@
       <th class="challenge-completion">Challenge Completion</th>
       <th class="health-risk">Health Risk</th>
       <th class="activity-level">Activity Level</th>
-    </thead>    
+    </thead>
     <tbody>
-      {{#each model as |patient|}}
+      {{#each model as |model|}}
         <tr>
           <td>
-            <div class="bar fitness" style="width: {{patient.challengeCompletion.fitness}}%">{{patient.challengeCompletion.fitness}}%</div>
-            <div class="bar diet" style="width: {{patient.challengeCompletion.diet}}%">{{patient.challengeCompletion.diet}}%</div>
-            <div class="bar stress" style="width: {{patient.challengeCompletion.stress}}%">{{patient.challengeCompletion.stress}}%</div>
+            <div class="bar fitness" style="width: {{model.challengeCompletion.fitness}}%">{{model.challengeCompletion.fitness}}%</div>
+            <div class="bar diet" style="width: {{model.challengeCompletion.diet}}%">{{model.challengeCompletion.diet}}%</div>
+            <div class="bar stress" style="width: {{model.challengeCompletion.stress}}%">{{model.challengeCompletion.stress}}%</div>
           </td>
-          <td>
-            {{patient.healthRisk.status}}<br />
+          <td class="health-risk {{model.healthRisk.change}}">
+            {{model.healthRisk.status}}
           </td>
-          <td>
-            {{patient.activityLevel.status}}<br />
+          <td class="activity-level {{model.activityLevel.change}}">
+            {{model.activityLevel.status}}
           </td>
         </tr>
       {{/each}}

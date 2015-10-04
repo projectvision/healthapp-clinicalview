@@ -336,6 +336,7 @@ section#patients {
         padding: 0; }
       section#patients table tbody tr td .bar {
         color: white;
+        overflow: hidden;
         height: 21px;
         padding: 2px 3px;
         background: #EFEFEF; }
@@ -345,6 +346,11 @@ section#patients {
           background: #73BDF4; }
         section#patients table tbody tr td .bar.stress {
           background: #88D392; }
+        section#patients table tbody tr td .bar em {
+          font-style: normal;
+          color: white; }
+        section#patients table tbody tr td .bar .percent {
+          float: right; }
       section#patients table tbody tr td.up:after {
         content: '▲'; }
       section#patients table tbody tr td.down:after {

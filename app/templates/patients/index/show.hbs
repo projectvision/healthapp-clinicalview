@@ -9,9 +9,18 @@
     <tbody>
       <tr>
         <td>
-          <div class="bar fitness" style="width: {{model.challengeCompletion.fitness}}%">{{model.challengeCompletion.fitness}}%</div>
-          <div class="bar diet" style="width: {{model.challengeCompletion.diet}}%">{{model.challengeCompletion.diet}}%</div>
-          <div class="bar stress" style="width: {{model.challengeCompletion.stress}}%">{{model.challengeCompletion.stress}}%</div>
+          <div class="bar fitness" style="width: {{model.challengeCompletion.fitness}}%">
+            <em class="percent">{{model.challengeCompletion.fitness}}%</em>
+            <em>Fitness</em>
+          </div>
+          <div class="bar diet" style="width: {{model.challengeCompletion.diet}}%">
+            <em class="percent">{{model.challengeCompletion.diet}}%</em>
+            <em>Diet</em>
+          </div>
+          <div class="bar stress" style="width: {{model.challengeCompletion.stress}}%">
+            <em class="percent">{{model.challengeCompletion.stress}}%</em>
+            <em>Strength</em>
+          </div>
         </td>
         <td class="health-risk {{model.healthRisk.change}}">
           {{model.healthRisk.status}}

@@ -698,6 +698,13 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
           title: "Step count",
           measurement: "steps",
           data: [{ y: '2015-07', a: 1000, b: 3000 }, { y: '2015-08', a: 1050, b: 3500 }, { y: '2015-09', a: 1500, b: 4100 }, { y: '2015-10', a: 1800, b: 4000 }, { y: '2015-11', a: 2000, b: 3900 }, { y: '2015-12', a: 2005, b: 4030 }]
+        }, {
+          title: "Weight",
+          measurement: "lb",
+          data: [{ y: '2015-07', a: 170, b: 80 }, { y: '2015-08', a: 165, b: 80 }, { y: '2015-09', a: 160, b: 81 }, { y: '2015-10', a: 155, b: 83 }, { y: '2015-11', a: 140, b: 80 }, { y: '2015-12', a: 130, b: 78 }]
+        }, {
+          title: "Calories burned",
+          data: [{ y: '2015-07', a: 10000, b: 20000 }, { y: '2015-08', a: 11000, b: 21000 }, { y: '2015-09', a: 15000, b: 23000 }, { y: '2015-10', a: 16000, b: 24000 }, { y: '2015-11', a: 20000, b: 23000 }, { y: '2015-12', a: 35000, b: 22000 }]
         }]
       }, {
         "patientId": 987654321,
@@ -725,6 +732,13 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
           title: "Step count",
           measurement: "steps",
           data: [{ y: '2015-07', a: 1100, b: 3000 }, { y: '2015-08', a: 900, b: 3500 }, { y: '2015-09', a: 1200, b: 3100 }, { y: '2015-10', a: 1300, b: 2500 }, { y: '2015-11', a: 1600, b: 3900 }, { y: '2015-12', a: 1805, b: 3000 }]
+        }, {
+          title: "Weight",
+          measurement: "lb",
+          data: [{ y: '2015-07', a: 140, b: 60 }, { y: '2015-08', a: 165, b: 80 }, { y: '2015-09', a: 140, b: 91 }, { y: '2015-10', a: 155, b: 83 }, { y: '2015-11', a: 140, b: 80 }, { y: '2015-12', a: 130, b: 78 }]
+        }, {
+          title: "Calories burned",
+          data: [{ y: '2015-07', a: 14000, b: 18000 }, { y: '2015-08', a: 15000, b: 21000 }, { y: '2015-09', a: 14000, b: 23000 }, { y: '2015-10', a: 16000, b: 20000 }, { y: '2015-11', a: 20000, b: 23000 }, { y: '2015-12', a: 35000, b: 22000 }]
         }]
       }, {
         "patientId": 76764565643,
@@ -752,6 +766,13 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
           title: "Step count",
           measurement: "steps",
           data: [{ y: '2015-07', a: 1000, b: 3000 }, { y: '2015-08', a: 1050, b: 3500 }, { y: '2015-09', a: 1500, b: 4100 }, { y: '2015-10', a: 1800, b: 4000 }, { y: '2015-11', a: 2000, b: 3900 }, { y: '2015-12', a: 2005, b: 4030 }]
+        }, {
+          title: "Weight",
+          measurement: "lb",
+          data: [{ y: '2015-07', a: 170, b: 80 }, { y: '2015-08', a: 165, b: 80 }, { y: '2015-09', a: 160, b: 81 }, { y: '2015-10', a: 155, b: 83 }, { y: '2015-11', a: 140, b: 80 }, { y: '2015-12', a: 130, b: 78 }]
+        }, {
+          title: "Calories burned",
+          data: [{ y: '2015-07', a: 10000, b: 20000 }, { y: '2015-08', a: 11000, b: 21000 }, { y: '2015-09', a: 15000, b: 23000 }, { y: '2015-10', a: 16000, b: 24000 }, { y: '2015-11', a: 20000, b: 23000 }, { y: '2015-12', a: 35000, b: 22000 }]
         }]
       }];
     }
@@ -1355,7 +1376,7 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
               },
               "end": {
                 "line": 5,
-                "column": 102
+                "column": 96
               }
             },
             "moduleName": "yabbit/templates/patients/index.hbs"
@@ -1382,8 +1403,8 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
             return morphs;
           },
           statements: [
-            ["content","patient.firstName",["loc",[null,[5,60],[5,81]]]],
-            ["content","patient.lastName",["loc",[null,[5,82],[5,102]]]]
+            ["content","model.firstName",["loc",[null,[5,58],[5,77]]]],
+            ["content","model.lastName",["loc",[null,[5,78],[5,96]]]]
           ],
           locals: [],
           templates: []
@@ -1430,9 +1451,9 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["block","link-to",["patients.index.show",["get","patient.patientId",["loc",[null,[5,41],[5,58]]]]],[],0,null,["loc",[null,[5,8],[5,114]]]]
+          ["block","link-to",["patients.index.show",["get","model.patientId",["loc",[null,[5,41],[5,56]]]]],[],0,null,["loc",[null,[5,8],[5,108]]]]
         ],
-        locals: ["patient"],
+        locals: ["model"],
         templates: [child0]
       };
     }());
@@ -1541,8 +1562,6 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
           dom.appendChild(el2, el3);
           var el3 = dom.createComment("");
           dom.appendChild(el2, el3);
-          var el3 = dom.createElement("br");
-          dom.appendChild(el2, el3);
           var el3 = dom.createTextNode("\n          ");
           dom.appendChild(el2, el3);
           dom.appendChild(el1, el2);
@@ -1552,8 +1571,6 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
           var el3 = dom.createTextNode("\n            ");
           dom.appendChild(el2, el3);
           var el3 = dom.createComment("");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createElement("br");
           dom.appendChild(el2, el3);
           var el3 = dom.createTextNode("\n          ");
           dom.appendChild(el2, el3);
@@ -1571,28 +1588,34 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
           var element2 = dom.childAt(element1, [1]);
           var element3 = dom.childAt(element1, [3]);
           var element4 = dom.childAt(element1, [5]);
-          var morphs = new Array(8);
+          var element5 = dom.childAt(element0, [3]);
+          var element6 = dom.childAt(element0, [5]);
+          var morphs = new Array(10);
           morphs[0] = dom.createAttrMorph(element2, 'style');
           morphs[1] = dom.createMorphAt(element2,0,0);
           morphs[2] = dom.createAttrMorph(element3, 'style');
           morphs[3] = dom.createMorphAt(element3,0,0);
           morphs[4] = dom.createAttrMorph(element4, 'style');
           morphs[5] = dom.createMorphAt(element4,0,0);
-          morphs[6] = dom.createMorphAt(dom.childAt(element0, [3]),1,1);
-          morphs[7] = dom.createMorphAt(dom.childAt(element0, [5]),1,1);
+          morphs[6] = dom.createAttrMorph(element5, 'class');
+          morphs[7] = dom.createMorphAt(element5,1,1);
+          morphs[8] = dom.createAttrMorph(element6, 'class');
+          morphs[9] = dom.createMorphAt(element6,1,1);
           return morphs;
         },
         statements: [
-          ["attribute","style",["concat",["width: ",["get","patient.challengeCompletion.fitness",["loc",[null,[24,53],[24,88]]]],"%"]]],
-          ["content","patient.challengeCompletion.fitness",["loc",[null,[24,93],[24,132]]]],
-          ["attribute","style",["concat",["width: ",["get","patient.challengeCompletion.diet",["loc",[null,[25,50],[25,82]]]],"%"]]],
-          ["content","patient.challengeCompletion.diet",["loc",[null,[25,87],[25,123]]]],
-          ["attribute","style",["concat",["width: ",["get","patient.challengeCompletion.stress",["loc",[null,[26,52],[26,86]]]],"%"]]],
-          ["content","patient.challengeCompletion.stress",["loc",[null,[26,91],[26,129]]]],
-          ["content","patient.healthRisk.status",["loc",[null,[29,12],[29,41]]]],
-          ["content","patient.activityLevel.status",["loc",[null,[32,12],[32,44]]]]
+          ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.fitness",["loc",[null,[24,53],[24,86]]]],"%"]]],
+          ["content","model.challengeCompletion.fitness",["loc",[null,[24,91],[24,128]]]],
+          ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.diet",["loc",[null,[25,50],[25,80]]]],"%"]]],
+          ["content","model.challengeCompletion.diet",["loc",[null,[25,85],[25,119]]]],
+          ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.stress",["loc",[null,[26,52],[26,84]]]],"%"]]],
+          ["content","model.challengeCompletion.stress",["loc",[null,[26,89],[26,125]]]],
+          ["attribute","class",["concat",["health-risk ",["get","model.healthRisk.change",["loc",[null,[28,35],[28,58]]]]]]],
+          ["content","model.healthRisk.status",["loc",[null,[29,12],[29,39]]]],
+          ["attribute","class",["concat",["activity-level ",["get","model.activityLevel.change",["loc",[null,[31,38],[31,64]]]]]]],
+          ["content","model.activityLevel.status",["loc",[null,[32,12],[32,42]]]]
         ],
-        locals: ["patient"],
+        locals: ["model"],
         templates: []
       };
     }());
@@ -1665,7 +1688,7 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
         var el4 = dom.createTextNode("\n    ");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("    \n    ");
+        var el3 = dom.createTextNode("\n    ");
         dom.appendChild(el2, el3);
         var el3 = dom.createElement("tbody");
         var el4 = dom.createTextNode("\n");
@@ -1719,11 +1742,11 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 28,
+              "line": 37,
               "column": 4
             },
             "end": {
-              "line": 38,
+              "line": 47,
               "column": 4
             }
           },
@@ -1785,9 +1808,9 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["content","chart.measurement",["loc",[null,[32,36],[32,57]]]],
-          ["content","chart.title",["loc",[null,[33,16],[33,31]]]],
-          ["inline","area-chart",[],["data",["subexpr","@mut",[["get","chart.data",["loc",[null,[35,28],[35,38]]]]],[],[]]],["loc",[null,[35,10],[35,40]]]]
+          ["content","chart.measurement",["loc",[null,[41,36],[41,57]]]],
+          ["content","chart.title",["loc",[null,[42,16],[42,31]]]],
+          ["inline","area-chart",[],["data",["subexpr","@mut",[["get","chart.data",["loc",[null,[44,28],[44,38]]]]],[],[]]],["loc",[null,[44,10],[44,40]]]]
         ],
         locals: ["chart"],
         templates: []
@@ -1800,11 +1823,11 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 44,
+              "line": 53,
               "column": 0
             },
             "end": {
-              "line": 44,
+              "line": 53,
               "column": 66
             }
           },
@@ -1837,7 +1860,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 45,
+            "line": 54,
             "column": 0
           }
         },
@@ -1894,27 +1917,66 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         dom.appendChild(el5, el6);
         var el6 = dom.createElement("div");
         dom.setAttribute(el6,"class","bar fitness");
-        var el7 = dom.createComment("");
+        var el7 = dom.createTextNode("\n            ");
         dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("%");
+        var el7 = dom.createElement("em");
+        dom.setAttribute(el7,"class","percent");
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("%");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("em");
+        var el8 = dom.createTextNode("Fitness");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
         dom.appendChild(el6, el7);
         dom.appendChild(el5, el6);
         var el6 = dom.createTextNode("\n          ");
         dom.appendChild(el5, el6);
         var el6 = dom.createElement("div");
         dom.setAttribute(el6,"class","bar diet");
-        var el7 = dom.createComment("");
+        var el7 = dom.createTextNode("\n            ");
         dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("%");
+        var el7 = dom.createElement("em");
+        dom.setAttribute(el7,"class","percent");
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("%");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("em");
+        var el8 = dom.createTextNode("Diet");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
         dom.appendChild(el6, el7);
         dom.appendChild(el5, el6);
         var el6 = dom.createTextNode("\n          ");
         dom.appendChild(el5, el6);
         var el6 = dom.createElement("div");
         dom.setAttribute(el6,"class","bar stress");
-        var el7 = dom.createComment("");
+        var el7 = dom.createTextNode("\n            ");
         dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("%");
+        var el7 = dom.createElement("em");
+        dom.setAttribute(el7,"class","percent");
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("%");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("em");
+        var el8 = dom.createTextNode("Strength");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
         dom.appendChild(el6, el7);
         dom.appendChild(el5, el6);
         var el6 = dom.createTextNode("\n        ");
@@ -1982,11 +2044,11 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         var element9 = dom.childAt(element3, [5]);
         var morphs = new Array(12);
         morphs[0] = dom.createAttrMorph(element5, 'style');
-        morphs[1] = dom.createMorphAt(element5,0,0);
+        morphs[1] = dom.createMorphAt(dom.childAt(element5, [1]),0,0);
         morphs[2] = dom.createAttrMorph(element6, 'style');
-        morphs[3] = dom.createMorphAt(element6,0,0);
+        morphs[3] = dom.createMorphAt(dom.childAt(element6, [1]),0,0);
         morphs[4] = dom.createAttrMorph(element7, 'style');
-        morphs[5] = dom.createMorphAt(element7,0,0);
+        morphs[5] = dom.createMorphAt(dom.childAt(element7, [1]),0,0);
         morphs[6] = dom.createAttrMorph(element8, 'class');
         morphs[7] = dom.createMorphAt(element8,1,1);
         morphs[8] = dom.createAttrMorph(element9, 'class');
@@ -1997,17 +2059,17 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
       },
       statements: [
         ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.fitness",["loc",[null,[12,51],[12,84]]]],"%"]]],
-        ["content","model.challengeCompletion.fitness",["loc",[null,[12,89],[12,126]]]],
-        ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.diet",["loc",[null,[13,48],[13,78]]]],"%"]]],
-        ["content","model.challengeCompletion.diet",["loc",[null,[13,83],[13,117]]]],
-        ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.stress",["loc",[null,[14,50],[14,82]]]],"%"]]],
-        ["content","model.challengeCompletion.stress",["loc",[null,[14,87],[14,123]]]],
-        ["attribute","class",["concat",["health-risk ",["get","model.healthRisk.change",["loc",[null,[16,33],[16,56]]]]]]],
-        ["content","model.healthRisk.status",["loc",[null,[17,10],[17,37]]]],
-        ["attribute","class",["concat",["activity-level ",["get","model.activityLevel.change",["loc",[null,[19,36],[19,62]]]]]]],
-        ["content","model.activityLevel.status",["loc",[null,[20,10],[20,40]]]],
-        ["block","each",[["get","model.charts",["loc",[null,[28,12],[28,24]]]]],[],0,null,["loc",[null,[28,4],[38,13]]]],
-        ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[44,0],[44,78]]]]
+        ["content","model.challengeCompletion.fitness",["loc",[null,[13,32],[13,69]]]],
+        ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.diet",["loc",[null,[16,48],[16,78]]]],"%"]]],
+        ["content","model.challengeCompletion.diet",["loc",[null,[17,32],[17,66]]]],
+        ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.stress",["loc",[null,[20,50],[20,82]]]],"%"]]],
+        ["content","model.challengeCompletion.stress",["loc",[null,[21,32],[21,68]]]],
+        ["attribute","class",["concat",["health-risk ",["get","model.healthRisk.change",["loc",[null,[25,33],[25,56]]]]]]],
+        ["content","model.healthRisk.status",["loc",[null,[26,10],[26,37]]]],
+        ["attribute","class",["concat",["activity-level ",["get","model.activityLevel.change",["loc",[null,[28,36],[28,62]]]]]]],
+        ["content","model.activityLevel.status",["loc",[null,[29,10],[29,40]]]],
+        ["block","each",[["get","model.charts",["loc",[null,[37,12],[37,24]]]]],[],0,null,["loc",[null,[37,4],[47,13]]]],
+        ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[53,0],[53,78]]]]
       ],
       locals: [],
       templates: [child0, child1]
