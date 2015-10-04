@@ -153,6 +153,47 @@ define('yabbit/components/app-version', ['exports', 'ember-cli-app-version/compo
   });
 
 });
+define('yabbit/components/area-chart', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.Component.extend({
+
+    /****************************************************************************
+    /* PROPERTIES
+    /***************************************************************************/
+
+    chart: null,
+    tagName: 'div',
+
+    /****************************************************************************
+    /* EVENTS
+    /***************************************************************************/
+
+    renderGraph: (function () {
+      this.chart.setData(this.get('progress'));
+    }).observes('progress'),
+
+    didInsertElement: function didInsertElement() {
+      var element = this.get('element').id;
+      var self = this;
+
+      this.chart = new Morris.Line({
+        element: element,
+        xkey: 'date',
+        ykeys: ['amount', 'increase'],
+        labels: ['Amount', 'increase'],
+        resize: true,
+        smooth: false,
+        parseTime: false
+      }).on('click', function (i, row) {
+        self.set('clicked', row);
+        self.sendAction('goToSession');
+      });
+    }
+  });
+
+});
 define('yabbit/controllers/account/edit', ['exports', 'ember'], function (exports, Ember) {
 
   'use strict';
@@ -1132,6 +1173,82 @@ define('yabbit/templates/application', ['exports'], function (exports) {
       ],
       locals: [],
       templates: [child0, child1, child2]
+    };
+  }()));
+
+});
+define('yabbit/templates/components/area-chart', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    return {
+      meta: {
+        "revision": "Ember@1.13.10",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 8,
+            "column": 0
+          }
+        },
+        "moduleName": "yabbit/templates/components/area-chart.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("section");
+        dom.setAttribute(el1,"class","area-chart");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("header");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("h2");
+        var el4 = dom.createComment("");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("p");
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("p");
+        var el3 = dom.createTextNode("...");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0]);
+        var morphs = new Array(2);
+        morphs[0] = dom.createMorphAt(dom.childAt(element0, [1, 1]),0,0);
+        morphs[1] = dom.createMorphAt(dom.childAt(element0, [3]),0,0);
+        return morphs;
+      },
+      statements: [
+        ["content","title",["loc",[null,[3,8],[3,17]]]],
+        ["content","yield",["loc",[null,[5,5],[5,14]]]]
+      ],
+      locals: [],
+      templates: []
     };
   }()));
 
@@ -2269,6 +2386,16 @@ define('yabbit/tests/authorizers/parse.jshint', function () {
   });
 
 });
+define('yabbit/tests/components/area-chart.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - components');
+  QUnit.test('components/area-chart.js should pass jshint', function(assert) { 
+    assert.ok(false, 'components/area-chart.js should pass jshint.\ncomponents/area-chart.js: line 1, col 16, \'Ember\' is not defined.\ncomponents/area-chart.js: line 22, col 22, \'Morris\' is not defined.\n\n2 errors'); 
+  });
+
+});
 define('yabbit/tests/controllers/account/edit.jshint', function () {
 
   'use strict';
@@ -2766,7 +2893,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+f5abf505"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+25207112"});
 }
 
 /* jshint ignore:end */

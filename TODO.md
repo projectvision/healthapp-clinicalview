@@ -21,7 +21,9 @@
 ### Graphs
 
 1. Use Morris http://codepen.io/anon/pen/ZbeaZZ
-2. Create component https://medium.com/delightful-ui-for-ember-apps/using-highcharts-js-in-an-ember-app-18a65d611644
+2. Create component
+   http://stackoverflow.com/questions/23188978/using-morris-js-graph-as-ember-component
+   https://medium.com/delightful-ui-for-ember-apps/using-highcharts-js-in-an-ember-app-18a65d611644
 
 - http://jsfiddle.net/maedi/uwvrgm4h/1/
 - Add graph data as well to patient model on patient route:  
