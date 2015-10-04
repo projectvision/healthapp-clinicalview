@@ -281,6 +281,15 @@ section#patients {
         width: 50%;
         border: 1px solid #ccc;
         border-radius: 10px; }
+        section#patients .pane .charts section header {
+          padding: 10px;
+          border-bottom: 1px solid #ccc; }
+          section#patients .pane .charts section header h2 {
+            padding: 0;
+            margin: 0;
+            font-weight: normal; }
+          section#patients .pane .charts section header .measurement {
+            float: right; }
   section#patients #view-all.button {
     position: absolute;
     top: 6px;
