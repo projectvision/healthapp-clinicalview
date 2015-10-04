@@ -23,7 +23,18 @@
     </tbody>
   </table>
 
-  <img id="graphs" src="assets/graphs.png"/>
+  <div class="charts">
+
+    {{#each model.charts as |chart|}}
+      <section class="area-chart">
+        <header>
+          <h2>{{chart.title}}</h2>
+        </header>
+        {{area-chart data=chart.data}}
+      </section>
+    {{/each}}
+
+  </div>
 
 </div>
 

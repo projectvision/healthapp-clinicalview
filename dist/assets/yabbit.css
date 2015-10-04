@@ -106,44 +106,44 @@ body {
 /******************************************************************************
  * LAYOUT *
  ******************************************************************************/
-.container, #main {
+.container {
   max-width: 1200px;
   margin: 0 auto; }
 
-header {
+header#main {
   height: 45px;
   background: #55C2E7;
   border-bottom: 1px solid #76A9BA;
   /* dropdown icon */ }
-  header #logo {
+  header#main #logo {
     height: 37px;
     margin-top: 3px;
     border: 2px solid white;
     border-radius: 3px; }
-  header ul#user {
+  header#main ul#user {
     margin: 0;
     padding: 0;
     float: right;
     list-style: none;
     position: relative; }
-    header ul#user li {
+    header#main ul#user li {
       margin: 0;
       padding: 0;
       position: relative;
       /* dropdown menu */ }
-      header ul#user li:hover > ul {
+      header#main ul#user li:hover > ul {
         display: block; }
-      header ul#user li a#user-icon {
+      header#main ul#user li a#user-icon {
         width: 30px;
         height: 28px;
         display: block;
         margin-top: 8px;
         background-size: 30px;
         background-image: url("/assets/icons/user.png"); }
-        header ul#user li a#user-icon:hover {
+        header#main ul#user li a#user-icon:hover {
           cursor: pointer;
           background-image: url("/assets/icons/user-hover.png"); }
-      header ul#user li ul {
+      header#main ul#user li ul {
         top: 100%;
         left: -120px;
         z-index: 500;
@@ -154,19 +154,19 @@ header {
         background: white;
         border-radius: 5px;
         border: 1px solid #ccc; }
-        header ul#user li ul li {
+        header#main ul#user li ul li {
           float: none;
           list-style: none;
           line-height: 1em;
           width: 150px;
           border-bottom: 1px solid #ccc; }
-          header ul#user li ul li:last-child {
+          header#main ul#user li ul li:last-child {
             border-bottom: none; }
-          header ul#user li ul li a {
+          header#main ul#user li ul li a {
             display: block;
             font-size: 0.9em;
             padding: 5px 10px; }
-            header ul#user li ul li a:hover {
+            header#main ul#user li ul li a:hover {
               cursor: pointer;
               background: #F7F7F7; }
 
@@ -274,9 +274,13 @@ section#patients {
     border-top: 0;
     background: white;
     min-height: 500px; }
-    section#patients .pane #graphs {
-      width: 100%;
+    section#patients .pane .charts {
       padding: 20px; }
+      section#patients .pane .charts section {
+        float: left;
+        width: 50%;
+        border: 1px solid #ccc;
+        border-radius: 10px; }
   section#patients #view-all.button {
     position: absolute;
     top: 6px;

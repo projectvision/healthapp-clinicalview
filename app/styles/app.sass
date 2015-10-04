@@ -20,11 +20,11 @@ body
  * LAYOUT *
  ******************************************************************************/
 
-.container, #main
+.container
   max-width: 1200px
   margin: 0 auto
 
-header
+header#main
   height: 45px
   background: #55C2E7
   border-bottom: 1px solid #76A9BA
@@ -154,6 +154,9 @@ h1
 section#patients
   position: relative
 
+  // MASTER
+
+  // Patients Menu
   aside
     margin-top: $table_head_height
     float: left
@@ -183,12 +186,15 @@ section#patients
             border: 1px solid $active_border
             border-right: none
             margin: -1px
-
+  // Patients Index
   #patients-overview
     overflow: auto
     border: 1px solid #7F7F7F
     border-top: 0
 
+  // DETAIL
+
+  // Patient Show
   .pane
     position: absolute
     top: 0
@@ -198,9 +204,14 @@ section#patients
     border-top: 0
     background: white
     min-height: 500px
-    #graphs
-      width: 100%
+    .charts
       padding: $padding * 2
+      section
+        float: left
+        width: 50%
+        border: $border
+        border-radius: 10px
+
   #view-all.button
     position: absolute
     top: $margin + 1px

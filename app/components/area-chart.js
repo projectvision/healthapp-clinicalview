@@ -5,31 +5,26 @@ export default Ember.Component.extend({
   /***************************************************************************/
 
   chart: null,
-  tagName: 'div',
 
   /****************************************************************************
   /* EVENTS
   /***************************************************************************/
 
-  renderGraph: function() {
-    this.chart.setData(this.get('progress'));
-  }.observes('progress'),
-
   didInsertElement: function() {
-    var element = this.get('element').id;
-    var self = this;
 
-    this.chart = new Morris.Line({
-      element: element,
-      xkey: 'date',
-      ykeys: ['amount', 'increase'],
-      labels: ['Amount', 'increase'],
+    // Create chart using data injected via template
+    this.chart = new Morris.Area({
+      element: this.get('elementId'),
+      data: this.get('data'),
+      xkey: 'y',
+      ykeys: ['a', 'b'],
+      labels: ['Total Income', 'Total Outcome'],
+      fillOpacity: 0.2,
+      hideHover: 'auto',
+      behaveLikeLine: true,
       resize: true,
-      smooth: false,
-      parseTime: false
-    }).on('click', function(i, row){
-      self.set('clicked', row);
-      self.sendAction('goToSession');
+      pointFillColors:['#848484','#4BB3D2'],
+      lineColors:['#848484','#4BB3D2']
     });
   }
 });

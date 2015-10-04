@@ -164,31 +164,26 @@ define('yabbit/components/area-chart', ['exports'], function (exports) {
     /***************************************************************************/
 
     chart: null,
-    tagName: 'div',
 
     /****************************************************************************
     /* EVENTS
     /***************************************************************************/
 
-    renderGraph: (function () {
-      this.chart.setData(this.get('progress'));
-    }).observes('progress'),
-
     didInsertElement: function didInsertElement() {
-      var element = this.get('element').id;
-      var self = this;
 
-      this.chart = new Morris.Line({
-        element: element,
-        xkey: 'date',
-        ykeys: ['amount', 'increase'],
-        labels: ['Amount', 'increase'],
+      // Create chart using data injected via template
+      this.chart = new Morris.Area({
+        element: this.get('elementId'),
+        data: this.get('data'),
+        xkey: 'y',
+        ykeys: ['a', 'b'],
+        labels: ['Total Income', 'Total Outcome'],
+        fillOpacity: 0.2,
+        hideHover: 'auto',
+        behaveLikeLine: true,
         resize: true,
-        smooth: false,
-        parseTime: false
-      }).on('click', function (i, row) {
-        self.set('clicked', row);
-        self.sendAction('goToSession');
+        pointFillColors: ['#848484', '#4BB3D2'],
+        lineColors: ['#848484', '#4BB3D2']
       });
     }
   });
@@ -699,7 +694,11 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
         "activityLevel": {
           "status": "Moderate Exercise",
           "change": "up"
-        }
+        },
+        "charts": [{
+          title: "Happy Heading",
+          data: [{ y: '2014', a: 50, b: 90 }, { y: '2015', a: 65, b: 75 }, { y: '2016', a: 50, b: 50 }, { y: '2017', a: 75, b: 60 }, { y: '2018', a: 80, b: 65 }, { y: '2019', a: 90, b: 70 }, { y: '2020', a: 100, b: 75 }, { y: '2021', a: 115, b: 75 }, { y: '2022', a: 120, b: 85 }, { y: '2023', a: 145, b: 85 }, { y: '2024', a: 160, b: 95 }]
+        }]
       }, {
         "patientId": 987654321,
         "firstName": "Miguel",
@@ -1103,6 +1102,7 @@ define('yabbit/templates/application', ['exports'], function (exports) {
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createElement("header");
+        dom.setAttribute(el1,"id","main");
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("div");
@@ -1146,7 +1146,7 @@ define('yabbit/templates/application', ['exports'], function (exports) {
         var el1 = dom.createTextNode("\n\n");
         dom.appendChild(el0, el1);
         var el1 = dom.createElement("div");
-        dom.setAttribute(el1,"id","main");
+        dom.setAttribute(el1,"class","container");
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createComment("");
@@ -1192,7 +1192,7 @@ define('yabbit/templates/components/area-chart', ['exports'], function (exports)
             "column": 0
           },
           "end": {
-            "line": 8,
+            "line": 2,
             "column": 0
           }
         },
@@ -1203,49 +1203,15 @@ define('yabbit/templates/components/area-chart', ['exports'], function (exports)
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("section");
-        dom.setAttribute(el1,"class","area-chart");
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("header");
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("h2");
-        var el4 = dom.createComment("");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n  ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("p");
-        var el3 = dom.createComment("");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("p");
-        var el3 = dom.createTextNode("...");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n");
-        dom.appendChild(el1, el2);
+        var el1 = dom.createComment(" SVG rendered here by didInsertElement in area-chart.js ");
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         return el0;
       },
-      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0]);
-        var morphs = new Array(2);
-        morphs[0] = dom.createMorphAt(dom.childAt(element0, [1, 1]),0,0);
-        morphs[1] = dom.createMorphAt(dom.childAt(element0, [3]),0,0);
-        return morphs;
-      },
+      buildRenderNodes: function buildRenderNodes() { return []; },
       statements: [
-        ["content","title",["loc",[null,[3,8],[3,17]]]],
-        ["content","yield",["loc",[null,[5,5],[5,14]]]]
+
       ],
       locals: [],
       templates: []
@@ -1735,11 +1701,75 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 30,
+              "line": 28,
+              "column": 4
+            },
+            "end": {
+              "line": 35,
+              "column": 4
+            }
+          },
+          "moduleName": "yabbit/templates/patients/index/show.hbs"
+        },
+        arity: 1,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("      ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("section");
+          dom.setAttribute(el1,"class","area-chart");
+          var el2 = dom.createTextNode("\n        ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("header");
+          var el3 = dom.createTextNode("\n          ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("h2");
+          var el4 = dom.createComment("");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n        ");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n        ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createComment("");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n      ");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var element0 = dom.childAt(fragment, [1]);
+          var morphs = new Array(2);
+          morphs[0] = dom.createMorphAt(dom.childAt(element0, [1, 1]),0,0);
+          morphs[1] = dom.createMorphAt(element0,3,3);
+          return morphs;
+        },
+        statements: [
+          ["content","chart.title",["loc",[null,[31,14],[31,29]]]],
+          ["inline","area-chart",[],["data",["subexpr","@mut",[["get","chart.data",["loc",[null,[33,26],[33,36]]]]],[],[]]],["loc",[null,[33,8],[33,38]]]]
+        ],
+        locals: ["chart"],
+        templates: []
+      };
+    }());
+    var child1 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.10",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 41,
               "column": 0
             },
             "end": {
-              "line": 30,
+              "line": 41,
               "column": 66
             }
           },
@@ -1772,7 +1802,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 31,
+            "line": 42,
             "column": 0
           }
         },
@@ -1886,9 +1916,14 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n\n  ");
         dom.appendChild(el1, el2);
-        var el2 = dom.createElement("img");
-        dom.setAttribute(el2,"id","graphs");
-        dom.setAttribute(el2,"src","assets/graphs.png");
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","charts");
+        var el3 = dom.createTextNode("\n\n");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n\n");
         dom.appendChild(el1, el2);
@@ -1902,21 +1937,23 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0, 1, 3, 1]);
-        var element1 = dom.childAt(element0, [1]);
-        var element2 = dom.childAt(element1, [1]);
-        var element3 = dom.childAt(element1, [3]);
-        var element4 = dom.childAt(element1, [5]);
-        var morphs = new Array(9);
-        morphs[0] = dom.createAttrMorph(element2, 'style');
-        morphs[1] = dom.createMorphAt(element2,0,0);
-        morphs[2] = dom.createAttrMorph(element3, 'style');
-        morphs[3] = dom.createMorphAt(element3,0,0);
-        morphs[4] = dom.createAttrMorph(element4, 'style');
-        morphs[5] = dom.createMorphAt(element4,0,0);
-        morphs[6] = dom.createMorphAt(dom.childAt(element0, [3]),1,1);
-        morphs[7] = dom.createMorphAt(dom.childAt(element0, [5]),1,1);
-        morphs[8] = dom.createMorphAt(fragment,2,2,contextualElement);
+        var element1 = dom.childAt(fragment, [0]);
+        var element2 = dom.childAt(element1, [1, 3, 1]);
+        var element3 = dom.childAt(element2, [1]);
+        var element4 = dom.childAt(element3, [1]);
+        var element5 = dom.childAt(element3, [3]);
+        var element6 = dom.childAt(element3, [5]);
+        var morphs = new Array(10);
+        morphs[0] = dom.createAttrMorph(element4, 'style');
+        morphs[1] = dom.createMorphAt(element4,0,0);
+        morphs[2] = dom.createAttrMorph(element5, 'style');
+        morphs[3] = dom.createMorphAt(element5,0,0);
+        morphs[4] = dom.createAttrMorph(element6, 'style');
+        morphs[5] = dom.createMorphAt(element6,0,0);
+        morphs[6] = dom.createMorphAt(dom.childAt(element2, [3]),1,1);
+        morphs[7] = dom.createMorphAt(dom.childAt(element2, [5]),1,1);
+        morphs[8] = dom.createMorphAt(dom.childAt(element1, [3]),1,1);
+        morphs[9] = dom.createMorphAt(fragment,2,2,contextualElement);
         return morphs;
       },
       statements: [
@@ -1928,10 +1965,11 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         ["content","model.challengeCompletion.stress",["loc",[null,[14,87],[14,123]]]],
         ["content","model.healthRisk.status",["loc",[null,[17,10],[17,37]]]],
         ["content","model.activityLevel.status",["loc",[null,[20,10],[20,40]]]],
-        ["block","link-to",["patients.index"],["id","view-all","class","button"],0,null,["loc",[null,[30,0],[30,78]]]]
+        ["block","each",[["get","model.charts",["loc",[null,[28,12],[28,24]]]]],[],0,null,["loc",[null,[28,4],[35,13]]]],
+        ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[41,0],[41,78]]]]
       ],
       locals: [],
-      templates: [child0]
+      templates: [child0, child1]
     };
   }()));
 
@@ -2392,7 +2430,7 @@ define('yabbit/tests/components/area-chart.jshint', function () {
 
   QUnit.module('JSHint - components');
   QUnit.test('components/area-chart.js should pass jshint', function(assert) { 
-    assert.ok(false, 'components/area-chart.js should pass jshint.\ncomponents/area-chart.js: line 1, col 16, \'Ember\' is not defined.\ncomponents/area-chart.js: line 22, col 22, \'Morris\' is not defined.\n\n2 errors'); 
+    assert.ok(false, 'components/area-chart.js should pass jshint.\ncomponents/area-chart.js: line 1, col 16, \'Ember\' is not defined.\ncomponents/area-chart.js: line 16, col 22, \'Morris\' is not defined.\n\n2 errors'); 
   });
 
 });
