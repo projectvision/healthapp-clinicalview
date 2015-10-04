@@ -26,13 +26,15 @@
   <div class="charts">
 
     {{#each model.charts as |chart|}}
-      <section class="area-chart">
-        <header>
-          <h2>{{chart.title}}</h2>
-          <em class="measurement">{{chart.measurement}}</em>
-        </header>
-        {{area-chart data=chart.data}}
-      </section>
+      <div class="column">
+        <section class="area-chart">
+          <header>
+            <em class="measurement">{{chart.measurement}}</em>
+            <h2>{{chart.title}}</h2>
+          </header>
+          {{area-chart data=chart.data}}
+        </section>
+      </div>
     {{/each}}
 
   </div>

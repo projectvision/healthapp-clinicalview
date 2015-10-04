@@ -699,6 +699,10 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
           title: "Heart Rate",
           measurement: "bpm",
           data: [{ y: '2015-07', a: 100, b: 90 }, { y: '2015-08', a: 105, b: 87 }, { y: '2015-09', a: 120, b: 75 }, { y: '2015-10', a: 115, b: 80 }, { y: '2015-11', a: 130, b: 85 }, { y: '2015-12', a: 110, b: 110 }]
+        }, {
+          title: "Step count",
+          measurement: "steps",
+          data: [{ y: '2015-07', a: 1000, b: 3000 }, { y: '2015-08', a: 1050, b: 3500 }, { y: '2015-09', a: 1500, b: 4100 }, { y: '2015-10', a: 1800, b: 4000 }, { y: '2015-11', a: 2000, b: 3900 }, { y: '2015-12', a: 2005, b: 4030 }]
         }]
       }, {
         "patientId": 987654321,
@@ -1706,7 +1710,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
               "column": 4
             },
             "end": {
-              "line": 36,
+              "line": 38,
               "column": 4
             }
           },
@@ -1719,30 +1723,37 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           var el0 = dom.createDocumentFragment();
           var el1 = dom.createTextNode("      ");
           dom.appendChild(el0, el1);
-          var el1 = dom.createElement("section");
-          dom.setAttribute(el1,"class","area-chart");
+          var el1 = dom.createElement("div");
+          dom.setAttribute(el1,"class","column");
           var el2 = dom.createTextNode("\n        ");
           dom.appendChild(el1, el2);
-          var el2 = dom.createElement("header");
+          var el2 = dom.createElement("section");
+          dom.setAttribute(el2,"class","area-chart");
           var el3 = dom.createTextNode("\n          ");
           dom.appendChild(el2, el3);
-          var el3 = dom.createElement("h2");
-          var el4 = dom.createComment("");
+          var el3 = dom.createElement("header");
+          var el4 = dom.createTextNode("\n            ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createElement("em");
+          dom.setAttribute(el4,"class","measurement");
+          var el5 = dom.createComment("");
+          dom.appendChild(el4, el5);
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n            ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createElement("h2");
+          var el5 = dom.createComment("");
+          dom.appendChild(el4, el5);
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n          ");
           dom.appendChild(el3, el4);
           dom.appendChild(el2, el3);
           var el3 = dom.createTextNode("\n          ");
           dom.appendChild(el2, el3);
-          var el3 = dom.createElement("em");
-          dom.setAttribute(el3,"class","measurement");
-          var el4 = dom.createComment("");
-          dom.appendChild(el3, el4);
+          var el3 = dom.createComment("");
           dom.appendChild(el2, el3);
           var el3 = dom.createTextNode("\n        ");
           dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n        ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createComment("");
           dom.appendChild(el1, el2);
           var el2 = dom.createTextNode("\n      ");
           dom.appendChild(el1, el2);
@@ -1752,7 +1763,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element0 = dom.childAt(fragment, [1]);
+          var element0 = dom.childAt(fragment, [1, 1]);
           var element1 = dom.childAt(element0, [1]);
           var morphs = new Array(3);
           morphs[0] = dom.createMorphAt(dom.childAt(element1, [1]),0,0);
@@ -1761,9 +1772,9 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["content","chart.title",["loc",[null,[31,14],[31,29]]]],
-          ["content","chart.measurement",["loc",[null,[32,34],[32,55]]]],
-          ["inline","area-chart",[],["data",["subexpr","@mut",[["get","chart.data",["loc",[null,[34,26],[34,36]]]]],[],[]]],["loc",[null,[34,8],[34,38]]]]
+          ["content","chart.measurement",["loc",[null,[32,36],[32,57]]]],
+          ["content","chart.title",["loc",[null,[33,16],[33,31]]]],
+          ["inline","area-chart",[],["data",["subexpr","@mut",[["get","chart.data",["loc",[null,[35,28],[35,38]]]]],[],[]]],["loc",[null,[35,10],[35,40]]]]
         ],
         locals: ["chart"],
         templates: []
@@ -1776,11 +1787,11 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 42,
+              "line": 44,
               "column": 0
             },
             "end": {
-              "line": 42,
+              "line": 44,
               "column": 66
             }
           },
@@ -1813,7 +1824,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 43,
+            "line": 45,
             "column": 0
           }
         },
@@ -1976,8 +1987,8 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         ["content","model.challengeCompletion.stress",["loc",[null,[14,87],[14,123]]]],
         ["content","model.healthRisk.status",["loc",[null,[17,10],[17,37]]]],
         ["content","model.activityLevel.status",["loc",[null,[20,10],[20,40]]]],
-        ["block","each",[["get","model.charts",["loc",[null,[28,12],[28,24]]]]],[],0,null,["loc",[null,[28,4],[36,13]]]],
-        ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[42,0],[42,78]]]]
+        ["block","each",[["get","model.charts",["loc",[null,[28,12],[28,24]]]]],[],0,null,["loc",[null,[28,4],[38,13]]]],
+        ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[44,0],[44,78]]]]
       ],
       locals: [],
       templates: [child0, child1]

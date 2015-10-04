@@ -70,6 +70,18 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
               {y:'2015-11', a:130, b:85},
               {y:'2015-12', a:110, b:110},
             ]
+          },
+          {
+            title: "Step count",
+            measurement: "steps",
+            data: [
+              {y:'2015-07', a:1000, b:3000},
+              {y:'2015-08', a:1050, b:3500},
+              {y:'2015-09', a:1500, b:4100},
+              {y:'2015-10', a:1800, b:4000},
+              {y:'2015-11', a:2000, b:3900},
+              {y:'2015-12', a:2005, b:4030},
+            ]
           }
         ]
       },
