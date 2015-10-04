@@ -228,6 +228,15 @@ section#patients
               float: right
               font-size: 1.2em
               font-style: normal
+          .description
+            font-size: 0.9em
+            .patient
+              color: #4BB3D2
+            em.vs
+              font-weight: bold
+              text-transform: uppercase
+            .demographic
+              color: #848484
 
   #view-all.button
     position: absolute
@@ -269,6 +278,19 @@ section#patients
               background: #73BDF4
             &.stress
               background: #88D392
+          // change arrow icons
+          &.up:after
+            content: '▲'
+          &.down:after
+            content: '▼'
+          // good change
+          &.health-risk.down:after,
+          &.activity-level.up:after
+            color: #17A554
+          // bad change
+          &.health-risk.up:after,
+          &.activity-level.down:after
+            color: #FF3F8B
 
   /* remove outside table border */
   table

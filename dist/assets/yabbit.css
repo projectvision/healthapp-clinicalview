@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /******************************************************************************
  * TEXT
  *****************************************************************************/
@@ -298,6 +299,15 @@ section#patients {
               float: right;
               font-size: 1.2em;
               font-style: normal; }
+          section#patients .pane .charts .column section .description {
+            font-size: 0.9em; }
+            section#patients .pane .charts .column section .description .patient {
+              color: #4BB3D2; }
+            section#patients .pane .charts .column section .description em.vs {
+              font-weight: bold;
+              text-transform: uppercase; }
+            section#patients .pane .charts .column section .description .demographic {
+              color: #848484; }
   section#patients #view-all.button {
     position: absolute;
     top: 6px;
@@ -335,6 +345,16 @@ section#patients {
           background: #73BDF4; }
         section#patients table tbody tr td .bar.stress {
           background: #88D392; }
+      section#patients table tbody tr td.up:after {
+        content: '▲'; }
+      section#patients table tbody tr td.down:after {
+        content: '▼'; }
+      section#patients table tbody tr td.health-risk.down:after,
+      section#patients table tbody tr td.activity-level.up:after {
+        color: #17A554; }
+      section#patients table tbody tr td.health-risk.up:after,
+      section#patients table tbody tr td.activity-level.down:after {
+        color: #FF3F8B; }
   section#patients table thead th {
     border: 1px solid #ccc;
     border-top: 0;

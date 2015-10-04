@@ -8,12 +8,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       outlet: 'master',
     });
   },
-  actions: {
-    //didTransition: function() {
-    //  console.log('routeName: ' + this.routeName);
-    //  return true; // Bubble the didTransition event
-    //}
-  },
   model: function(params) {
 
     // @TODO: Load patients from Parse
@@ -39,6 +33,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     //  });
     //});
 
+    // Dummy Data
     return [
       {
         "patientId": 123456789,
@@ -102,7 +97,33 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         "activityLevel": {
           "status": "Sedentary",
           "change": "down"
-        }
+        },
+        "charts": [
+          {
+            title: "Heart Rate",
+            measurement: "bpm",
+            data: [
+              {y:'2015-07', a:110, b:80},
+              {y:'2015-08', a:145, b:67},
+              {y:'2015-09', a:120, b:95},
+              {y:'2015-10', a:125, b:50},
+              {y:'2015-11', a:160, b:45},
+              {y:'2015-12', a:120, b:90},
+            ]
+          },
+          {
+            title: "Step count",
+            measurement: "steps",
+            data: [
+              {y:'2015-07', a:1100, b:3000},
+              {y:'2015-08', a:900,  b:3500},
+              {y:'2015-09', a:1200, b:3100},
+              {y:'2015-10', a:1300, b:2500},
+              {y:'2015-11', a:1600, b:3900},
+              {y:'2015-12', a:1805, b:3000},
+            ]
+          }
+        ]
       },
       {
         "patientId": 76764565643,
@@ -121,7 +142,33 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         "activityLevel": {
           "status": "Moderate Exercise",
           "change": "up"
-        }
+        },
+        "charts": [
+          {
+            title: "Heart Rate",
+            measurement: "bpm",
+            data: [
+              {y:'2015-07', a:90,  b:99},
+              {y:'2015-08', a:125, b:77},
+              {y:'2015-09', a:123, b:75},
+              {y:'2015-10', a:105, b:44},
+              {y:'2015-11', a:110, b:85},
+              {y:'2015-12', a:100, b:50},
+            ]
+          },
+          {
+            title: "Step count",
+            measurement: "steps",
+            data: [
+              {y:'2015-07', a:1000, b:3000},
+              {y:'2015-08', a:1050, b:3500},
+              {y:'2015-09', a:1500, b:4100},
+              {y:'2015-10', a:1800, b:4000},
+              {y:'2015-11', a:2000, b:3900},
+              {y:'2015-12', a:2005, b:4030},
+            ]
+          }
+        ]
       },
     ];
   }

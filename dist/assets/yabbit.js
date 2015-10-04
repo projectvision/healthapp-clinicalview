@@ -646,12 +646,6 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
         outlet: 'master'
       });
     },
-    actions: {
-      //didTransition: function() {
-      //  console.log('routeName: ' + this.routeName);
-      //  return true; // Bubble the didTransition event
-      //}
-    },
     model: function model(params) {
 
       // @TODO: Load patients from Parse
@@ -677,6 +671,7 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
       //  });
       //});
 
+      // Dummy Data
       return [{
         "patientId": 123456789,
         "firstName": "John",
@@ -721,7 +716,16 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
         "activityLevel": {
           "status": "Sedentary",
           "change": "down"
-        }
+        },
+        "charts": [{
+          title: "Heart Rate",
+          measurement: "bpm",
+          data: [{ y: '2015-07', a: 110, b: 80 }, { y: '2015-08', a: 145, b: 67 }, { y: '2015-09', a: 120, b: 95 }, { y: '2015-10', a: 125, b: 50 }, { y: '2015-11', a: 160, b: 45 }, { y: '2015-12', a: 120, b: 90 }]
+        }, {
+          title: "Step count",
+          measurement: "steps",
+          data: [{ y: '2015-07', a: 1100, b: 3000 }, { y: '2015-08', a: 900, b: 3500 }, { y: '2015-09', a: 1200, b: 3100 }, { y: '2015-10', a: 1300, b: 2500 }, { y: '2015-11', a: 1600, b: 3900 }, { y: '2015-12', a: 1805, b: 3000 }]
+        }]
       }, {
         "patientId": 76764565643,
         "firstName": "Marlon",
@@ -739,7 +743,16 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
         "activityLevel": {
           "status": "Moderate Exercise",
           "change": "up"
-        }
+        },
+        "charts": [{
+          title: "Heart Rate",
+          measurement: "bpm",
+          data: [{ y: '2015-07', a: 90, b: 99 }, { y: '2015-08', a: 125, b: 77 }, { y: '2015-09', a: 123, b: 75 }, { y: '2015-10', a: 105, b: 44 }, { y: '2015-11', a: 110, b: 85 }, { y: '2015-12', a: 100, b: 50 }]
+        }, {
+          title: "Step count",
+          measurement: "steps",
+          data: [{ y: '2015-07', a: 1000, b: 3000 }, { y: '2015-08', a: 1050, b: 3500 }, { y: '2015-09', a: 1500, b: 4100 }, { y: '2015-10', a: 1800, b: 4000 }, { y: '2015-11', a: 2000, b: 3900 }, { y: '2015-12', a: 2005, b: 4030 }]
+        }]
       }];
     }
   });
@@ -1965,17 +1978,21 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         var element5 = dom.childAt(element4, [1]);
         var element6 = dom.childAt(element4, [3]);
         var element7 = dom.childAt(element4, [5]);
-        var morphs = new Array(10);
+        var element8 = dom.childAt(element3, [3]);
+        var element9 = dom.childAt(element3, [5]);
+        var morphs = new Array(12);
         morphs[0] = dom.createAttrMorph(element5, 'style');
         morphs[1] = dom.createMorphAt(element5,0,0);
         morphs[2] = dom.createAttrMorph(element6, 'style');
         morphs[3] = dom.createMorphAt(element6,0,0);
         morphs[4] = dom.createAttrMorph(element7, 'style');
         morphs[5] = dom.createMorphAt(element7,0,0);
-        morphs[6] = dom.createMorphAt(dom.childAt(element3, [3]),1,1);
-        morphs[7] = dom.createMorphAt(dom.childAt(element3, [5]),1,1);
-        morphs[8] = dom.createMorphAt(dom.childAt(element2, [3]),1,1);
-        morphs[9] = dom.createMorphAt(fragment,2,2,contextualElement);
+        morphs[6] = dom.createAttrMorph(element8, 'class');
+        morphs[7] = dom.createMorphAt(element8,1,1);
+        morphs[8] = dom.createAttrMorph(element9, 'class');
+        morphs[9] = dom.createMorphAt(element9,1,1);
+        morphs[10] = dom.createMorphAt(dom.childAt(element2, [3]),1,1);
+        morphs[11] = dom.createMorphAt(fragment,2,2,contextualElement);
         return morphs;
       },
       statements: [
@@ -1985,7 +2002,9 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         ["content","model.challengeCompletion.diet",["loc",[null,[13,83],[13,117]]]],
         ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.stress",["loc",[null,[14,50],[14,82]]]],"%"]]],
         ["content","model.challengeCompletion.stress",["loc",[null,[14,87],[14,123]]]],
+        ["attribute","class",["concat",["health-risk ",["get","model.healthRisk.change",["loc",[null,[16,33],[16,56]]]]]]],
         ["content","model.healthRisk.status",["loc",[null,[17,10],[17,37]]]],
+        ["attribute","class",["concat",["activity-level ",["get","model.activityLevel.change",["loc",[null,[19,36],[19,62]]]]]]],
         ["content","model.activityLevel.status",["loc",[null,[20,10],[20,40]]]],
         ["block","each",[["get","model.charts",["loc",[null,[28,12],[28,24]]]]],[],0,null,["loc",[null,[28,4],[38,13]]]],
         ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[44,0],[44,78]]]]
@@ -2699,7 +2718,7 @@ define('yabbit/tests/routes/patients/index.jshint', function () {
 
   QUnit.module('JSHint - routes/patients');
   QUnit.test('routes/patients/index.js should pass jshint', function(assert) { 
-    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 17, col 19, \'params\' is defined but never used.\n\n1 error'); 
+    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 11, col 19, \'params\' is defined but never used.\n\n1 error'); 
   });
 
 });

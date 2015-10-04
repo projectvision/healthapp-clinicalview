@@ -13,10 +13,10 @@
           <div class="bar diet" style="width: {{model.challengeCompletion.diet}}%">{{model.challengeCompletion.diet}}%</div>
           <div class="bar stress" style="width: {{model.challengeCompletion.stress}}%">{{model.challengeCompletion.stress}}%</div>
         </td>
-        <td>
+        <td class="health-risk {{model.healthRisk.change}}">
           {{model.healthRisk.status}}
         </td>
-        <td>
+        <td class="activity-level {{model.activityLevel.change}}">
           {{model.activityLevel.status}}
         </td>
       </tr>
