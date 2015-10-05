@@ -171,19 +171,26 @@ define('yabbit/components/area-chart', ['exports'], function (exports) {
 
     didInsertElement: function didInsertElement() {
 
+      var months = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+
       // Create chart using data injected via template
       this.chart = new Morris.Area({
         element: this.get('elementId'),
         data: this.get('data'),
+        ykeys: ['p', 'd'], // patient, demographic
+        xkey: 'x',
+        xLabels: "month",
+        xLabelFormat: function xLabelFormat(date) {
+          // convert date string or timestamp to just month
+          return months[new Date(date).getMonth()];
+        },
         resize: true,
-        xkey: 'y',
-        ykeys: ['a', 'b'],
+        hideHover: true,
         fillOpacity: 0.2,
-        hideHover: 'auto',
         behaveLikeLine: true,
+        lineColors: ['#848484', '#4BB3D2'],
         labels: ['Patient', 'Demographic'],
-        pointFillColors: ['#848484', '#4BB3D2'],
-        lineColors: ['#848484', '#4BB3D2']
+        pointFillColors: ['#848484', '#4BB3D2']
       });
     }
   });
@@ -693,18 +700,18 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
         "charts": [{
           title: "Heart Rate",
           measurement: "bpm",
-          data: [{ y: '2015-07', a: 100, b: 90 }, { y: '2015-08', a: 105, b: 87 }, { y: '2015-09', a: 120, b: 75 }, { y: '2015-10', a: 115, b: 80 }, { y: '2015-11', a: 130, b: 85 }, { y: '2015-12', a: 110, b: 110 }]
+          data: [{ x: '2015-07', p: 100, d: 90 }, { x: '2015-08', p: 105, d: 87 }, { x: '2015-09', p: 120, d: 75 }, { x: '2015-10', p: 115, d: 80 }, { x: '2015-11', p: 130, d: 85 }, { x: '2015-12', p: 110, d: 110 }]
         }, {
           title: "Step count",
           measurement: "steps",
-          data: [{ y: '2015-07', a: 1000, b: 3000 }, { y: '2015-08', a: 1050, b: 3500 }, { y: '2015-09', a: 1500, b: 4100 }, { y: '2015-10', a: 1800, b: 4000 }, { y: '2015-11', a: 2000, b: 3900 }, { y: '2015-12', a: 2005, b: 4030 }]
+          data: [{ x: '2015-07', p: 1000, d: 3000 }, { x: '2015-08', p: 1050, d: 3500 }, { x: '2015-09', p: 1500, d: 4100 }, { x: '2015-10', p: 1800, d: 4000 }, { x: '2015-11', p: 2000, d: 3900 }, { x: '2015-12', p: 2005, d: 4030 }]
         }, {
           title: "Weight",
           measurement: "lb",
-          data: [{ y: '2015-07', a: 170, b: 80 }, { y: '2015-08', a: 165, b: 80 }, { y: '2015-09', a: 160, b: 81 }, { y: '2015-10', a: 155, b: 83 }, { y: '2015-11', a: 140, b: 80 }, { y: '2015-12', a: 130, b: 78 }]
+          data: [{ x: '2015-07', p: 170, d: 80 }, { x: '2015-08', p: 165, d: 80 }, { x: '2015-09', p: 160, d: 81 }, { x: '2015-10', p: 155, d: 83 }, { x: '2015-11', p: 140, d: 80 }, { x: '2015-12', p: 130, d: 78 }]
         }, {
           title: "Calories burned",
-          data: [{ y: '2015-07', a: 10000, b: 20000 }, { y: '2015-08', a: 11000, b: 21000 }, { y: '2015-09', a: 15000, b: 23000 }, { y: '2015-10', a: 16000, b: 24000 }, { y: '2015-11', a: 20000, b: 23000 }, { y: '2015-12', a: 35000, b: 22000 }]
+          data: [{ x: '2015-07', p: 10000, d: 20000 }, { x: '2015-08', p: 11000, d: 21000 }, { x: '2015-09', p: 15000, d: 23000 }, { x: '2015-10', p: 16000, d: 24000 }, { x: '2015-11', p: 20000, d: 23000 }, { x: '2015-12', p: 35000, d: 22000 }]
         }]
       }, {
         "patientId": 987654321,
@@ -727,18 +734,18 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
         "charts": [{
           title: "Heart Rate",
           measurement: "bpm",
-          data: [{ y: '2015-07', a: 110, b: 80 }, { y: '2015-08', a: 145, b: 67 }, { y: '2015-09', a: 120, b: 95 }, { y: '2015-10', a: 125, b: 50 }, { y: '2015-11', a: 160, b: 45 }, { y: '2015-12', a: 120, b: 90 }]
+          data: [{ x: '2015-07', p: 110, d: 80 }, { x: '2015-08', p: 145, d: 67 }, { x: '2015-09', p: 120, d: 95 }, { x: '2015-10', p: 125, d: 50 }, { x: '2015-11', p: 160, d: 45 }, { x: '2015-12', p: 120, d: 90 }]
         }, {
           title: "Step count",
           measurement: "steps",
-          data: [{ y: '2015-07', a: 1100, b: 3000 }, { y: '2015-08', a: 900, b: 3500 }, { y: '2015-09', a: 1200, b: 3100 }, { y: '2015-10', a: 1300, b: 2500 }, { y: '2015-11', a: 1600, b: 3900 }, { y: '2015-12', a: 1805, b: 3000 }]
+          data: [{ x: '2015-07', p: 1100, d: 3000 }, { x: '2015-08', p: 900, d: 3500 }, { x: '2015-09', p: 1200, d: 3100 }, { x: '2015-10', p: 1300, d: 2500 }, { x: '2015-11', p: 1600, d: 3900 }, { x: '2015-12', p: 1805, d: 3000 }]
         }, {
           title: "Weight",
           measurement: "lb",
-          data: [{ y: '2015-07', a: 140, b: 60 }, { y: '2015-08', a: 165, b: 80 }, { y: '2015-09', a: 140, b: 91 }, { y: '2015-10', a: 155, b: 83 }, { y: '2015-11', a: 140, b: 80 }, { y: '2015-12', a: 130, b: 78 }]
+          data: [{ x: '2015-07', p: 140, d: 60 }, { x: '2015-08', p: 165, d: 80 }, { x: '2015-09', p: 140, d: 91 }, { x: '2015-10', p: 155, d: 83 }, { x: '2015-11', p: 140, d: 80 }, { x: '2015-12', p: 130, d: 78 }]
         }, {
           title: "Calories burned",
-          data: [{ y: '2015-07', a: 14000, b: 18000 }, { y: '2015-08', a: 15000, b: 21000 }, { y: '2015-09', a: 14000, b: 23000 }, { y: '2015-10', a: 16000, b: 20000 }, { y: '2015-11', a: 20000, b: 23000 }, { y: '2015-12', a: 35000, b: 22000 }]
+          data: [{ x: '2015-07', p: 14000, d: 18000 }, { x: '2015-08', p: 15000, d: 21000 }, { x: '2015-09', p: 14000, d: 23000 }, { x: '2015-10', p: 16000, d: 20000 }, { x: '2015-11', p: 20000, d: 23000 }, { x: '2015-12', p: 35000, d: 22000 }]
         }]
       }, {
         "patientId": 76764565643,
@@ -761,18 +768,18 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
         "charts": [{
           title: "Heart Rate",
           measurement: "bpm",
-          data: [{ y: '2015-07', a: 90, b: 99 }, { y: '2015-08', a: 125, b: 77 }, { y: '2015-09', a: 123, b: 75 }, { y: '2015-10', a: 105, b: 44 }, { y: '2015-11', a: 110, b: 85 }, { y: '2015-12', a: 100, b: 50 }]
+          data: [{ x: '2015-07', p: 90, d: 99 }, { x: '2015-08', p: 125, d: 77 }, { x: '2015-09', p: 123, d: 75 }, { x: '2015-10', p: 105, d: 44 }, { x: '2015-11', p: 110, d: 85 }, { x: '2015-12', p: 100, d: 50 }]
         }, {
           title: "Step count",
           measurement: "steps",
-          data: [{ y: '2015-07', a: 1000, b: 3000 }, { y: '2015-08', a: 1050, b: 3500 }, { y: '2015-09', a: 1500, b: 4100 }, { y: '2015-10', a: 1800, b: 4000 }, { y: '2015-11', a: 2000, b: 3900 }, { y: '2015-12', a: 2005, b: 4030 }]
+          data: [{ x: '2015-07', p: 1000, d: 3000 }, { x: '2015-08', p: 1050, d: 3500 }, { x: '2015-09', p: 1500, d: 4100 }, { x: '2015-10', p: 1800, d: 4000 }, { x: '2015-11', p: 2000, d: 3900 }, { x: '2015-12', p: 2005, d: 4030 }]
         }, {
           title: "Weight",
           measurement: "lb",
-          data: [{ y: '2015-07', a: 170, b: 80 }, { y: '2015-08', a: 165, b: 80 }, { y: '2015-09', a: 160, b: 81 }, { y: '2015-10', a: 155, b: 83 }, { y: '2015-11', a: 140, b: 80 }, { y: '2015-12', a: 130, b: 78 }]
+          data: [{ x: '2015-07', p: 170, d: 80 }, { x: '2015-08', p: 165, d: 80 }, { x: '2015-09', p: 160, d: 81 }, { x: '2015-10', p: 155, d: 83 }, { x: '2015-11', p: 140, d: 80 }, { x: '2015-12', p: 130, d: 78 }]
         }, {
           title: "Calories burned",
-          data: [{ y: '2015-07', a: 10000, b: 20000 }, { y: '2015-08', a: 11000, b: 21000 }, { y: '2015-09', a: 15000, b: 23000 }, { y: '2015-10', a: 16000, b: 24000 }, { y: '2015-11', a: 20000, b: 23000 }, { y: '2015-12', a: 35000, b: 22000 }]
+          data: [{ x: '2015-07', p: 10000, d: 20000 }, { x: '2015-08', p: 11000, d: 21000 }, { x: '2015-09', p: 15000, d: 23000 }, { x: '2015-10', p: 16000, d: 24000 }, { x: '2015-11', p: 20000, d: 23000 }, { x: '2015-12', p: 35000, d: 22000 }]
         }]
       }];
     }
@@ -2533,7 +2540,7 @@ define('yabbit/tests/components/area-chart.jshint', function () {
 
   QUnit.module('JSHint - components');
   QUnit.test('components/area-chart.js should pass jshint', function(assert) { 
-    assert.ok(false, 'components/area-chart.js should pass jshint.\ncomponents/area-chart.js: line 1, col 16, \'Ember\' is not defined.\ncomponents/area-chart.js: line 16, col 22, \'Morris\' is not defined.\n\n2 errors'); 
+    assert.ok(false, 'components/area-chart.js should pass jshint.\ncomponents/area-chart.js: line 1, col 16, \'Ember\' is not defined.\ncomponents/area-chart.js: line 18, col 22, \'Morris\' is not defined.\n\n2 errors'); 
   });
 
 });
@@ -3034,7 +3041,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+25207112"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+4f1f5ebd"});
 }
 
 /* jshint ignore:end */

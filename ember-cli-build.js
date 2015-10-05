@@ -21,6 +21,7 @@ module.exports = function(defaults) {
 
   app.import('vendor/raphael.js');
   app.import('vendor/morris/morris.js');
+  app.import('vendor/morris/morris.css');
 
   return app.toTree();
 };
