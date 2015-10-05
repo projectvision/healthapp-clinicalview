@@ -7,11 +7,11 @@ url -s https://www.parse.com/downloads/cloud_code/installer.sh | sudo /bin/bash
 
 ## Rename Tables Suggestions
 
-Reward         -> EMPTY TABLE (delete?)
-Stress_Level   -> StressLevels
-UserChallenges -> Challenges
-UserRewards    -> Rewards
-UserTable      -> Patients
+Reward         -> EMPTY TABLE (delete?)  
+Stress_Level   -> StressLevels  
+UserChallenges -> Challenges  
+UserRewards    -> Rewards  
+UserTable      -> Patients  
 
 # Ember
 
