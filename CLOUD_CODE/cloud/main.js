@@ -1,17 +1,17 @@
-Parse.Cloud.define("patientsForPhysician", function(request, response) {
+Parse.Cloud.define("patients", function(request, response) {
 
   // Get Physician
   var userQuery = new Parse.Query(Parse.User);
 
   // Get Physician's Patients
   var query = new Parse.Query("UserTable");
-  query.equalTo("PercentStressChallenges", 100);
-  query.select('PercentFitnessChallengesLast', 'PercentDietChallengesLast', 'PercentStrengthChallengesLast').find({
+  query.notEqualTo("Fname", null);
+  query.select('Fname', 'Lname', 'PercentFitnessChallengesLast', 'PercentDietChallengesLast', 'PercentStressChallengesLast').find({
     success: function(results) {
       response.success(results);
     },
     error: function() {
-      response.error("movie lookup failed");
+      response.error("patients lookup failed");
     }
   });
 });

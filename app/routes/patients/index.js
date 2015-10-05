@@ -10,32 +10,37 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
   model: function(params) {
 
-    //// Get Physician
+    //// Get Store
     var store = this.get('store');
+
+    //// Get Adapter
     var adapter = store.adapterFor('parse-user');
     var serializer = store.serializerFor('parse-user');
 
-    // Get Patients For Physician
-    var parsePatients = adapter.ajax(adapter.buildURL("function", "patientsForPhysician"), "GET", {}).then(function(patients) {
-      console.log(patients);
+    // Get Patients For Physician (POST insead of GET to avoid parse error)
+    return adapter.ajax(adapter.buildURL("patients"), "POST", {}).then(function(data) {
 
-      //return store.push({
-      //  data: {
-      //    id: user.objectId,
-      //    type: 'parse-user',
-      //    attributes: {
-      //      sessionToken: user.sessionToken,
-      //      email: user.email,
-      //      username: user.username,
-      //      firstName: user.firstName,
-      //      lastName: user.lastName
-      //    }
-      //  }
-      //});
+      data.result.forEach(function(patient) {
+        store.push({
+          data: {
+            id: patient.objectId,
+            type: 'patient',
+            attributes: {
+              firstName:        patient.Fname,
+              lastName:         patient.Lname,
+              challengeFitness: patient.PercentFitnessChallengesLast,
+              challengeDiet:    patient.PercentDietChallengesLast,
+              challengeStress:  patient.PercentStresshChallengesLast
+            }
+          }
+        });
+      });
+
+      return store.findAll('patient');
     });
 
     // Dummy Data
-    return [
+    /*return [
       {
         "patientId": 123456789,
         "firstName": "John",
@@ -240,6 +245,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           }
         ]
       },
-    ];
+    ];*/
   }
 });

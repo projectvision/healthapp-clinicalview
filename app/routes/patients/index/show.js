@@ -9,6 +9,6 @@ export default Ember.Route.extend({
   },
   // Return the selected patient
   model: function(params) {
-    return this.modelFor('patients.index').findBy('patientId', parseInt(params.id));
+    return this.modelFor('patients.index').findBy('id', params.id);
   },
 });

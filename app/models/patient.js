@@ -8,9 +8,9 @@ export default DS.Model.extend({
 
   firstName: DS.attr('string'),
   lastName: DS.attr('string'),
-  challengeFitness:  DS.attr('number'),
-  challengeDiet:     DS.attr('number'),
-  challengeStrength: DS.attr('number'),
+  challengeDiet: DS.attr('number'),
+  challengeStress: DS.attr('number'),
+  challengeFitness: DS.attr('number'),
 
   /****************************************************************************
   /* RELATIONSHIPS

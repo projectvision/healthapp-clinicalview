@@ -5,9 +5,26 @@
 
 define('yabbit/adapters/application', ['exports', 'ember-parse-adapter/adapters/application'], function (exports, adapter) {
 
-	'use strict';
+  'use strict';
 
-	exports['default'] = adapter['default'];
+  exports['default'] = adapter['default'].extend({
+
+    pathForType: function pathForType(type) {
+      if ('parseUser' === type || 'parse-user' === type) {
+        return 'users';
+      } else if ('login' === type) {
+        return 'login';
+      } else if ('function' === type) {
+        return 'functions';
+      }
+      // Patient model has no corresponding Parse class, instead it's a function
+      else if ('patients' === type) {
+          return 'functions/patients';
+        } else {
+          return 'classes/' + Ember.String.capitalize(Ember.String.camelize(type));
+        }
+    }
+  });
 
 });
 define('yabbit/app', ['exports', 'ember', 'ember/resolver', 'ember/load-initializers', 'yabbit/config/environment'], function (exports, Ember, Resolver, loadInitializers, config) {
@@ -596,9 +613,9 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
 
     firstName: DS['default'].attr('string'),
     lastName: DS['default'].attr('string'),
-    challengeFitness: DS['default'].attr('number'),
     challengeDiet: DS['default'].attr('number'),
-    challengeStrength: DS['default'].attr('number'),
+    challengeStress: DS['default'].attr('number'),
+    challengeFitness: DS['default'].attr('number'),
 
     /****************************************************************************
     /* RELATIONSHIPS
@@ -680,134 +697,242 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
     },
     model: function model(params) {
 
-      //// Get Physician
+      //// Get Store
       var store = this.get('store');
+
+      //// Get Adapter
       var adapter = store.adapterFor('parse-user');
       var serializer = store.serializerFor('parse-user');
 
-      // Get Patients For Physician
-      var parsePatients = adapter.ajax(adapter.buildURL("function", "patientsForPhysician"), "GET", {}).then(function (patients) {
-        console.log(patients);
+      // Get Patients For Physician (POST insead of GET to avoid parse error)
+      return adapter.ajax(adapter.buildURL("patients"), "POST", {}).then(function (data) {
 
-        //return store.push({
-        //  data: {
-        //    id: user.objectId,
-        //    type: 'parse-user',
-        //    attributes: {
-        //      sessionToken: user.sessionToken,
-        //      email: user.email,
-        //      username: user.username,
-        //      firstName: user.firstName,
-        //      lastName: user.lastName
-        //    }
-        //  }
-        //});
+        data.result.forEach(function (patient) {
+          store.push({
+            data: {
+              id: patient.objectId,
+              type: 'patient',
+              attributes: {
+                firstName: patient.Fname,
+                lastName: patient.Lname,
+                challengeFitness: patient.PercentFitnessChallengesLast,
+                challengeDiet: patient.PercentDietChallengesLast,
+                challengeStress: patient.PercentStresshChallengesLast
+              }
+            }
+          });
+        });
+
+        return store.findAll('patient');
       });
 
       // Dummy Data
-      return [{
-        "patientId": 123456789,
-        "firstName": "John",
-        "lastName": "Doe",
-        "alerts": false,
-        "challengeCompletion": {
-          "fitness": 90,
-          "diet": 65,
-          "stress": 75
+      /*return [
+        {
+          "patientId": 123456789,
+          "firstName": "John",
+          "lastName": "Doe",
+          "alerts": false,
+          "challengeCompletion": {
+            "fitness": 90,
+            "diet": 65,
+            "stress": 75
+          },
+          "healthRisk": {
+            "status": "Low",
+            "change": false
+          },
+          "activityLevel": {
+            "status": "Moderate Exercise",
+            "change": "up"
+          },
+          "charts": [
+            {
+              title: "Heart Rate",
+              measurement: "bpm",
+              data: [
+                {x:'2015-07', p:100, d:90},
+                {x:'2015-08', p:105, d:87},
+                {x:'2015-09', p:120, d:75},
+                {x:'2015-10', p:115, d:80},
+                {x:'2015-11', p:130, d:85},
+                {x:'2015-12', p:110, d:110},
+              ]
+            },
+            {
+              title: "Step count",
+              measurement: "steps",
+              data: [
+                {x:'2015-07', p:1000, d:3000},
+                {x:'2015-08', p:1050, d:3500},
+                {x:'2015-09', p:1500, d:4100},
+                {x:'2015-10', p:1800, d:4000},
+                {x:'2015-11', p:2000, d:3900},
+                {x:'2015-12', p:2005, d:4030},
+              ]
+            },
+            {
+              title: "Weight",
+              measurement: "lb",
+              data: [
+                {x:'2015-07', p:170, d:80},
+                {x:'2015-08', p:165, d:80},
+                {x:'2015-09', p:160, d:81},
+                {x:'2015-10', p:155, d:83},
+                {x:'2015-11', p:140, d:80},
+                {x:'2015-12', p:130, d:78},
+              ]
+            },
+            {
+              title: "Calories burned",
+              data: [
+                {x:'2015-07', p:10000, d:20000},
+                {x:'2015-08', p:11000, d:21000},
+                {x:'2015-09', p:15000, d:23000},
+                {x:'2015-10', p:16000, d:24000},
+                {x:'2015-11', p:20000, d:23000},
+                {x:'2015-12', p:35000, d:22000},
+              ]
+            }
+          ]
         },
-        "healthRisk": {
-          "status": "Low",
-          "change": false
+        {
+          "patientId": 987654321,
+          "firstName": "Miguel",
+          "lastName": "Ferrara",
+          "alerts": ["overweight"],
+          "challengeCompletion": {
+            "fitness": 50,
+            "diet": 40,
+            "stress": 66
+          },
+          "healthRisk": {
+            "status": "Warning",
+            "change": "up"
+          },
+          "activityLevel": {
+            "status": "Sedentary",
+            "change": "down"
+          },
+          "charts": [
+            {
+              title: "Heart Rate",
+              measurement: "bpm",
+              data: [
+                {x:'2015-07', p:110, d:80},
+                {x:'2015-08', p:145, d:67},
+                {x:'2015-09', p:120, d:95},
+                {x:'2015-10', p:125, d:50},
+                {x:'2015-11', p:160, d:45},
+                {x:'2015-12', p:120, d:90},
+              ]
+            },
+            {
+              title: "Step count",
+              measurement: "steps",
+              data: [
+                {x:'2015-07', p:1100, d:3000},
+                {x:'2015-08', p:900,  d:3500},
+                {x:'2015-09', p:1200, d:3100},
+                {x:'2015-10', p:1300, d:2500},
+                {x:'2015-11', p:1600, d:3900},
+                {x:'2015-12', p:1805, d:3000},
+              ]
+            },
+            {
+              title: "Weight",
+              measurement: "lb",
+              data: [
+                {x:'2015-07', p:140, d:60},
+                {x:'2015-08', p:165, d:80},
+                {x:'2015-09', p:140, d:91},
+                {x:'2015-10', p:155, d:83},
+                {x:'2015-11', p:140, d:80},
+                {x:'2015-12', p:130, d:78},
+              ]
+            },
+            {
+              title: "Calories burned",
+              data: [
+                {x:'2015-07', p:14000, d:18000},
+                {x:'2015-08', p:15000, d:21000},
+                {x:'2015-09', p:14000, d:23000},
+                {x:'2015-10', p:16000, d:20000},
+                {x:'2015-11', p:20000, d:23000},
+                {x:'2015-12', p:35000, d:22000},
+              ]
+            }
+          ]
         },
-        "activityLevel": {
-          "status": "Moderate Exercise",
-          "change": "up"
+        {
+          "patientId": 76764565643,
+          "firstName": "Marlon",
+          "lastName": "Jones",
+          "alerts": false,
+          "challengeCompletion": {
+            "fitness": 50,
+            "diet": 15,
+            "stress": 95
+          },
+          "healthRisk": {
+            "status": "Low",
+            "change": false
+          },
+          "activityLevel": {
+            "status": "Moderate Exercise",
+            "change": "up"
+          },
+          "charts": [
+            {
+              title: "Heart Rate",
+              measurement: "bpm",
+              data: [
+                {x:'2015-07', p:90,  d:99},
+                {x:'2015-08', p:125, d:77},
+                {x:'2015-09', p:123, d:75},
+                {x:'2015-10', p:105, d:44},
+                {x:'2015-11', p:110, d:85},
+                {x:'2015-12', p:100, d:50},
+              ]
+            },
+            {
+              title: "Step count",
+              measurement: "steps",
+              data: [
+                {x:'2015-07', p:1000, d:3000},
+                {x:'2015-08', p:1050, d:3500},
+                {x:'2015-09', p:1500, d:4100},
+                {x:'2015-10', p:1800, d:4000},
+                {x:'2015-11', p:2000, d:3900},
+                {x:'2015-12', p:2005, d:4030},
+              ]
+            },
+            {
+              title: "Weight",
+              measurement: "lb",
+              data: [
+                {x:'2015-07', p:170, d:80},
+                {x:'2015-08', p:165, d:80},
+                {x:'2015-09', p:160, d:81},
+                {x:'2015-10', p:155, d:83},
+                {x:'2015-11', p:140, d:80},
+                {x:'2015-12', p:130, d:78},
+              ]
+            },
+            {
+              title: "Calories burned",
+              data: [
+                {x:'2015-07', p:10000, d:20000},
+                {x:'2015-08', p:11000, d:21000},
+                {x:'2015-09', p:15000, d:23000},
+                {x:'2015-10', p:16000, d:24000},
+                {x:'2015-11', p:20000, d:23000},
+                {x:'2015-12', p:35000, d:22000},
+              ]
+            }
+          ]
         },
-        "charts": [{
-          title: "Heart Rate",
-          measurement: "bpm",
-          data: [{ x: '2015-07', p: 100, d: 90 }, { x: '2015-08', p: 105, d: 87 }, { x: '2015-09', p: 120, d: 75 }, { x: '2015-10', p: 115, d: 80 }, { x: '2015-11', p: 130, d: 85 }, { x: '2015-12', p: 110, d: 110 }]
-        }, {
-          title: "Step count",
-          measurement: "steps",
-          data: [{ x: '2015-07', p: 1000, d: 3000 }, { x: '2015-08', p: 1050, d: 3500 }, { x: '2015-09', p: 1500, d: 4100 }, { x: '2015-10', p: 1800, d: 4000 }, { x: '2015-11', p: 2000, d: 3900 }, { x: '2015-12', p: 2005, d: 4030 }]
-        }, {
-          title: "Weight",
-          measurement: "lb",
-          data: [{ x: '2015-07', p: 170, d: 80 }, { x: '2015-08', p: 165, d: 80 }, { x: '2015-09', p: 160, d: 81 }, { x: '2015-10', p: 155, d: 83 }, { x: '2015-11', p: 140, d: 80 }, { x: '2015-12', p: 130, d: 78 }]
-        }, {
-          title: "Calories burned",
-          data: [{ x: '2015-07', p: 10000, d: 20000 }, { x: '2015-08', p: 11000, d: 21000 }, { x: '2015-09', p: 15000, d: 23000 }, { x: '2015-10', p: 16000, d: 24000 }, { x: '2015-11', p: 20000, d: 23000 }, { x: '2015-12', p: 35000, d: 22000 }]
-        }]
-      }, {
-        "patientId": 987654321,
-        "firstName": "Miguel",
-        "lastName": "Ferrara",
-        "alerts": ["overweight"],
-        "challengeCompletion": {
-          "fitness": 50,
-          "diet": 40,
-          "stress": 66
-        },
-        "healthRisk": {
-          "status": "Warning",
-          "change": "up"
-        },
-        "activityLevel": {
-          "status": "Sedentary",
-          "change": "down"
-        },
-        "charts": [{
-          title: "Heart Rate",
-          measurement: "bpm",
-          data: [{ x: '2015-07', p: 110, d: 80 }, { x: '2015-08', p: 145, d: 67 }, { x: '2015-09', p: 120, d: 95 }, { x: '2015-10', p: 125, d: 50 }, { x: '2015-11', p: 160, d: 45 }, { x: '2015-12', p: 120, d: 90 }]
-        }, {
-          title: "Step count",
-          measurement: "steps",
-          data: [{ x: '2015-07', p: 1100, d: 3000 }, { x: '2015-08', p: 900, d: 3500 }, { x: '2015-09', p: 1200, d: 3100 }, { x: '2015-10', p: 1300, d: 2500 }, { x: '2015-11', p: 1600, d: 3900 }, { x: '2015-12', p: 1805, d: 3000 }]
-        }, {
-          title: "Weight",
-          measurement: "lb",
-          data: [{ x: '2015-07', p: 140, d: 60 }, { x: '2015-08', p: 165, d: 80 }, { x: '2015-09', p: 140, d: 91 }, { x: '2015-10', p: 155, d: 83 }, { x: '2015-11', p: 140, d: 80 }, { x: '2015-12', p: 130, d: 78 }]
-        }, {
-          title: "Calories burned",
-          data: [{ x: '2015-07', p: 14000, d: 18000 }, { x: '2015-08', p: 15000, d: 21000 }, { x: '2015-09', p: 14000, d: 23000 }, { x: '2015-10', p: 16000, d: 20000 }, { x: '2015-11', p: 20000, d: 23000 }, { x: '2015-12', p: 35000, d: 22000 }]
-        }]
-      }, {
-        "patientId": 76764565643,
-        "firstName": "Marlon",
-        "lastName": "Jones",
-        "alerts": false,
-        "challengeCompletion": {
-          "fitness": 50,
-          "diet": 15,
-          "stress": 95
-        },
-        "healthRisk": {
-          "status": "Low",
-          "change": false
-        },
-        "activityLevel": {
-          "status": "Moderate Exercise",
-          "change": "up"
-        },
-        "charts": [{
-          title: "Heart Rate",
-          measurement: "bpm",
-          data: [{ x: '2015-07', p: 90, d: 99 }, { x: '2015-08', p: 125, d: 77 }, { x: '2015-09', p: 123, d: 75 }, { x: '2015-10', p: 105, d: 44 }, { x: '2015-11', p: 110, d: 85 }, { x: '2015-12', p: 100, d: 50 }]
-        }, {
-          title: "Step count",
-          measurement: "steps",
-          data: [{ x: '2015-07', p: 1000, d: 3000 }, { x: '2015-08', p: 1050, d: 3500 }, { x: '2015-09', p: 1500, d: 4100 }, { x: '2015-10', p: 1800, d: 4000 }, { x: '2015-11', p: 2000, d: 3900 }, { x: '2015-12', p: 2005, d: 4030 }]
-        }, {
-          title: "Weight",
-          measurement: "lb",
-          data: [{ x: '2015-07', p: 170, d: 80 }, { x: '2015-08', p: 165, d: 80 }, { x: '2015-09', p: 160, d: 81 }, { x: '2015-10', p: 155, d: 83 }, { x: '2015-11', p: 140, d: 80 }, { x: '2015-12', p: 130, d: 78 }]
-        }, {
-          title: "Calories burned",
-          data: [{ x: '2015-07', p: 10000, d: 20000 }, { x: '2015-08', p: 11000, d: 21000 }, { x: '2015-09', p: 15000, d: 23000 }, { x: '2015-10', p: 16000, d: 24000 }, { x: '2015-11', p: 20000, d: 23000 }, { x: '2015-12', p: 35000, d: 22000 }]
-        }]
-      }];
+      ];*/
     }
   });
 
@@ -825,7 +950,7 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
     },
     // Return the selected patient
     model: function model(params) {
-      return this.modelFor('patients.index').findBy('patientId', parseInt(params.id));
+      return this.modelFor('patients.index').findBy('id', params.id);
     }
   });
 
@@ -1409,7 +1534,7 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
               },
               "end": {
                 "line": 5,
-                "column": 96
+                "column": 95
               }
             },
             "moduleName": "yabbit/templates/patients/index.hbs"
@@ -1436,8 +1561,8 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
             return morphs;
           },
           statements: [
-            ["content","model.firstName",["loc",[null,[5,58],[5,77]]]],
-            ["content","model.lastName",["loc",[null,[5,78],[5,96]]]]
+            ["content","patient.firstName",["loc",[null,[5,53],[5,74]]]],
+            ["content","patient.lastName",["loc",[null,[5,75],[5,95]]]]
           ],
           locals: [],
           templates: []
@@ -1484,9 +1609,9 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["block","link-to",["patients.index.show",["get","model.patientId",["loc",[null,[5,41],[5,56]]]]],[],0,null,["loc",[null,[5,8],[5,108]]]]
+          ["block","link-to",["patients.index.show",["get","patient.id",["loc",[null,[5,41],[5,51]]]]],[],0,null,["loc",[null,[5,8],[5,107]]]]
         ],
-        locals: ["model"],
+        locals: ["patient"],
         templates: [child0]
       };
     }());
@@ -1637,18 +1762,18 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.fitness",["loc",[null,[24,53],[24,86]]]],"%"]]],
-          ["content","model.challengeCompletion.fitness",["loc",[null,[24,91],[24,128]]]],
-          ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.diet",["loc",[null,[25,50],[25,80]]]],"%"]]],
-          ["content","model.challengeCompletion.diet",["loc",[null,[25,85],[25,119]]]],
-          ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.stress",["loc",[null,[26,52],[26,84]]]],"%"]]],
-          ["content","model.challengeCompletion.stress",["loc",[null,[26,89],[26,125]]]],
-          ["attribute","class",["concat",["health-risk ",["get","model.healthRisk.change",["loc",[null,[28,35],[28,58]]]]]]],
-          ["content","model.healthRisk.status",["loc",[null,[29,12],[29,39]]]],
-          ["attribute","class",["concat",["activity-level ",["get","model.activityLevel.change",["loc",[null,[31,38],[31,64]]]]]]],
-          ["content","model.activityLevel.status",["loc",[null,[32,12],[32,42]]]]
+          ["attribute","style",["concat",["width: ",["get","patient.challengeFitness",["loc",[null,[24,53],[24,77]]]],"%"]]],
+          ["content","patient.challengeFitness",["loc",[null,[24,82],[24,110]]]],
+          ["attribute","style",["concat",["width: ",["get","patient.challengeDiet",["loc",[null,[25,50],[25,71]]]],"%"]]],
+          ["content","patient.challengeDiet",["loc",[null,[25,76],[25,101]]]],
+          ["attribute","style",["concat",["width: ",["get","patient.challengeStress",["loc",[null,[26,52],[26,75]]]],"%"]]],
+          ["content","patient.challengeStress",["loc",[null,[26,80],[26,107]]]],
+          ["attribute","class",["concat",["health-risk ",["get","patient.healthRisk.change",["loc",[null,[28,35],[28,60]]]]]]],
+          ["content","patient.healthRisk.status",["loc",[null,[29,12],[29,41]]]],
+          ["attribute","class",["concat",["activity-level ",["get","patient.activityLevel.change",["loc",[null,[31,38],[31,66]]]]]]],
+          ["content","patient.activityLevel.status",["loc",[null,[32,12],[32,44]]]]
         ],
-        locals: ["model"],
+        locals: ["patient"],
         templates: []
       };
     }());
@@ -2091,12 +2216,12 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         return morphs;
       },
       statements: [
-        ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.fitness",["loc",[null,[12,51],[12,84]]]],"%"]]],
-        ["content","model.challengeCompletion.fitness",["loc",[null,[13,32],[13,69]]]],
-        ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.diet",["loc",[null,[16,48],[16,78]]]],"%"]]],
-        ["content","model.challengeCompletion.diet",["loc",[null,[17,32],[17,66]]]],
-        ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.stress",["loc",[null,[20,50],[20,82]]]],"%"]]],
-        ["content","model.challengeCompletion.stress",["loc",[null,[21,32],[21,68]]]],
+        ["attribute","style",["concat",["width: ",["get","model.challengeFitness",["loc",[null,[12,51],[12,73]]]],"%"]]],
+        ["content","model.challengeFitness",["loc",[null,[13,32],[13,58]]]],
+        ["attribute","style",["concat",["width: ",["get","model.challengeDiet",["loc",[null,[16,48],[16,67]]]],"%"]]],
+        ["content","model.challengeDiet",["loc",[null,[17,32],[17,55]]]],
+        ["attribute","style",["concat",["width: ",["get","model.challengeStress",["loc",[null,[20,50],[20,71]]]],"%"]]],
+        ["content","model.challengeStress",["loc",[null,[21,32],[21,57]]]],
         ["attribute","class",["concat",["health-risk ",["get","model.healthRisk.change",["loc",[null,[25,33],[25,56]]]]]]],
         ["content","model.healthRisk.status",["loc",[null,[26,10],[26,37]]]],
         ["attribute","class",["concat",["activity-level ",["get","model.activityLevel.change",["loc",[null,[28,36],[28,62]]]]]]],
@@ -2526,7 +2651,7 @@ define('yabbit/tests/adapters/application.jshint', function () {
 
   QUnit.module('JSHint - adapters');
   QUnit.test('adapters/application.js should pass jshint', function(assert) { 
-    assert.ok(true, 'adapters/application.js should pass jshint.'); 
+    assert.ok(false, 'adapters/application.js should pass jshint.\nadapters/application.js: line 25, col 27, \'Ember\' is not defined.\nadapters/application.js: line 25, col 51, \'Ember\' is not defined.\n\n2 errors'); 
   });
 
 });
@@ -2823,7 +2948,7 @@ define('yabbit/tests/routes/patients/index.jshint', function () {
 
   QUnit.module('JSHint - routes/patients');
   QUnit.test('routes/patients/index.js should pass jshint', function(assert) { 
-    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 16, col 9, \'serializer\' is defined but never used.\nroutes/patients/index.js: line 19, col 9, \'parsePatients\' is defined but never used.\nroutes/patients/index.js: line 11, col 19, \'params\' is defined but never used.\n\n3 errors'); 
+    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 18, col 9, \'serializer\' is defined but never used.\nroutes/patients/index.js: line 11, col 19, \'params\' is defined but never used.\n\n2 errors'); 
   });
 
 });
@@ -3077,7 +3202,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+4f1f5ebd"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+7c2e046f"});
 }
 
 /* jshint ignore:end */
