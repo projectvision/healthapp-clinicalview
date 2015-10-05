@@ -9,21 +9,44 @@
     <tbody>
       <tr>
         <td>
-          <div class="bar fitness" style="width: {{model.challengeCompletion.fitness}}%">{{model.challengeCompletion.fitness}}%</div>
-          <div class="bar diet" style="width: {{model.challengeCompletion.diet}}%">{{model.challengeCompletion.diet}}%</div>
-          <div class="bar stress" style="width: {{model.challengeCompletion.stress}}%">{{model.challengeCompletion.stress}}%</div>
+          <div class="bar fitness" style="width: {{model.challengeCompletion.fitness}}%">
+            <em class="percent">{{model.challengeCompletion.fitness}}%</em>
+            <em>Fitness</em>
+          </div>
+          <div class="bar diet" style="width: {{model.challengeCompletion.diet}}%">
+            <em class="percent">{{model.challengeCompletion.diet}}%</em>
+            <em>Diet</em>
+          </div>
+          <div class="bar stress" style="width: {{model.challengeCompletion.stress}}%">
+            <em class="percent">{{model.challengeCompletion.stress}}%</em>
+            <em>Strength</em>
+          </div>
         </td>
-        <td>
+        <td class="health-risk {{model.healthRisk.change}}">
           {{model.healthRisk.status}}
         </td>
-        <td>
+        <td class="activity-level {{model.activityLevel.change}}">
           {{model.activityLevel.status}}
         </td>
       </tr>
     </tbody>
   </table>
 
-  <img id="graphs" src="assets/graphs.png"/>
+  <div class="charts">
+
+    {{#each model.charts as |chart|}}
+      <div class="column">
+        <section class="area-chart">
+          <header>
+            <em class="measurement">{{chart.measurement}}</em>
+            <h2>{{chart.title}}</h2>
+          </header>
+          {{area-chart data=chart.data}}
+        </section>
+      </div>
+    {{/each}}
+
+  </div>
 
 </div>
 

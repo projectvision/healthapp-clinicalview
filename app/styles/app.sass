@@ -20,11 +20,11 @@ body
  * LAYOUT *
  ******************************************************************************/
 
-.container, #main
+.container
   max-width: 1200px
   margin: 0 auto
 
-header
+header#main
   height: 45px
   background: #55C2E7
   border-bottom: 1px solid #76A9BA
@@ -154,6 +154,9 @@ h1
 section#patients
   position: relative
 
+  // MASTER
+
+  // Patients Menu
   aside
     margin-top: $table_head_height
     float: left
@@ -183,12 +186,15 @@ section#patients
             border: 1px solid $active_border
             border-right: none
             margin: -1px
-
+  // Patients Index
   #patients-overview
     overflow: auto
     border: 1px solid #7F7F7F
     border-top: 0
 
+  // DETAIL
+
+  // Patient Show
   .pane
     position: absolute
     top: 0
@@ -198,9 +204,40 @@ section#patients
     border-top: 0
     background: white
     min-height: 500px
-    #graphs
-      width: 100%
-      padding: $padding * 2
+    .charts
+      overflow: auto
+      padding: $padding
+      .column
+        width: 50%
+        float: left
+        padding: $padding
+        section
+          border: $border
+          border-radius: 10px
+          header
+            color: #555
+            padding: 1em
+            border-bottom: $border
+            h2
+              margin: 0
+              padding: 0
+              font-size: 1.3em
+              font-weight: normal
+            .measurement
+              color: #999
+              float: right
+              font-size: 1.2em
+              font-style: normal
+          .description
+            font-size: 0.9em
+            .patient
+              color: #4BB3D2
+            em.vs
+              font-weight: bold
+              text-transform: uppercase
+            .demographic
+              color: #848484
+
   #view-all.button
     position: absolute
     top: $margin + 1px
@@ -232,6 +269,7 @@ section#patients
             padding: 0
           .bar
             color: white
+            overflow: hidden
             height: $row_height / 3
             padding: 2px 3px
             background: #EFEFEF
@@ -241,6 +279,24 @@ section#patients
               background: #73BDF4
             &.stress
               background: #88D392
+            em
+              font-style: normal
+              color: white
+            .percent
+              float: right
+          // change arrow icons
+          &.up:after
+            content: '▲'
+          &.down:after
+            content: '▼'
+          // good change
+          &.health-risk.down:after,
+          &.activity-level.up:after
+            color: #17A554
+          // bad change
+          &.health-risk.up:after,
+          &.activity-level.down:after
+            color: #FF3F8B
 
   /* remove outside table border */
   table
