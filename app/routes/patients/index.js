@@ -10,28 +10,29 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
   model: function(params) {
 
-    // @TODO: Load patients from Parse
+    //// Get Physician
+    var store = this.get('store');
+    var adapter = store.adapterFor('parse-user');
+    var serializer = store.serializerFor('parse-user');
 
-    //// Get adapter and serializer
-    //var store = this.get('store');
-    //var adapter = store.adapterFor('parse-user');
-    //var serializer = store.serializerFor('parse-user');
+    // Get Patients For Physician
+    var parsePatients = adapter.ajax(adapter.buildURL("function", "patientsForPhysician"), "GET", {}).then(function(patients) {
+      console.log(patients);
 
-    //var parsePatients = adapter.ajax(adapter.buildURL("parse-user", "me"), "GET", {}).then(function(user) {
-    //  return store.push({
-    //    data: {
-    //      id: user.objectId,
-    //      type: 'parse-user',
-    //      attributes: {
-    //        sessionToken: user.sessionToken,
-    //        email: user.email,
-    //        username: user.username,
-    //        firstName: user.firstName,
-    //        lastName: user.lastName
-    //      }
-    //    }
-    //  });
-    //});
+      //return store.push({
+      //  data: {
+      //    id: user.objectId,
+      //    type: 'parse-user',
+      //    attributes: {
+      //      sessionToken: user.sessionToken,
+      //      email: user.email,
+      //      username: user.username,
+      //      firstName: user.firstName,
+      //      lastName: user.lastName
+      //    }
+      //  }
+      //});
+    });
 
     // Dummy Data
     return [

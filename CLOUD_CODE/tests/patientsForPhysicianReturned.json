@@ -54,3 +54,26 @@
       }
    ]
 }
+
+{
+   "result":[
+      {
+         "PercentDietChallengesLast":50,
+         "PercentFitnessChallengesLast":0,
+         "__type":"Object",
+         "className":"UserTable",
+         "createdAt":"2015-04-02T15:15:59.086Z",
+         "objectId":"OnU7V3NGru",
+         "updatedAt":"2015-05-06T15:05:11.263Z"
+      },
+      {
+         "PercentDietChallengesLast":0,
+         "PercentFitnessChallengesLast":0,
+         "__type":"Object",
+         "className":"UserTable",
+         "createdAt":"2015-04-13T04:34:02.596Z",
+         "objectId":"jHYAjEqDjr",
+         "updatedAt":"2015-05-06T15:05:11.260Z"
+      }
+   ]
+}

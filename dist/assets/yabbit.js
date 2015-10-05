@@ -529,6 +529,15 @@ define('yabbit/initializers/simple-auth', ['exports', 'simple-auth/configuration
   };
 
 });
+define('yabbit/models/chart', ['exports', 'ember-data'], function (exports, DS) {
+
+  'use strict';
+
+  exports['default'] = DS['default'].Model.extend({
+    title: DS['default'].attr('string')
+  });
+
+});
 define('yabbit/models/parse-user', ['exports', 'ember', 'ember-parse-adapter/models/parse-user'], function (exports, Ember, ParseUser) {
 
   'use strict';
@@ -580,6 +589,22 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
   'use strict';
 
   exports['default'] = DS['default'].Model.extend({
+
+    /****************************************************************************
+    /* PROPERTIES
+    /***************************************************************************/
+
+    firstName: DS['default'].attr('string'),
+    lastName: DS['default'].attr('string'),
+    challengeFitness: DS['default'].attr('number'),
+    challengeDiet: DS['default'].attr('number'),
+    challengeStrength: DS['default'].attr('number'),
+
+    /****************************************************************************
+    /* RELATIONSHIPS
+    /***************************************************************************/
+
+    charts: DS['default'].hasMany('chart'),
     physician: DS['default'].belongsTo('parse-user', { async: true })
   });
 
@@ -655,28 +680,29 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
     },
     model: function model(params) {
 
-      // @TODO: Load patients from Parse
+      //// Get Physician
+      var store = this.get('store');
+      var adapter = store.adapterFor('parse-user');
+      var serializer = store.serializerFor('parse-user');
 
-      //// Get adapter and serializer
-      //var store = this.get('store');
-      //var adapter = store.adapterFor('parse-user');
-      //var serializer = store.serializerFor('parse-user');
+      // Get Patients For Physician
+      var parsePatients = adapter.ajax(adapter.buildURL("function", "patientsForPhysician"), "GET", {}).then(function (patients) {
+        console.log(patients);
 
-      //var parsePatients = adapter.ajax(adapter.buildURL("parse-user", "me"), "GET", {}).then(function(user) {
-      //  return store.push({
-      //    data: {
-      //      id: user.objectId,
-      //      type: 'parse-user',
-      //      attributes: {
-      //        sessionToken: user.sessionToken,
-      //        email: user.email,
-      //        username: user.username,
-      //        firstName: user.firstName,
-      //        lastName: user.lastName
-      //      }
-      //    }
-      //  });
-      //});
+        //return store.push({
+        //  data: {
+        //    id: user.objectId,
+        //    type: 'parse-user',
+        //    attributes: {
+        //      sessionToken: user.sessionToken,
+        //      email: user.email,
+        //      username: user.username,
+        //      firstName: user.firstName,
+        //      lastName: user.lastName
+        //    }
+        //  }
+        //});
+      });
 
       // Dummy Data
       return [{
@@ -2721,6 +2747,16 @@ define('yabbit/tests/helpers/validate-properties', ['exports', 'ember', 'ember-q
   }
 
 });
+define('yabbit/tests/models/chart.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - models');
+  QUnit.test('models/chart.js should pass jshint', function(assert) { 
+    assert.ok(true, 'models/chart.js should pass jshint.'); 
+  });
+
+});
 define('yabbit/tests/models/parse-user.jshint', function () {
 
   'use strict';
@@ -2787,7 +2823,7 @@ define('yabbit/tests/routes/patients/index.jshint', function () {
 
   QUnit.module('JSHint - routes/patients');
   QUnit.test('routes/patients/index.js should pass jshint', function(assert) { 
-    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 11, col 19, \'params\' is defined but never used.\n\n1 error'); 
+    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 16, col 9, \'serializer\' is defined but never used.\nroutes/patients/index.js: line 19, col 9, \'parsePatients\' is defined but never used.\nroutes/patients/index.js: line 11, col 19, \'params\' is defined but never used.\n\n3 errors'); 
   });
 
 });

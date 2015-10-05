@@ -1,4 +1,7 @@
 import adapter from 'ember-parse-adapter/adapters/application';
 
-/** @module adapters/application */
+/****************************************************************************
+/* EMBER PARSE ADAPTER ADDON
+/***************************************************************************/
+
 export default adapter;

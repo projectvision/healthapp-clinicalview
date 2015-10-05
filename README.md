@@ -1,5 +1,10 @@
 # Yabbit
 
+## App Structure
+
+`app` contains client-side MVC
+`CLOUD_CODE` is server-side Parse
+
 # Parse
 
 Install Cloud Code on Mac/Linux:
