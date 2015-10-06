@@ -695,6 +695,11 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
         outlet: 'master'
       });
     },
+
+    /****************************************************************************
+    /* PATIENTS FOR PHYSICIAN
+    /***************************************************************************/
+
     model: function model(params) {
 
       //// Get Store
@@ -715,6 +720,7 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
               attributes: {
                 firstName: patient.Fname,
                 lastName: patient.Lname,
+                username: patient.Username,
                 challengeFitness: patient.PercentFitnessChallengesLast,
                 challengeDiet: patient.PercentDietChallengesLast,
                 challengeStress: patient.PercentStresshChallengesLast
@@ -2948,7 +2954,7 @@ define('yabbit/tests/routes/patients/index.jshint', function () {
 
   QUnit.module('JSHint - routes/patients');
   QUnit.test('routes/patients/index.js should pass jshint', function(assert) { 
-    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 18, col 9, \'serializer\' is defined but never used.\nroutes/patients/index.js: line 11, col 19, \'params\' is defined but never used.\n\n2 errors'); 
+    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 24, col 9, \'serializer\' is defined but never used.\nroutes/patients/index.js: line 17, col 19, \'params\' is defined but never used.\n\n2 errors'); 
   });
 
 });

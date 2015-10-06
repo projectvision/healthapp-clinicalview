@@ -1,4 +1,5 @@
 import Ember from 'ember';
+// This route requires authentication
 import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixin';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
@@ -8,6 +9,11 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       outlet: 'master',
     });
   },
+
+  /****************************************************************************
+  /* PATIENTS FOR PHYSICIAN
+  /***************************************************************************/
+
   model: function(params) {
 
     //// Get Store
@@ -28,6 +34,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             attributes: {
               firstName:        patient.Fname,
               lastName:         patient.Lname,
+              username:         patient.Username,
               challengeFitness: patient.PercentFitnessChallengesLast,
               challengeDiet:    patient.PercentDietChallengesLast,
               challengeStress:  patient.PercentStresshChallengesLast
