@@ -4,6 +4,7 @@ var _ = require('underscore');
 
 // http://stackoverflow.com/questions/29716664/parse-com-left-join-alternative
 // https://www.parse.com/questions/parse-relationship-left-join-question
+// https://www.parse.com/questions/javascript-pointers-how-to-retrieve-fields-using-pointers-and-include-in-query
 
 /****************************************************************************
 /* PATIENTS FOR PHYSICIAN
@@ -25,16 +26,17 @@ Parse.Cloud.define("patients", function(request, response) {
 
       _.each(patients, function(patient) {
         // Get patient's email
-        var emailQuery = new Parse.Query("User");
-        emailQuery.equalTo("objectId", patient.objectId);
-        emailQuery.select('username').find({
-          success: function(user) {
-            patient["email"] = user.username;
-          },
-          error: function() {
-            response.error("emailQuery failed");
-          }
-        });
+
+        //var emailQuery = new Parse.Query("User");
+        //emailQuery.equalTo("objectId", patient.objectId);
+        //emailQuery.select('username').find({
+        //  success: function(user) {
+        //    patient["email"] = user.username;
+        //  },
+        //  error: function() {
+        //    response.error("emailQuery failed");
+        //  }
+        //});
       });
       // Return patients
       response.success(patients);
