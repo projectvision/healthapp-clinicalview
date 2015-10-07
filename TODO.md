@@ -1,5 +1,12 @@
 # TODO
 
+## Patients Index
+
+**Health Risk**
+- "health risk is on the core "User" table as "ABSI_zscore" field.  The normal range (given human height, weight, and waist circumfirence values) is between -2 and 2.  Below 0 is healthy, while above 0 is unhealthy.  If you are familiar with statistics, Z score shows the total relative to the entire population"
+
+## Patient Show
+
 ## User
 
 - Fix validation https://github.com/dockyard/ember-validations/issues/343

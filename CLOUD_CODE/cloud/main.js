@@ -18,25 +18,35 @@ Parse.Cloud.define("patients", function(request, response) {
   // Get Physician's Patients
   var patientQuery = new Parse.Query("UserTable");
   patientQuery.notEqualTo("Fname", null); // @TODO: Find UserTable that are connected to _User by MRN (PatientsPhysicians)
-  patientQuery.select('Username', 'Fname', 'Lname', 'PercentFitnessChallengesLast', 'PercentDietChallengesLast', 'PercentStressChallengesLast');
+  //patientQuery.select('Username', 'Fname', 'Lname', 'PercentFitnessChallengesLast', 'PercentDietChallengesLast', 'PercentStressChallengesLast');
+
+  // Include the user account with each patient
+  patientQuery.include("Username");
+  patientQuery.include("username");
+  patientQuery.include("user");
+  patientQuery.include("_User");
+
   patientQuery.find({
     success: function(patients) {
 
       //@TODO: Merge with "Diet" table that has Username equal to UserTable "objectId"
 
       _.each(patients, function(patient) {
-        // Get patient's email
 
-        //var emailQuery = new Parse.Query("User");
-        //emailQuery.equalTo("objectId", patient.objectId);
-        //emailQuery.select('username').find({
-        //  success: function(user) {
-        //    patient["email"] = user.username;
-        //  },
-        //  error: function() {
-        //    response.error("emailQuery failed");
-        //  }
-        //});
+        patient.get('Username');
+
+      //  // Get patient's email
+
+      //  //var emailQuery = new Parse.Query("User");
+      //  //emailQuery.equalTo("objectId", patient.objectId);
+      //  //emailQuery.select('username').find({
+      //  //  success: function(user) {
+      //  //    patient["email"] = user.username;
+      //  //  },
+      //  //  error: function() {
+      //  //    response.error("emailQuery failed");
+      //  //  }
+      //  //});
       });
       // Return patients
       response.success(patients);
