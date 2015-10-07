@@ -22,12 +22,11 @@ Parse.Cloud.define("patients", function(request, response) {
 
   // Include the user account with each patient
   patientQuery.include("Username");
-  patientQuery.include("username");
-  patientQuery.include("user");
-  patientQuery.include("_User");
 
   patientQuery.find({
     success: function(patients) {
+
+      console.log(patients);
 
       //@TODO: Merge with "Diet" table that has Username equal to UserTable "objectId"
 
