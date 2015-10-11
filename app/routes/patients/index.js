@@ -26,6 +26,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     // Get Patients For Physician (POST insead of GET to avoid parse error)
     return adapter.ajax(adapter.buildURL("patients"), "POST", {}).then(function(data) {
 
+      console.log('GET patients');
+      console.log(data.result[1]);
+
       data.result.forEach(function(patient) {
         store.push({
           data: {

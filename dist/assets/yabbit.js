@@ -712,6 +712,9 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
       // Get Patients For Physician (POST insead of GET to avoid parse error)
       return adapter.ajax(adapter.buildURL("patients"), "POST", {}).then(function (data) {
 
+        console.log('GET patients');
+        console.log(data.result[1]);
+
         data.result.forEach(function (patient) {
           store.push({
             data: {
@@ -3208,7 +3211,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+7c2e046f"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+eed66cd8"});
 }
 
 /* jshint ignore:end */

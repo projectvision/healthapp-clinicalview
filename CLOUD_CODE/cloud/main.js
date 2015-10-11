@@ -16,23 +16,29 @@ Parse.Cloud.define("patients", function(request, response) {
   //var physicianQuery = new Parse.Query(Parse.User);
 
   // Get Physician's Patients
-  var patientQuery = new Parse.Query("UserTable");
-  patientQuery.notEqualTo("Fname", null); // @TODO: Find UserTable that are connected to _User by MRN (PatientsPhysicians)
+  var Patients = Parse.Object.extend("UserTable");
+  var patientQuery = new Parse.Query(Patients);
+  patientQuery.notEqualTo("Fname", null); // @TODO: Find Patients that are connected to _User by MRN (PatientsPhysicians)
   //patientQuery.select('Username', 'Fname', 'Lname', 'PercentFitnessChallengesLast', 'PercentDietChallengesLast', 'PercentStressChallengesLast');
 
   // Include the user account with each patient
-  patientQuery.include("Username");
+  patientQuery.include("username.email");
 
   patientQuery.find({
     success: function(patients) {
 
-      console.log(patients);
-
       //@TODO: Merge with "Diet" table that has Username equal to UserTable "objectId"
+
+      console.log('------- patients --------');
+      console.log(patients);
 
       _.each(patients, function(patient) {
 
+        //patient.get('Username');
+        console.log('--------------');
+        console.log(patient.get('Username'));
         patient.get('Username');
+        //patient.email = patient.get('Username.email');
 
       //  // Get patient's email
 
