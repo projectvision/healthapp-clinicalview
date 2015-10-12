@@ -19,7 +19,7 @@ Parse.Cloud.define("patients", function(request, response) {
   var Patients = Parse.Object.extend("UserTable");
   var patientQuery = new Parse.Query(Patients);
   patientQuery.notEqualTo("Fname", null); // @TODO: Find Patients that are connected to _User by MRN (PatientsPhysicians)
-  patientQuery.select('Username.email', 'Fname', 'Lname', 'PercentFitnessChallengesLast', 'PercentDietChallengesLast', 'PercentStressChallengesLast');
+  patientQuery.select('Username.email','Username.ABSI_zscore','Fname','Lname','PercentFitnessChallengesLast','PercentDietChallengesLast','PercentStressChallengesLast');
 
   // Include the user account with each patient
   patientQuery.include("Username");
@@ -38,7 +38,3 @@ Parse.Cloud.define("patients", function(request, response) {
     }
   });
 });
-
-//job["applications"] = _.find(apps, function(app) {
-//    return app.get("job").id == job.id;
-//});

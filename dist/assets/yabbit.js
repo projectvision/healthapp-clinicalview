@@ -613,9 +613,28 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
 
     firstName: DS['default'].attr('string'),
     lastName: DS['default'].attr('string'),
+    email: DS['default'].attr('string'),
     challengeDiet: DS['default'].attr('number'),
     challengeStress: DS['default'].attr('number'),
     challengeFitness: DS['default'].attr('number'),
+    activityLevel: DS['default'].attr('number'), // integer from 0 - 13
+    zScore: DS['default'].attr('number'),
+
+    /****************************************************************************
+    /* COMPUTED PROPERTIES
+    /***************************************************************************/
+
+    healthRisk: Ember.computed('zScore', function () {
+
+      // The normal range (given human height, weight, and waist circumfirence values) is between -2 and 2.
+      // Below 0 is healthy while above 0 is unhealthy. Z score shows the total relative to the entire population
+
+      if (this.get('zScore') < 0) {
+        return 'Healthy';
+      } else if (this.get('zScore') > 0) {
+        return 'Unhealthy';
+      }
+    }),
 
     /****************************************************************************
     /* RELATIONSHIPS
@@ -711,27 +730,37 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
 
       // Get Patients For Physician (POST insead of GET to avoid parse error)
       return adapter.ajax(adapter.buildURL("patients"), "POST", {}).then(function (data) {
+        console.log(data.result);
 
-        console.log('GET patients');
-        console.log(data.result[1]);
-
+        // Build Patients
         data.result.forEach(function (patient) {
-          store.push({
+          var emberPatient = {
             data: {
               id: patient.objectId,
               type: 'patient',
               attributes: {
+                // values from UserTable
                 firstName: patient.Fname,
                 lastName: patient.Lname,
-                username: patient.Username,
                 challengeFitness: patient.PercentFitnessChallengesLast,
                 challengeDiet: patient.PercentDietChallengesLast,
                 challengeStress: patient.PercentStresshChallengesLast
               }
             }
-          });
+          };
+          // values from parse _User
+          if (patient.Username != undefined) {
+            if (patient.Username.email != undefined) {
+              emberPatient.data.attributes.email = patient.Username.email;
+            }
+            if (patient.Username.ABSI_zscore != undefined) {
+              emberPatient.data.attributes.zScore = patient.Username.ABSI_zscore;
+            }
+          }
+          // Create Patient
+          store.push(emberPatient);
         });
-
+        // Return Patients
         return store.findAll('patient');
       });
 
@@ -1778,7 +1807,7 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
           ["attribute","style",["concat",["width: ",["get","patient.challengeStress",["loc",[null,[26,52],[26,75]]]],"%"]]],
           ["content","patient.challengeStress",["loc",[null,[26,80],[26,107]]]],
           ["attribute","class",["concat",["health-risk ",["get","patient.healthRisk.change",["loc",[null,[28,35],[28,60]]]]]]],
-          ["content","patient.healthRisk.status",["loc",[null,[29,12],[29,41]]]],
+          ["content","patient.healthRisk",["loc",[null,[29,12],[29,34]]]],
           ["attribute","class",["concat",["activity-level ",["get","patient.activityLevel.change",["loc",[null,[31,38],[31,66]]]]]]],
           ["content","patient.activityLevel.status",["loc",[null,[32,12],[32,44]]]]
         ],
@@ -2232,7 +2261,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         ["attribute","style",["concat",["width: ",["get","model.challengeStress",["loc",[null,[20,50],[20,71]]]],"%"]]],
         ["content","model.challengeStress",["loc",[null,[21,32],[21,57]]]],
         ["attribute","class",["concat",["health-risk ",["get","model.healthRisk.change",["loc",[null,[25,33],[25,56]]]]]]],
-        ["content","model.healthRisk.status",["loc",[null,[26,10],[26,37]]]],
+        ["content","model.healthRisk",["loc",[null,[26,10],[26,30]]]],
         ["attribute","class",["concat",["activity-level ",["get","model.activityLevel.change",["loc",[null,[28,36],[28,62]]]]]]],
         ["content","model.activityLevel.status",["loc",[null,[29,10],[29,40]]]],
         ["block","each",[["get","model.charts",["loc",[null,[37,12],[37,24]]]]],[],0,null,["loc",[null,[37,4],[47,13]]]],
@@ -2907,7 +2936,7 @@ define('yabbit/tests/models/patient.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/patient.js should pass jshint', function(assert) { 
-    assert.ok(true, 'models/patient.js should pass jshint.'); 
+    assert.ok(false, 'models/patient.js should pass jshint.\nmodels/patient.js: line 22, col 15, \'Ember\' is not defined.\n\n1 error'); 
   });
 
 });
@@ -2957,7 +2986,7 @@ define('yabbit/tests/routes/patients/index.jshint', function () {
 
   QUnit.module('JSHint - routes/patients');
   QUnit.test('routes/patients/index.js should pass jshint', function(assert) { 
-    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 24, col 9, \'serializer\' is defined but never used.\nroutes/patients/index.js: line 17, col 19, \'params\' is defined but never used.\n\n2 errors'); 
+    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 47, col 32, Expected \'!==\' and instead saw \'!=\'.\nroutes/patients/index.js: line 48, col 40, Expected \'!==\' and instead saw \'!=\'.\nroutes/patients/index.js: line 51, col 46, Expected \'!==\' and instead saw \'!=\'.\nroutes/patients/index.js: line 24, col 9, \'serializer\' is defined but never used.\nroutes/patients/index.js: line 17, col 19, \'params\' is defined but never used.\n\n5 errors'); 
   });
 
 });

@@ -1,7 +1,7 @@
 import Ember from 'ember';
-// This route requires authentication
 import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixin';
 
+// This route requires authentication
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   // Render Patient Index into master template
   renderTemplate: function() {
@@ -25,27 +25,37 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
     // Get Patients For Physician (POST insead of GET to avoid parse error)
     return adapter.ajax(adapter.buildURL("patients"), "POST", {}).then(function(data) {
+      console.log(data.result);
 
-      console.log('GET patients');
-      console.log(data.result[1]);
-
+      // Build Patients
       data.result.forEach(function(patient) {
-        store.push({
+        var emberPatient = {
           data: {
             id: patient.objectId,
             type: 'patient',
             attributes: {
+              // values from UserTable
               firstName:        patient.Fname,
               lastName:         patient.Lname,
-              username:         patient.Username,
               challengeFitness: patient.PercentFitnessChallengesLast,
               challengeDiet:    patient.PercentDietChallengesLast,
               challengeStress:  patient.PercentStresshChallengesLast
             }
           }
-        });
+        };
+        // values from parse _User
+        if (patient.Username != undefined) {
+          if (patient.Username.email != undefined) {
+            emberPatient.data.attributes.email = patient.Username.email;
+          }
+          if (patient.Username.ABSI_zscore != undefined) {
+            emberPatient.data.attributes.zScore = patient.Username.ABSI_zscore;
+          }
+        }
+        // Create Patient
+        store.push(emberPatient);
       });
-
+      // Return Patients
       return store.findAll('patient');
     });
 
