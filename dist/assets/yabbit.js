@@ -628,11 +628,14 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
 
       // The normal range (given human height, weight, and waist circumfirence values) is between -2 and 2.
       // Below 0 is healthy while above 0 is unhealthy. Z score shows the total relative to the entire population
-
-      if (this.get('zScore') < 0) {
+      if (this.get('zScore') < -1) {
         return 'Healthy';
-      } else if (this.get('zScore') > 0) {
-        return 'Unhealthy';
+      } else if (this.get('zScore') < 0) {
+        return 'Low Risk';
+      } else if (this.get('zScore') < 1) {
+        return 'Moderate Risk';
+      } else if (this.get('zScore') > 1) {
+        return 'High Risk';
       }
     }),
 
