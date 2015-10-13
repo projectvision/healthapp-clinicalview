@@ -617,7 +617,7 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
     challengeDiet: DS['default'].attr('number'),
     challengeStress: DS['default'].attr('number'),
     challengeFitness: DS['default'].attr('number'),
-    activityLevel: DS['default'].attr('number'), // integer from 0 - 13
+    activityLevelScore: DS['default'].attr('number'), // integer from 0 - 13
     zScore: DS['default'].attr('number'),
 
     /****************************************************************************
@@ -637,6 +637,14 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
       } else if (this.get('zScore') > 1) {
         return 'High Risk';
       }
+    }),
+
+    activityLevel: Ember.computed('zScore', function () {
+      // 4 - 7 Sedentary
+      // 8 - 10 Moderate
+      // 11 - 13 Active
+      // 14 - 16 Very Active
+      return this.get('activityLevelScore');
     }),
 
     /****************************************************************************
@@ -760,6 +768,7 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
               emberPatient.data.attributes.zScore = patient.Username.ABSI_zscore;
             }
           }
+          // @TODO: Get Activity Level
           // Create Patient
           store.push(emberPatient);
         });
@@ -1812,7 +1821,7 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
           ["attribute","class",["concat",["health-risk ",["get","patient.healthRisk.change",["loc",[null,[28,35],[28,60]]]]]]],
           ["content","patient.healthRisk",["loc",[null,[29,12],[29,34]]]],
           ["attribute","class",["concat",["activity-level ",["get","patient.activityLevel.change",["loc",[null,[31,38],[31,66]]]]]]],
-          ["content","patient.activityLevel.status",["loc",[null,[32,12],[32,44]]]]
+          ["content","patient.activityLevel",["loc",[null,[32,12],[32,37]]]]
         ],
         locals: ["patient"],
         templates: []
@@ -2266,7 +2275,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         ["attribute","class",["concat",["health-risk ",["get","model.healthRisk.change",["loc",[null,[25,33],[25,56]]]]]]],
         ["content","model.healthRisk",["loc",[null,[26,10],[26,30]]]],
         ["attribute","class",["concat",["activity-level ",["get","model.activityLevel.change",["loc",[null,[28,36],[28,62]]]]]]],
-        ["content","model.activityLevel.status",["loc",[null,[29,10],[29,40]]]],
+        ["content","model.activityLevel",["loc",[null,[29,10],[29,33]]]],
         ["block","each",[["get","model.charts",["loc",[null,[37,12],[37,24]]]]],[],0,null,["loc",[null,[37,4],[47,13]]]],
         ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[53,0],[53,78]]]]
       ],
@@ -2939,7 +2948,7 @@ define('yabbit/tests/models/patient.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/patient.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/patient.js should pass jshint.\nmodels/patient.js: line 22, col 15, \'Ember\' is not defined.\n\n1 error'); 
+    assert.ok(false, 'models/patient.js should pass jshint.\nmodels/patient.js: line 22, col 15, \'Ember\' is not defined.\nmodels/patient.js: line 40, col 18, \'Ember\' is not defined.\n\n2 errors'); 
   });
 
 });

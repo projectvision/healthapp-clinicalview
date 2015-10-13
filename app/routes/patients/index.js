@@ -52,6 +52,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             emberPatient.data.attributes.zScore = patient.Username.ABSI_zscore;
           }
         }
+        // @TODO: Get Activity Level
         // Create Patient
         store.push(emberPatient);
       });

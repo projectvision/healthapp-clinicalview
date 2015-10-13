@@ -21,15 +21,35 @@ Parse.Cloud.define("patients", function(request, response) {
   patientQuery.notEqualTo("Fname", null); // @TODO: Find Patients that are connected to _User by MRN (PatientsPhysicians)
   patientQuery.select('Username.email','Username.ABSI_zscore','Fname','Lname','PercentFitnessChallengesLast','PercentDietChallengesLast','PercentStressChallengesLast');
 
-  // Include the user account with each patient
+  // Include email and ABSI_zscore from _User
   patientQuery.include("Username");
 
   patientQuery.find({
     success: function(patients) {
-      // Debugging
-      //_.each(patients, function(patient) {
-      //  console.log(patient.get('Username'));
-      //});
+      // Get ACTIVITY_LEVEL from Diet...
+      _.each(patients, function(patient) {
+        console.log("-----------------------");
+
+        // _User email is used as the key
+        var username = patient.get('Username');
+        if (!!username) {
+          console.log(username);
+          console.log(username.email);
+        }
+
+        //var Diet = Parse.Object.extend("Diet");
+        //var dietQuery = new Parse.Query(Diet);
+        //dietQuery.equalTo("email", "maedi");
+        //dietQuery.find({
+        //  success: function(diets) {
+        //    console.log("diet found");
+        //    console.log(diets);
+        //  },
+        //  error: function(error) {
+        //    // error is an instance of Parse.Error.
+        //  }
+        //});
+      });
       // Return patients
       response.success(patients);
     },

@@ -12,7 +12,7 @@ export default DS.Model.extend({
   challengeDiet: DS.attr('number'),
   challengeStress: DS.attr('number'),
   challengeFitness: DS.attr('number'),
-  activityLevel: DS.attr('number'), // integer from 0 - 13
+  activityLevelScore: DS.attr('number'), // integer from 0 - 13
   zScore: DS.attr('number'),
 
   /****************************************************************************
@@ -35,6 +35,14 @@ export default DS.Model.extend({
     else if (this.get('zScore') > 1) {
       return 'High Risk';
     }
+  }),
+
+  activityLevel: Ember.computed('zScore', function() {
+    // 4 - 7 Sedentary
+    // 8 - 10 Moderate
+    // 11 - 13 Active
+    // 14 - 16 Very Active
+    return this.get('activityLevelScore');
   }),
 
   /****************************************************************************
