@@ -639,7 +639,7 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
       }
     }),
 
-    activityLevel: Ember.computed('zScore', function () {
+    activityLevel: Ember.computed('activityLevelScore', function () {
       // 4 - 7 Sedentary
       // 8 - 10 Moderate
       // 11 - 13 Active
@@ -652,7 +652,7 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
     /***************************************************************************/
 
     charts: DS['default'].hasMany('chart'),
-    physician: DS['default'].belongsTo('parse-user', { async: true })
+    physician: DS['default'].belongsTo('parse-user')
   });
 
 });

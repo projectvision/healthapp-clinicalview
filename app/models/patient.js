@@ -37,7 +37,7 @@ export default DS.Model.extend({
     }
   }),
 
-  activityLevel: Ember.computed('zScore', function() {
+  activityLevel: Ember.computed('activityLevelScore', function() {
     // 4 - 7 Sedentary
     // 8 - 10 Moderate
     // 11 - 13 Active
@@ -50,5 +50,5 @@ export default DS.Model.extend({
   /***************************************************************************/
 
   charts: DS.hasMany('chart'),
-  physician: DS.belongsTo('parse-user', {async: true})
+  physician: DS.belongsTo('parse-user')
 });

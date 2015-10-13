@@ -16,10 +16,9 @@ Parse.Cloud.define("patients", function(request, response) {
   //var physicianQuery = new Parse.Query(Parse.User);
 
   // Get Physician's Patients
-  var Patients = Parse.Object.extend("UserTable");
-  var patientQuery = new Parse.Query(Patients);
+  var patientQuery = new Parse.Query("UserTable");
   patientQuery.notEqualTo("Fname", null); // @TODO: Find Patients that are connected to _User by MRN (PatientsPhysicians)
-  patientQuery.select('Username.email','Username.ABSI_zscore','Fname','Lname','PercentFitnessChallengesLast','PercentDietChallengesLast','PercentStressChallengesLast');
+  patientQuery.select('Username.username','Username.ABSI_zscore','Fname','Lname','PercentFitnessChallengesLast','PercentDietChallengesLast','PercentStressChallengesLast');
 
   // Include email and ABSI_zscore from _User
   patientQuery.include("Username");
@@ -30,25 +29,22 @@ Parse.Cloud.define("patients", function(request, response) {
       _.each(patients, function(patient) {
         console.log("-----------------------");
 
-        // _User email is used as the key
-        var username = patient.get('Username');
-        if (!!username) {
-          console.log(username);
-          console.log(username.email);
-        }
+        // _User username/email is used as the key
+        if (!!patient.get('Username')) {
+          console.log(patient.get('Username').username);
 
-        //var Diet = Parse.Object.extend("Diet");
-        //var dietQuery = new Parse.Query(Diet);
-        //dietQuery.equalTo("email", "maedi");
-        //dietQuery.find({
-        //  success: function(diets) {
-        //    console.log("diet found");
-        //    console.log(diets);
-        //  },
-        //  error: function(error) {
-        //    // error is an instance of Parse.Error.
-        //  }
-        //});
+          var dietQuery = new Parse.Query("Diet");
+          dietQuery.equalTo("username", patient.get('Username').username);
+          dietQuery.find({
+            success: function(diets) {
+              console.log("diet found");
+              console.log(diets);
+            },
+            error: function(error) {
+              // error is an instance of Parse.Error.
+            }
+          });
+        }
       });
       // Return patients
       response.success(patients);
