@@ -33,7 +33,6 @@ Parse.Cloud.define("patients", function(request, response) {
 
     // Build patient
     _.each(patients, function(patient) {
-      console.log("--------- each -----------");
 
       if (!!patient.get('Username')) {
 
@@ -44,11 +43,15 @@ Parse.Cloud.define("patients", function(request, response) {
 
         // Create promise
         patientPromises.push(dietQuery.first().then(function(diet) {
+          console.log("--------- promise -----------");
+
           console.log("diet found");
           console.log(diet);
+          // http://stackoverflow.com/questions/30911160/cloud-code-add-attribute-to-response
+          var patientResult = _.clone(patient);
+          //patientResult.activityLevel = diet.get('ACTIVITY_LEVEL');
           console.log(patient);
-          //patient.activityLevel = diet.get('ACTIVITY_LEVEL');
-          patient.set('Diet.ACTIVITY_LEVEL');
+          console.log(patientResult);
           // Create patient
           patientResults.push(patient);
         }));
