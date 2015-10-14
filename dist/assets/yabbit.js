@@ -744,34 +744,30 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
         console.log(data.result);
 
         // Build Patients
-        data.result.forEach(function (patient) {
+        for (var index = 0; index < data.result.patients.length; index++) {
+          var patient = data.result.patients[index];
+          var diet = data.result.diet[index];
+
+          // Build Patient
           var emberPatient = {
             data: {
               id: patient.objectId,
               type: 'patient',
               attributes: {
-                // values from UserTable
                 firstName: patient.Fname,
                 lastName: patient.Lname,
+                email: patient.Username.email,
                 challengeFitness: patient.PercentFitnessChallengesLast,
                 challengeDiet: patient.PercentDietChallengesLast,
-                challengeStress: patient.PercentStresshChallengesLast
+                challengeStress: patient.PercentStresshChallengesLast,
+                zScore: patient.Username.ABSI_zscore,
+                activityLevelScore: diet.activityLevel
               }
             }
           };
-          // values from parse _User
-          if (patient.Username != undefined) {
-            if (patient.Username.email != undefined) {
-              emberPatient.data.attributes.email = patient.Username.email;
-            }
-            if (patient.Username.ABSI_zscore != undefined) {
-              emberPatient.data.attributes.zScore = patient.Username.ABSI_zscore;
-            }
-          }
-          // @TODO: Get Activity Level
           // Create Patient
           store.push(emberPatient);
-        });
+        }
         // Return Patients
         return store.findAll('patient');
       });
@@ -2862,7 +2858,7 @@ define('yabbit/tests/routes/patients/index.jshint', function () {
 
   QUnit.module('JSHint - routes/patients');
   QUnit.test('routes/patients/index.js should pass jshint', function(assert) { 
-    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 47, col 32, Expected \'!==\' and instead saw \'!=\'.\nroutes/patients/index.js: line 48, col 40, Expected \'!==\' and instead saw \'!=\'.\nroutes/patients/index.js: line 51, col 46, Expected \'!==\' and instead saw \'!=\'.\nroutes/patients/index.js: line 24, col 9, \'serializer\' is defined but never used.\nroutes/patients/index.js: line 17, col 19, \'params\' is defined but never used.\n\n5 errors'); 
+    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 24, col 9, \'serializer\' is defined but never used.\nroutes/patients/index.js: line 17, col 19, \'params\' is defined but never used.\n\n2 errors'); 
   });
 
 });

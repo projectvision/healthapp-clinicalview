@@ -17,6 +17,7 @@ var Patients = Parse.Object.extend('UserTable');
 Parse.Cloud.define("patients", function(request, response) {
 
   var patientResults = [];
+  var dietResults = [];
 
   // Get Physician
   //var physicianQuery = new Parse.Query(Parse.User);
@@ -44,15 +45,10 @@ Parse.Cloud.define("patients", function(request, response) {
         // Create promise
         patientPromises.push(dietQuery.first().then(function(diet) {
           console.log("--------- promise -----------");
-
-          console.log("diet found");
           console.log(diet);
-          // http://stackoverflow.com/questions/30911160/cloud-code-add-attribute-to-response
-          var patientResult = _.clone(patient);
-          //patientResult.activityLevel = diet.get('ACTIVITY_LEVEL');
           console.log(patient);
-          console.log(patientResult);
           // Create patient
+          dietResults.push({activityLevel: diet.get('ACTIVITY_LEVEL')});
           patientResults.push(patient);
         }));
       }
@@ -61,6 +57,6 @@ Parse.Cloud.define("patients", function(request, response) {
     return Parse.Promise.when(patientPromises);
   }).then(function () {
     // Return patients
-    response.success(patientResults);
+    response.success({patients: patientResults, diet: dietResults});
   });
 });

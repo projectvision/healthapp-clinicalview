@@ -28,34 +28,30 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       console.log(data.result);
 
       // Build Patients
-      data.result.forEach(function(patient) {
+      for (var index = 0; index < data.result.patients.length; index++) {
+        var patient = data.result.patients[index];
+        var diet = data.result.diet[index];
+
+        // Build Patient
         var emberPatient = {
           data: {
             id: patient.objectId,
             type: 'patient',
             attributes: {
-              // values from UserTable
-              firstName:        patient.Fname,
-              lastName:         patient.Lname,
-              challengeFitness: patient.PercentFitnessChallengesLast,
-              challengeDiet:    patient.PercentDietChallengesLast,
-              challengeStress:  patient.PercentStresshChallengesLast
+              firstName:          patient.Fname,
+              lastName:           patient.Lname,
+              email:              patient.Username.email,
+              challengeFitness:   patient.PercentFitnessChallengesLast,
+              challengeDiet:      patient.PercentDietChallengesLast,
+              challengeStress:    patient.PercentStresshChallengesLast,
+              zScore:             patient.Username.ABSI_zscore,
+              activityLevelScore: diet.activityLevel,
             }
           }
         };
-        // values from parse _User
-        if (patient.Username != undefined) {
-          if (patient.Username.email != undefined) {
-            emberPatient.data.attributes.email = patient.Username.email;
-          }
-          if (patient.Username.ABSI_zscore != undefined) {
-            emberPatient.data.attributes.zScore = patient.Username.ABSI_zscore;
-          }
-        }
-        // @TODO: Get Activity Level
         // Create Patient
         store.push(emberPatient);
-      });
+      }
       // Return Patients
       return store.findAll('patient');
     });
