@@ -641,10 +641,21 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
 
     activityLevel: Ember.computed('activityLevelScore', function () {
       // 4 - 7 Sedentary
+      if (this.get('activityLevelScore') <= 7) {
+        return 'Sedentary';
+      }
       // 8 - 10 Moderate
-      // 11 - 13 Active
-      // 14 - 16 Very Active
-      return this.get('activityLevelScore');
+      else if (this.get('activityLevelScore') <= 10) {
+          return 'Moderate';
+        }
+        // 11 - 13 Active
+        else if (this.get('activityLevelScore') <= 13) {
+            return 'Active';
+          }
+          // 14 - 16 Very Active
+          else if (this.get('activityLevelScore') <= 16) {
+              return 'Very Active';
+            }
     }),
 
     /****************************************************************************

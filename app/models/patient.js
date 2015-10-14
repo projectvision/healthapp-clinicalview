@@ -39,10 +39,21 @@ export default DS.Model.extend({
 
   activityLevel: Ember.computed('activityLevelScore', function() {
     // 4 - 7 Sedentary
+    if (this.get('activityLevelScore') <= 7) {
+      return 'Sedentary';
+    }
     // 8 - 10 Moderate
+    else if (this.get('activityLevelScore') <= 10) {
+      return 'Moderate';
+    }
     // 11 - 13 Active
+    else if (this.get('activityLevelScore') <= 13) {
+      return 'Active';
+    }
     // 14 - 16 Very Active
-    return this.get('activityLevelScore');
+    else if (this.get('activityLevelScore') <= 16) {
+      return 'Very Active';
+    }
   }),
 
   /****************************************************************************
