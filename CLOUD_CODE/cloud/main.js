@@ -10,50 +10,54 @@ var Patients = Parse.Object.extend('UserTable');
 
 /****************************************************************************
 /* PATIENTS FOR PHYSICIAN
+/* Query UserTable for name and challenge completion percentages, then
+/* query Diet for activity level by matching Diet.username with _User.username
 /***************************************************************************/
 
 Parse.Cloud.define("patients", function(request, response) {
 
-  var patientsArray = [];
+  var patientResults = [];
 
   // Get Physician
   //var physicianQuery = new Parse.Query(Parse.User);
 
-  // Get Physician's Patients
+  // Get Patients
   var patientQuery = new Parse.Query(Patients);
   patientQuery.notEqualTo("Fname", null); // @TODO: Find Patients  connected to _User by MRN or PatientsPhysicians relationship
   patientQuery.select('Username.username','Username.ABSI_zscore','Fname','Lname','PercentFitnessChallengesLast','PercentDietChallengesLast','PercentStressChallengesLast');
-
-  // Include email and ABSI_zscore from _User
-  patientQuery.include("Username");
-
+  patientQuery.include("Username"); // include username(email) and ABSI_zscore from _User
   patientQuery.find().then(function(patients) {
 
-    var promises = [];
-    patientsArray.push(patients);
+    // Store promises
+    var patientPromises = [];
 
+    // Build patient
     _.each(patients, function(patient) {
-      // Get ACTIVITY_LEVEL from Diet...
       console.log("--------- each -----------");
 
-      // _User username/email is used as the key
       if (!!patient.get('Username')) {
-        console.log(patient.get('Username').username);
 
+        // Get Diet activity level
         var dietQuery = new Parse.Query(Diet);
-        dietQuery.equalTo("username", 'uiu@uiu.uiu');
+        dietQuery.equalTo("username", patient.get('Username').username); // _User username is used as the key
         dietQuery.select('ACTIVITY_LEVEL');
-        promises.push(dietQuery.find().then(function(diets) {
+
+        // Create promise
+        patientPromises.push(dietQuery.first().then(function(diet) {
           console.log("diet found");
-          console.log(diets);
+          console.log(diet);
+          console.log(patient);
+          //patient.activityLevel = diet.get('ACTIVITY_LEVEL');
+          patient.set('Diet.ACTIVITY_LEVEL');
+          // Create patient
+          patientResults.push(patient);
         }));
       }
     });
-
-    return Parse.Promise.when(promises);
+    // Resolve promises
+    return Parse.Promise.when(patientPromises);
   }).then(function () {
-    console.log('return');
     // Return patients
-    response.success(patientsArray[0]);
+    response.success(patientResults);
   });
 });
