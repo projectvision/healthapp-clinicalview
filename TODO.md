@@ -1,5 +1,10 @@
 # TODO
 
+## Cloud Code
+- https://parse.com/docs/js/guide#promises-promises-in-series
+- http://stackoverflow.com/questions/27723121/parse-javascript-sdk-and-promise-chaining
+- http://stackoverflow.com/questions/30911160/cloud-code-add-attribute-to-response
+
 ## Patients Index
 
 **Health Risk**
