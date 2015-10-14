@@ -91337,7 +91337,6 @@ define('ember-parse-adapter/adapters/application', ['exports', 'ember', 'ember-d
           }
         }
       };
-
       // the request is to the related type and not the type for the record.
       // the query is where there is a pointer to this record.
       return this.ajax(this.buildURL(relationship.type), "GET", { data: query });
@@ -91362,7 +91361,6 @@ define('ember-parse-adapter/adapters/application', ['exports', 'ember', 'ember-d
       if (_query.where && 'string' !== Ember['default'].typeOf(_query.where)) {
         _query.where = JSON.stringify(_query.where);
       }
-
       // Pass to _super()
       return this._super(store, type, _query);
     },
@@ -91469,16 +91467,14 @@ define('ember-parse-adapter/models/parse-user', ['exports', 'ember', 'ember-data
 
       return adapter.ajax(adapter.buildURL(model.modelName), 'POST', { data: data }).then(function (response) {
 
-        //var serialized = serializer.normalize( model, response ),
-        //    record = store.push( serialized );
-
         var serialized = serializer.normalize(model, response);
+        // This is the essential bit - merge response data onto existing data.
         Ember['default'].merge(serialized.data.attributes, data);
         var record = store.push(serialized);
 
         return record;
       }, function (response) {
-        return Ember['default'].RSVP.reject(response);
+        return Ember['default'].RSVP.reject(response.responseJSON);
       });
     }
   });

@@ -1,4 +1,6 @@
 var _ = require('underscore');
+var Diet = Parse.Object.extend('Diet');
+var Patients = Parse.Object.extend('UserTable');
 
 // curl -X POST  -H "X-Parse-Application-Id: kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9"  -H "X-Parse-REST-API-Key: 1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN"  -H "Content-Type: application/json" -d '{}'  https://api.parse.com/1/functions/patients
 
@@ -12,45 +14,46 @@ var _ = require('underscore');
 
 Parse.Cloud.define("patients", function(request, response) {
 
+  var patientsArray = [];
+
   // Get Physician
   //var physicianQuery = new Parse.Query(Parse.User);
 
   // Get Physician's Patients
-  var patientQuery = new Parse.Query("UserTable");
-  patientQuery.notEqualTo("Fname", null); // @TODO: Find Patients that are connected to _User by MRN (PatientsPhysicians)
+  var patientQuery = new Parse.Query(Patients);
+  patientQuery.notEqualTo("Fname", null); // @TODO: Find Patients  connected to _User by MRN or PatientsPhysicians relationship
   patientQuery.select('Username.username','Username.ABSI_zscore','Fname','Lname','PercentFitnessChallengesLast','PercentDietChallengesLast','PercentStressChallengesLast');
 
   // Include email and ABSI_zscore from _User
   patientQuery.include("Username");
 
-  patientQuery.find({
-    success: function(patients) {
+  patientQuery.find().then(function(patients) {
+
+    var promises = [];
+    patientsArray.push(patients);
+
+    _.each(patients, function(patient) {
       // Get ACTIVITY_LEVEL from Diet...
-      _.each(patients, function(patient) {
-        console.log("-----------------------");
+      console.log("--------- each -----------");
 
-        // _User username/email is used as the key
-        if (!!patient.get('Username')) {
-          console.log(patient.get('Username').username);
+      // _User username/email is used as the key
+      if (!!patient.get('Username')) {
+        console.log(patient.get('Username').username);
 
-          var dietQuery = new Parse.Query("Diet");
-          dietQuery.equalTo("username", patient.get('Username').username);
-          dietQuery.find({
-            success: function(diets) {
-              console.log("diet found");
-              console.log(diets);
-            },
-            error: function(error) {
-              // error is an instance of Parse.Error.
-            }
-          });
-        }
-      });
-      // Return patients
-      response.success(patients);
-    },
-    error: function() {
-      response.error("patientQuery failed");
-    }
+        var dietQuery = new Parse.Query(Diet);
+        dietQuery.equalTo("username", 'uiu@uiu.uiu');
+        dietQuery.select('ACTIVITY_LEVEL');
+        promises.push(dietQuery.find().then(function(diets) {
+          console.log("diet found");
+          console.log(diets);
+        }));
+      }
+    });
+
+    return Parse.Promise.when(promises);
+  }).then(function () {
+    console.log('return');
+    // Return patients
+    response.success(patientsArray[0]);
   });
 });
