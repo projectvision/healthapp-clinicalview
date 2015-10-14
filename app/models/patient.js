@@ -12,7 +12,7 @@ export default DS.Model.extend({
   challengeDiet: DS.attr('number'),
   challengeStress: DS.attr('number'),
   challengeFitness: DS.attr('number'),
-  activityLevelScore: DS.attr('number'), // integer from 0 - 13
+  activityLevelScore: DS.attr('number'),
   zScore: DS.attr('number'),
 
   /****************************************************************************
@@ -60,6 +60,6 @@ export default DS.Model.extend({
   /* RELATIONSHIPS
   /***************************************************************************/
 
-  charts: DS.hasMany('chart'),
-  physician: DS.belongsTo('parse-user')
+  physician: DS.belongsTo('parse-user'),
+  charts: DS.hasMany('chart')
 });

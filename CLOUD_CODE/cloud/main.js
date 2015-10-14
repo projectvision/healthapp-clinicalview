@@ -2,12 +2,6 @@ var _ = require('underscore');
 var Diet = Parse.Object.extend('Diet');
 var Patients = Parse.Object.extend('UserTable');
 
-// curl -X POST  -H "X-Parse-Application-Id: kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9"  -H "X-Parse-REST-API-Key: 1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN"  -H "Content-Type: application/json" -d '{}'  https://api.parse.com/1/functions/patients
-
-// http://stackoverflow.com/questions/29716664/parse-com-left-join-alternative
-// https://www.parse.com/questions/parse-relationship-left-join-question
-// https://www.parse.com/questions/javascript-pointers-how-to-retrieve-fields-using-pointers-and-include-in-query
-
 /****************************************************************************
 /* PATIENTS FOR PHYSICIAN
 /* Query UserTable for name and challenge completion percentages, then
@@ -35,6 +29,7 @@ Parse.Cloud.define("patients", function(request, response) {
     // Build patient
     _.each(patients, function(patient) {
 
+      // only build patients connected to _User
       if (!!patient.get('Username')) {
 
         // Get Diet activity level
@@ -44,9 +39,6 @@ Parse.Cloud.define("patients", function(request, response) {
 
         // Create promise
         patientPromises.push(dietQuery.first().then(function(diet) {
-          console.log("--------- promise -----------");
-          console.log(diet);
-          console.log(patient);
           // Create patient
           dietResults.push({activityLevel: diet.get('ACTIVITY_LEVEL')});
           patientResults.push(patient);
