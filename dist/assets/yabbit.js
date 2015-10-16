@@ -771,7 +771,7 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
       var patient = this.modelFor('patients.index').findBy('id', params.id);
 
       // Get Graphs For Patient
-      adapter.ajax(adapter.buildURL("graphsForPatient"), "POST", {}).then(function (data) {
+      adapter.ajax(adapter.buildURL("graphsForPatient"), "POST", { data: { id: params.id } }).then(function (data) {
         console.log(data.results);
       });
 

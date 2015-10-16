@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var Diet = Parse.Object.extend('Diet');
 var Patients = Parse.Object.extend('UserTable');
+var ActivitiesImport = Parse.Object.extend('ActivitiesImport');
 
 /****************************************************************************
 /* PATIENTS FOR PHYSICIAN
@@ -59,8 +60,20 @@ Parse.Cloud.define("patientsForPhysician", function(request, response) {
 
 Parse.Cloud.define("graphsForPatient", function(request, response) {
 
-  //console.log(request);
+  console.log('--- graphsForPatient ----');
+  console.log(request.params.id);
 
-  response.success({hello: "how are you"});
-
+  // Heart Rate, Step Count, Calories Burned
+  var aQuery = new Parse.Query(ActivitiesImport);
+  aQuery.equalTo("user", request.params.id);
+  aQuery.select('NormalHR', 'Calories', 'Steps');
+  aQuery.find().then({
+    success: function(activities) {
+      console.log(activities);
+      response.success(activities);
+    },
+    error: function(error) {
+      response.error(error);
+    }
+  });
 });
