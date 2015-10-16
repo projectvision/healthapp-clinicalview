@@ -4,6 +4,7 @@
 - https://parse.com/docs/js/guide#promises-promises-in-series
 - http://stackoverflow.com/questions/27723121/parse-javascript-sdk-and-promise-chaining
 - http://stackoverflow.com/questions/30911160/cloud-code-add-attribute-to-response
+- http://stackoverflow.com/questions/22960320/parse-cloud-code-relational-query-syntax?rq=1
 
 ## Patients Index
 

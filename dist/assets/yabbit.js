@@ -667,6 +667,17 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
   });
 
 });
+define('yabbit/models/stat', ['exports', 'ember-data'], function (exports, DS) {
+
+  'use strict';
+
+  exports['default'] = DS['default'].Model.extend({
+    title: DS['default'].attr('string'),
+    stat: DS['default'].attr('string'),
+    description: DS['default'].attr('string')
+  });
+
+});
 define('yabbit/router', ['exports', 'ember', 'yabbit/config/environment'], function (exports, Ember, config) {
 
   'use strict';
@@ -743,16 +754,15 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
 
     model: function model(params) {
 
-      //// Get Store
+      // Get Store
       var store = this.get('store');
 
-      //// Get Adapter
+      // Get Adapter
       var adapter = store.adapterFor('parse-user');
       var serializer = store.serializerFor('parse-user');
 
       // Get Patients For Physician (POST insead of GET to avoid parse error)
       return adapter.ajax(adapter.buildURL("patients"), "POST", {}).then(function (data) {
-        console.log(data.result);
 
         // Build Patients
         for (var index = 0; index < data.result.patients.length; index++) {
@@ -869,9 +879,29 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
         outlet: 'detail'
       });
     },
-    // Return the selected patient
+
+    /****************************************************************************
+    /* GRAPHS FOR PATIENT
+    /* Return patient and their graphs
+    /***************************************************************************/
+
     model: function model(params) {
-      return this.modelFor('patients.index').findBy('id', params.id);
+
+      //// Get Store
+      var store = this.get('store');
+
+      //// Get Adapter
+      var adapter = store.adapterFor('parse-user');
+      var serializer = store.serializerFor('parse-user');
+
+      // Get Patient
+      var patient = this.modelFor('patients.index').findBy('id', params.id);
+
+      // Get Graphs For Patient
+      //adapter.ajax(adapter.buildURL("patients"), "POST", {}).then(function(data) {
+      //}
+
+      return patient;
     }
   });
 
@@ -2823,6 +2853,16 @@ define('yabbit/tests/models/patient.jshint', function () {
   });
 
 });
+define('yabbit/tests/models/stat.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - models');
+  QUnit.test('models/stat.js should pass jshint', function(assert) { 
+    assert.ok(true, 'models/stat.js should pass jshint.'); 
+  });
+
+});
 define('yabbit/tests/router.jshint', function () {
 
   'use strict';
@@ -2879,7 +2919,7 @@ define('yabbit/tests/routes/patients/index/show.jshint', function () {
 
   QUnit.module('JSHint - routes/patients/index');
   QUnit.test('routes/patients/index/show.js should pass jshint', function(assert) { 
-    assert.ok(true, 'routes/patients/index/show.js should pass jshint.'); 
+    assert.ok(false, 'routes/patients/index/show.js should pass jshint.\nroutes/patients/index/show.js: line 22, col 9, \'adapter\' is defined but never used.\nroutes/patients/index/show.js: line 23, col 9, \'serializer\' is defined but never used.\n\n2 errors'); 
   });
 
 });

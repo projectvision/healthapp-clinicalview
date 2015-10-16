@@ -7,8 +7,30 @@ export default Ember.Route.extend({
       outlet: 'detail',
     });
   },
-  // Return the selected patient
+
+  /****************************************************************************
+  /* GRAPHS FOR PATIENT
+  /* Return patient and their graphs
+  /***************************************************************************/
+
   model: function(params) {
-    return this.modelFor('patients.index').findBy('id', params.id);
-  },
+
+    //// Get Store
+    var store = this.get('store');
+
+    //// Get Adapter
+    var adapter = store.adapterFor('parse-user');
+    var serializer = store.serializerFor('parse-user');
+
+    // Get Patient
+    var patient = this.modelFor('patients.index').findBy('id', params.id);
+
+    // Get Graphs For Patient
+    //adapter.ajax(adapter.buildURL("patients"), "POST", {}).then(function(data) {
+    //}
+
+    
+
+    return patient;
+  }
 });
