@@ -18,12 +18,12 @@ define('yabbit/adapters/application', ['exports', 'ember', 'ember-parse-adapter/
         return 'functions';
       }
       // APP SPECIFIC: Patient data is fragmented so it's a function instead
-      else if ('patients' === type) {
-          return 'functions/patients';
+      else if ('patientsForPhysician' === type) {
+          return 'functions/patientsForPhysician';
         }
         // APP SPECIFIC: Graph data is fragmented so it's a function instead
-        else if ('graphs' === type) {
-            return 'functions/graphs';
+        else if ('graphsForPatient' === type) {
+            return 'functions/graphsForPatient';
           } else {
             return 'classes/' + Ember['default'].String.capitalize(Ember['default'].String.camelize(type));
           }
@@ -708,7 +708,7 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
       var serializer = store.serializerFor('parse-user');
 
       // Get Patients For Physician (POST insead of GET to avoid parse error)
-      return adapter.ajax(adapter.buildURL("patients"), "POST", {}).then(function (data) {
+      return adapter.ajax(adapter.buildURL("patientsForPhysician"), "POST", {}).then(function (data) {
 
         // Build Patients
         for (var index = 0; index < data.result.patients.length; index++) {
@@ -771,7 +771,7 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
       var patient = this.modelFor('patients.index').findBy('id', params.id);
 
       // Get Graphs For Patient
-      adapter.ajax(adapter.buildURL("graphs"), "POST", {}).then(function (data) {
+      adapter.ajax(adapter.buildURL("graphsForPatient"), "POST", {}).then(function (data) {
         console.log(data.results);
       });
 

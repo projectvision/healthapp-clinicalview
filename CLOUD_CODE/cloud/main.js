@@ -8,7 +8,7 @@ var Patients = Parse.Object.extend('UserTable');
 /* query Diet for activity level by matching Diet.username with _User.username
 /***************************************************************************/
 
-Parse.Cloud.define("patients", function(request, response) {
+Parse.Cloud.define("patientsForPhysician", function(request, response) {
 
   var patientResults = [];
   var dietResults = [];
@@ -57,7 +57,7 @@ Parse.Cloud.define("patients", function(request, response) {
 /* GRAPHS FOR PATIENT
 /***************************************************************************/
 
-Parse.Cloud.define("graphs", function(request, response) {
+Parse.Cloud.define("graphsForPatient", function(request, response) {
 
   //console.log(request);
 

@@ -19,12 +19,12 @@ export default adapter.extend({
       return 'functions';
     }
     // APP SPECIFIC: Patient data is fragmented so it's a function instead
-    else if ('patients' === type) {
-      return 'functions/patients';
+    else if ('patientsForPhysician' === type) {
+      return 'functions/patientsForPhysician';
     }
     // APP SPECIFIC: Graph data is fragmented so it's a function instead
-    else if ('graphs' === type) {
-      return 'functions/graphs';
+    else if ('graphsForPatient' === type) {
+      return 'functions/graphsForPatient';
     }
     else {
       return 'classes/' + Ember.String.capitalize(Ember.String.camelize(type));

@@ -24,7 +24,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     var serializer = store.serializerFor('parse-user');
 
     // Get Patients For Physician (POST insead of GET to avoid parse error)
-    return adapter.ajax(adapter.buildURL("patients"), "POST", {}).then(function(data) {
+    return adapter.ajax(adapter.buildURL("patientsForPhysician"), "POST", {}).then(function(data) {
 
       // Build Patients
       for (var index = 0; index < data.result.patients.length; index++) {
