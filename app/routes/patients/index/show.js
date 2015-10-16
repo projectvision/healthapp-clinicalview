@@ -60,6 +60,7 @@ export default Ember.Route.extend({
       // Create Heart Rate Graph
       store.createRecord('graph', {
         title: 'Heart Rate',
+        measurement: 'bpm',
         values: heartRates,
         patient: patient
       });
