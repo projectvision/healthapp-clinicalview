@@ -17,8 +17,8 @@ export default Ember.Component.extend({
     // Create chart using data injected via template
     this.chart = new Morris.Area({
       element: this.get('elementId'),
-      data: this.get('data'),
-      ykeys: ['p', 'd'], // patient, demographic
+      data: this.get('values'),
+      ykeys: 'y', //['p', 'd'], // patient, demographic
       xkey: 'x',
       xLabels: "month",
       xLabelFormat: function (date) {

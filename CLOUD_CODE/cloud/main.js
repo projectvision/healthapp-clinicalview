@@ -73,7 +73,7 @@ Parse.Cloud.define("graphsForPatient", function(request, response) {
   aQuery.equalTo("user", user);
   aQuery.select('NormalHR', 'Calories', 'Steps');
   aQuery.find().then(function(activities) {
-    response.success(activities);
+    response.success({graphs: activities});
   }, function(error) {
     response.error(error);
   });

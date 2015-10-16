@@ -7,6 +7,8 @@ export default DS.Model.extend({
   /***************************************************************************/
 
   title: DS.attr('string'),
+  measurement: DS.attr('string'),
+  values: DS.attr(),
 
   /****************************************************************************
   /* RELATIONSHIPS

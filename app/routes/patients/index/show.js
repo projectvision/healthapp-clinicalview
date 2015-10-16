@@ -27,7 +27,43 @@ export default Ember.Route.extend({
 
     // Get Graphs For Patient
     adapter.ajax(adapter.buildURL("graphsForPatient"), "POST", {data: patientUser}).then(function(data) {
-      console.log(data.results);
+      console.log(data.result.graphs);
+
+      // Seperate Data
+      var steps = [];
+      var calories = [];
+      var heartRates = [];
+
+      for (var index = 0; index < data.result.graphs.length; index++) {
+        var item = data.result.graphs[index];
+        steps.push({x: item.createdAt, y: item.Steps});
+        calories.push({x: item.createdAt, y: item.Calories});
+        heartRates.push({x: item.createdAt, y: item.NormalHR});
+      }
+
+      // CREATE GRAPHS
+
+      // Create Calories Graph
+      store.createRecord('graph', {
+        title: 'Calories',
+        values: calories,
+        patient: patient
+      });
+
+      // Create Steps Graph
+      store.createRecord('graph', {
+        title: 'Steps',
+        values: steps,
+        patient: patient
+      });
+
+      // Create Heart Rate Graph
+      store.createRecord('graph', {
+        title: 'Heart Rate',
+        values: heartRates,
+        patient: patient
+      });
+
     });
 
     // Return patient and their graphs to the route

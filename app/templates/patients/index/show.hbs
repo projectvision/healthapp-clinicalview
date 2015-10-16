@@ -34,14 +34,14 @@
 
   <div class="charts">
 
-    {{#each model.charts as |chart|}}
+    {{#each model.graphs as |graph|}}
       <div class="column">
         <section class="area-chart">
           <header>
-            <em class="measurement">{{chart.measurement}}</em>
-            <h2>{{chart.title}}</h2>
+            <em class="measurement">{{graph.measurement}}</em>
+            <h2>{{graph.title}}</h2>
           </header>
-          {{area-chart data=chart.data}}
+          {{area-chart values=graph.values}}
         </section>
       </div>
     {{/each}}

@@ -197,8 +197,8 @@ define('yabbit/components/area-chart', ['exports'], function (exports) {
       // Create chart using data injected via template
       this.chart = new Morris.Area({
         element: this.get('elementId'),
-        data: this.get('data'),
-        ykeys: ['p', 'd'], // patient, demographic
+        data: this.get('values'),
+        ykeys: 'y', //['p', 'd'], // patient, demographic
         xkey: 'x',
         xLabels: "month",
         xLabelFormat: function xLabelFormat(date) {
@@ -471,6 +471,8 @@ define('yabbit/models/graph', ['exports', 'ember-data'], function (exports, DS) 
     /***************************************************************************/
 
     title: DS['default'].attr('string'),
+    measurement: DS['default'].attr('string'),
+    values: DS['default'].attr(),
 
     /****************************************************************************
     /* RELATIONSHIPS
@@ -775,7 +777,42 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
 
       // Get Graphs For Patient
       adapter.ajax(adapter.buildURL("graphsForPatient"), "POST", { data: patientUser }).then(function (data) {
-        console.log(data.results);
+        console.log(data.result.graphs);
+
+        // Seperate Data
+        var steps = [];
+        var calories = [];
+        var heartRates = [];
+
+        for (var index = 0; index < data.result.graphs.length; index++) {
+          var item = data.result.graphs[index];
+          steps.push({ x: item.createdAt, y: item.Steps });
+          calories.push({ x: item.createdAt, y: item.Calories });
+          heartRates.push({ x: item.createdAt, y: item.NormalHR });
+        }
+
+        // CREATE GRAPHS
+
+        // Create Calories Graph
+        store.createRecord('graph', {
+          title: 'Calories',
+          values: calories,
+          patient: patient
+        });
+
+        // Create Steps Graph
+        store.createRecord('graph', {
+          title: 'Steps',
+          values: steps,
+          patient: patient
+        });
+
+        // Create Heart Rate Graph
+        store.createRecord('graph', {
+          title: 'Heart Rate',
+          values: heartRates,
+          patient: patient
+        });
       });
 
       // Return patient and their graphs to the route
@@ -1867,11 +1904,11 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["content","chart.measurement",["loc",[null,[41,36],[41,57]]]],
-          ["content","chart.title",["loc",[null,[42,16],[42,31]]]],
-          ["inline","area-chart",[],["data",["subexpr","@mut",[["get","chart.data",["loc",[null,[44,28],[44,38]]]]],[],[]]],["loc",[null,[44,10],[44,40]]]]
+          ["content","graph.measurement",["loc",[null,[41,36],[41,57]]]],
+          ["content","graph.title",["loc",[null,[42,16],[42,31]]]],
+          ["inline","area-chart",[],["values",["subexpr","@mut",[["get","graph.values",["loc",[null,[44,30],[44,42]]]]],[],[]]],["loc",[null,[44,10],[44,44]]]]
         ],
-        locals: ["chart"],
+        locals: ["graph"],
         templates: []
       };
     }());
@@ -2127,7 +2164,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         ["content","model.healthRisk",["loc",[null,[26,10],[26,30]]]],
         ["attribute","class",["concat",["activity-level ",["get","model.activityLevel.change",["loc",[null,[28,36],[28,62]]]]]]],
         ["content","model.activityLevel",["loc",[null,[29,10],[29,33]]]],
-        ["block","each",[["get","model.charts",["loc",[null,[37,12],[37,24]]]]],[],0,null,["loc",[null,[37,4],[47,13]]]],
+        ["block","each",[["get","model.graphs",["loc",[null,[37,12],[37,24]]]]],[],0,null,["loc",[null,[37,4],[47,13]]]],
         ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[53,0],[53,78]]]]
       ],
       locals: [],
