@@ -3,7 +3,7 @@
 
 /* jshint ignore:end */
 
-define('yabbit/adapters/application', ['exports', 'ember-parse-adapter/adapters/application'], function (exports, adapter) {
+define('yabbit/adapters/application', ['exports', 'ember', 'ember-parse-adapter/adapters/application'], function (exports, Ember, adapter) {
 
   'use strict';
 
@@ -17,12 +17,16 @@ define('yabbit/adapters/application', ['exports', 'ember-parse-adapter/adapters/
       } else if ('function' === type) {
         return 'functions';
       }
-      // Patient model has no corresponding Parse class, instead it's a function
+      // APP SPECIFIC: Patient data is fragmented so it's a function instead
       else if ('patients' === type) {
           return 'functions/patients';
-        } else {
-          return 'classes/' + Ember.String.capitalize(Ember.String.camelize(type));
         }
+        // APP SPECIFIC: Graph data is fragmented so it's a function instead
+        else if ('graphs' === type) {
+            return 'functions/graphs';
+          } else {
+            return 'classes/' + Ember['default'].String.capitalize(Ember['default'].String.camelize(type));
+          }
     }
   });
 
@@ -362,96 +366,6 @@ define('yabbit/controllers/session/signup', ['exports', 'ember', 'ember-validati
   });
 
 });
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/adapters/application.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/adapters');
-  QUnit.test('modules/ember-parse-adapter/adapters/application.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/adapters/application.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/file.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter');
-  QUnit.test('modules/ember-parse-adapter/file.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/file.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/geopoint.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter');
-  QUnit.test('modules/ember-parse-adapter/geopoint.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/geopoint.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/initializers/initialize.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/initializers');
-  QUnit.test('modules/ember-parse-adapter/initializers/initialize.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/initializers/initialize.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/models/parse-user.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/models');
-  QUnit.test('modules/ember-parse-adapter/models/parse-user.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/models/parse-user.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/serializers/application.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/serializers');
-  QUnit.test('modules/ember-parse-adapter/serializers/application.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/serializers/application.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/transforms/date.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/transforms');
-  QUnit.test('modules/ember-parse-adapter/transforms/date.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/transforms/date.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/transforms/file.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/transforms');
-  QUnit.test('modules/ember-parse-adapter/transforms/file.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/transforms/file.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/transforms/geopoint.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/transforms');
-  QUnit.test('modules/ember-parse-adapter/transforms/geopoint.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/transforms/geopoint.js should pass jshint.');
-  });
-
-});
 define('yabbit/file', ['exports', 'ember-parse-adapter/file'], function (exports, file) {
 
 	'use strict';
@@ -546,12 +460,24 @@ define('yabbit/initializers/simple-auth', ['exports', 'simple-auth/configuration
   };
 
 });
-define('yabbit/models/chart', ['exports', 'ember-data'], function (exports, DS) {
+define('yabbit/models/graph', ['exports', 'ember-data'], function (exports, DS) {
 
   'use strict';
 
   exports['default'] = DS['default'].Model.extend({
-    title: DS['default'].attr('string')
+
+    /****************************************************************************
+    /* PROPERTIES
+    /***************************************************************************/
+
+    title: DS['default'].attr('string'),
+
+    /****************************************************************************
+    /* RELATIONSHIPS
+    /***************************************************************************/
+
+    patient: DS['default'].belongsTo('patient')
+
   });
 
 });
@@ -568,6 +494,12 @@ define('yabbit/models/parse-user', ['exports', 'ember', 'ember-parse-adapter/mod
     firstName: DS.attr('string'),
     lastName: DS.attr('string'),
     isPhysician: DS.attr('boolean'),
+
+    /****************************************************************************
+    /* RELATIONSHIPS
+    /***************************************************************************/
+
+    patients: DS.hasMany('patient'),
 
     /****************************************************************************
     /* ACTIONS
@@ -663,7 +595,9 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
     /***************************************************************************/
 
     physician: DS['default'].belongsTo('parse-user'),
-    charts: DS['default'].hasMany('chart')
+    graphs: DS['default'].hasMany('graph'),
+    stats: DS['default'].hasMany('stat')
+
   });
 
 });
@@ -672,9 +606,21 @@ define('yabbit/models/stat', ['exports', 'ember-data'], function (exports, DS) {
   'use strict';
 
   exports['default'] = DS['default'].Model.extend({
+
+    /****************************************************************************
+    /* PROPERTIES
+    /***************************************************************************/
+
     title: DS['default'].attr('string'),
     stat: DS['default'].attr('string'),
-    description: DS['default'].attr('string')
+    description: DS['default'].attr('string'),
+
+    /****************************************************************************
+    /* RELATIONSHIPS
+    /***************************************************************************/
+
+    patient: DS['default'].belongsTo('patient')
+
   });
 
 });
@@ -795,6 +741,45 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
     }
   });
 
+});
+define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (exports, Ember) {
+
+  'use strict';
+
+  exports['default'] = Ember['default'].Route.extend({
+    // Render Patient Show into detail template
+    renderTemplate: function renderTemplate() {
+      this.render({
+        outlet: 'detail'
+      });
+    },
+
+    /****************************************************************************
+    /* GRAPHS FOR PATIENT
+    /***************************************************************************/
+
+    model: function model(params) {
+
+      //// Get Store
+      var store = this.get('store');
+
+      //// Get Adapter
+      var adapter = store.adapterFor('parse-user');
+      var serializer = store.serializerFor('parse-user');
+
+      // Get Patient
+      var patient = this.modelFor('patients.index').findBy('id', params.id);
+
+      // Get Graphs For Patient
+      adapter.ajax(adapter.buildURL("graphs"), "POST", {}).then(function (data) {
+        console.log(data.results);
+      });
+
+      // Return patient and their graphs to the route
+      return patient;
+    }
+  });
+
   // Dummy Data
   /*return [
     {
@@ -866,44 +851,6 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
       ]
     }
   ];*/
-
-});
-define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (exports, Ember) {
-
-  'use strict';
-
-  exports['default'] = Ember['default'].Route.extend({
-    // Render Patient Show into detail template
-    renderTemplate: function renderTemplate() {
-      this.render({
-        outlet: 'detail'
-      });
-    },
-
-    /****************************************************************************
-    /* GRAPHS FOR PATIENT
-    /* Return patient and their graphs
-    /***************************************************************************/
-
-    model: function model(params) {
-
-      //// Get Store
-      var store = this.get('store');
-
-      //// Get Adapter
-      var adapter = store.adapterFor('parse-user');
-      var serializer = store.serializerFor('parse-user');
-
-      // Get Patient
-      var patient = this.modelFor('patients.index').findBy('id', params.id);
-
-      // Get Graphs For Patient
-      //adapter.ajax(adapter.buildURL("patients"), "POST", {}).then(function(data) {
-      //}
-
-      return patient;
-    }
-  });
 
 });
 define('yabbit/routes/session/login', ['exports', 'ember'], function (exports, Ember) {
@@ -2602,7 +2549,7 @@ define('yabbit/tests/adapters/application.jshint', function () {
 
   QUnit.module('JSHint - adapters');
   QUnit.test('adapters/application.js should pass jshint', function(assert) { 
-    assert.ok(false, 'adapters/application.js should pass jshint.\nadapters/application.js: line 25, col 27, \'Ember\' is not defined.\nadapters/application.js: line 25, col 51, \'Ember\' is not defined.\n\n2 errors'); 
+    assert.ok(true, 'adapters/application.js should pass jshint.'); 
   });
 
 });
@@ -2823,13 +2770,13 @@ define('yabbit/tests/helpers/validate-properties', ['exports', 'ember', 'ember-q
   }
 
 });
-define('yabbit/tests/models/chart.jshint', function () {
+define('yabbit/tests/models/graph.jshint', function () {
 
   'use strict';
 
   QUnit.module('JSHint - models');
-  QUnit.test('models/chart.js should pass jshint', function(assert) { 
-    assert.ok(true, 'models/chart.js should pass jshint.'); 
+  QUnit.test('models/graph.js should pass jshint', function(assert) { 
+    assert.ok(true, 'models/graph.js should pass jshint.'); 
   });
 
 });
@@ -2839,7 +2786,7 @@ define('yabbit/tests/models/parse-user.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/parse-user.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 13, col 15, \'DS\' is not defined.\nmodels/parse-user.js: line 14, col 14, \'DS\' is not defined.\nmodels/parse-user.js: line 15, col 17, \'DS\' is not defined.\nmodels/parse-user.js: line 1, col 8, \'Ember\' is defined but never used.\nmodels/parse-user.js: line 26, col 9, \'serializer\' is defined but never used.\n\n5 errors'); 
+    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 15, col 15, \'DS\' is not defined.\nmodels/parse-user.js: line 16, col 14, \'DS\' is not defined.\nmodels/parse-user.js: line 17, col 17, \'DS\' is not defined.\nmodels/parse-user.js: line 23, col 13, \'DS\' is not defined.\nmodels/parse-user.js: line 1, col 8, \'Ember\' is defined but never used.\nmodels/parse-user.js: line 34, col 9, \'serializer\' is defined but never used.\n\n6 errors'); 
   });
 
 });
@@ -2919,7 +2866,7 @@ define('yabbit/tests/routes/patients/index/show.jshint', function () {
 
   QUnit.module('JSHint - routes/patients/index');
   QUnit.test('routes/patients/index/show.js should pass jshint', function(assert) { 
-    assert.ok(false, 'routes/patients/index/show.js should pass jshint.\nroutes/patients/index/show.js: line 22, col 9, \'adapter\' is defined but never used.\nroutes/patients/index/show.js: line 23, col 9, \'serializer\' is defined but never used.\n\n2 errors'); 
+    assert.ok(false, 'routes/patients/index/show.js should pass jshint.\nroutes/patients/index/show.js: line 22, col 9, \'serializer\' is defined but never used.\n\n1 error'); 
   });
 
 });
@@ -3163,7 +3110,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+eed66cd8"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+93188180"});
 }
 
 /* jshint ignore:end */

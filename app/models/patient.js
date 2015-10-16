@@ -61,5 +61,7 @@ export default DS.Model.extend({
   /***************************************************************************/
 
   physician: DS.belongsTo('parse-user'),
-  charts: DS.hasMany('chart')
+  graphs: DS.hasMany('graph'),
+  stats: DS.hasMany('stat')
+
 });

@@ -52,3 +52,15 @@ Parse.Cloud.define("patients", function(request, response) {
     response.success({patients: patientResults, diet: dietResults});
   });
 });
+
+/****************************************************************************
+/* GRAPHS FOR PATIENT
+/***************************************************************************/
+
+Parse.Cloud.define("graphs", function(request, response) {
+
+  //console.log(request);
+
+  response.success({hello: "how are you"});
+
+});

@@ -1,6 +1,8 @@
 import Ember from 'ember';
 import ParseUser from 'ember-parse-adapter/models/parse-user';
 
+// AKA Physician
+
 // ParseUser is created by the Ember Parse Adapter.
 // @see: node_modules/ember-parse-adapter/addon/models/parse-user.js
 
@@ -13,6 +15,12 @@ ParseUser.reopenClass({
   firstName : DS.attr('string'),
   lastName : DS.attr('string'),
   isPhysician : DS.attr('boolean'),
+
+  /****************************************************************************
+  /* RELATIONSHIPS
+  /***************************************************************************/
+
+  patients: DS.hasMany('patient'),
 
   /****************************************************************************
   /* ACTIONS
