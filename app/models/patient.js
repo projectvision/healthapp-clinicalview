@@ -14,6 +14,7 @@ export default DS.Model.extend({
   challengeFitness: DS.attr('number'),
   activityLevelScore: DS.attr('number'),
   zScore: DS.attr('number'),
+  user: DS.attr('number'),
 
   /****************************************************************************
   /* COMPUTED PROPERTIES

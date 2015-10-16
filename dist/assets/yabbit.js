@@ -551,6 +551,7 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
     challengeFitness: DS['default'].attr('number'),
     activityLevelScore: DS['default'].attr('number'),
     zScore: DS['default'].attr('number'),
+    user: DS['default'].attr('number'),
 
     /****************************************************************************
     /* COMPUTED PROPERTIES
@@ -727,6 +728,7 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
                 challengeFitness: patient.PercentFitnessChallengesLast,
                 challengeDiet: patient.PercentDietChallengesLast,
                 challengeStress: patient.PercentStresshChallengesLast,
+                user: patient.Username.objectId,
                 zScore: patient.Username.ABSI_zscore,
                 activityLevelScore: diet.activityLevel
               }
@@ -769,9 +771,10 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
 
       // Get Patient
       var patient = this.modelFor('patients.index').findBy('id', params.id);
+      var patientUser = { user: patient.get('user') };
 
       // Get Graphs For Patient
-      adapter.ajax(adapter.buildURL("graphsForPatient"), "POST", { data: { id: params.id } }).then(function (data) {
+      adapter.ajax(adapter.buildURL("graphsForPatient"), "POST", { data: patientUser }).then(function (data) {
         console.log(data.results);
       });
 
@@ -2796,7 +2799,7 @@ define('yabbit/tests/models/patient.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/patient.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/patient.js should pass jshint.\nmodels/patient.js: line 22, col 15, \'Ember\' is not defined.\nmodels/patient.js: line 40, col 18, \'Ember\' is not defined.\n\n2 errors'); 
+    assert.ok(false, 'models/patient.js should pass jshint.\nmodels/patient.js: line 23, col 15, \'Ember\' is not defined.\nmodels/patient.js: line 41, col 18, \'Ember\' is not defined.\n\n2 errors'); 
   });
 
 });

@@ -43,6 +43,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
               challengeFitness:   patient.PercentFitnessChallengesLast,
               challengeDiet:      patient.PercentDietChallengesLast,
               challengeStress:    patient.PercentStresshChallengesLast,
+              user:               patient.Username.objectId,
               zScore:             patient.Username.ABSI_zscore,
               activityLevelScore: diet.activityLevel,
             }

@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var User = Parse.Object.extend("User");
 var Diet = Parse.Object.extend('Diet');
 var Patients = Parse.Object.extend('UserTable');
 var ActivitiesImport = Parse.Object.extend('ActivitiesImport');
@@ -20,7 +21,7 @@ Parse.Cloud.define("patientsForPhysician", function(request, response) {
   // Get Patients
   var patientQuery = new Parse.Query(Patients);
   patientQuery.notEqualTo("Fname", null); // @TODO: Find Patients  connected to _User by MRN or PatientsPhysicians relationship
-  patientQuery.select('Username.username','Username.ABSI_zscore','Fname','Lname','PercentFitnessChallengesLast','PercentDietChallengesLast','PercentStressChallengesLast');
+  patientQuery.select('Username.objectId', 'Username.username','Username.ABSI_zscore','Fname','Lname','PercentFitnessChallengesLast','PercentDietChallengesLast','PercentStressChallengesLast');
   patientQuery.include("Username"); // include username(email) and ABSI_zscore from _User
   patientQuery.find().then(function(patients) {
 
@@ -61,19 +62,20 @@ Parse.Cloud.define("patientsForPhysician", function(request, response) {
 Parse.Cloud.define("graphsForPatient", function(request, response) {
 
   console.log('--- graphsForPatient ----');
-  console.log(request.params.id);
+  console.log(request.params);
+
+  // Get Patient's _User object with which to filter by
+  var user = new User();
+  user.id = request.params.user;
 
   // Heart Rate, Step Count, Calories Burned
   var aQuery = new Parse.Query(ActivitiesImport);
-  aQuery.equalTo("user", request.params.id);
+  aQuery.equalTo("user", user);
   aQuery.select('NormalHR', 'Calories', 'Steps');
-  aQuery.find().then({
-    success: function(activities) {
-      console.log(activities);
-      response.success(activities);
-    },
-    error: function(error) {
-      response.error(error);
-    }
+  aQuery.find().then(function(activities) {
+    response.success(activities);
+  }, function(error) {
+    response.error(error);
   });
+
 });
