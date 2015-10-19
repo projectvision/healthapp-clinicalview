@@ -781,42 +781,44 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
       var patientUser = { user: patient.get('user') };
 
       // Get Graphs For Patient
-      adapter.ajax(adapter.buildURL("graphsForPatient"), "POST", { data: patientUser }).then(function (data) {
-        console.log(data.result.graphs);
+      if (patient.get('graphs').length == 0) {
+        adapter.ajax(adapter.buildURL("graphsForPatient"), "POST", { data: patientUser }).then(function (data) {
+          console.log(data.result.graphs[0]);
 
-        // Seperate Data
-        var steps = [];
-        var calories = [];
-        var heartRates = [];
+          // Seperate Data
+          var steps = [];
+          var calories = [];
+          var heartRates = [];
 
-        for (var index = 0; index < data.result.graphs.length; index++) {
-          var item = data.result.graphs[index];
-          steps.push({ x: item.createdAt, y: item.Steps });
-          calories.push({ x: item.createdAt, y: item.Calories });
-          heartRates.push({ x: item.createdAt, y: item.NormalHR });
-        }
+          for (var index = 0; index < data.result.graphs.length; index++) {
+            var item = data.result.graphs[index];
+            steps.push({ x: item.createdAt, y: item.Steps });
+            calories.push({ x: item.createdAt, y: item.Calories });
+            heartRates.push({ x: item.createdAt, y: item.NormalHR });
+          }
 
-        // Create Graphs
-        store.createRecord('graph', {
-          title: 'Calories',
-          hoverUnits: 'calories',
-          values: calories,
-          patient: patient
+          // Create Graphs
+          store.createRecord('graph', {
+            title: 'Calories',
+            hoverUnits: 'calories',
+            values: calories,
+            patient: patient
+          });
+          store.createRecord('graph', {
+            title: 'Steps',
+            hoverUnits: 'steps',
+            values: steps,
+            patient: patient
+          });
+          store.createRecord('graph', {
+            title: 'Heart Rate',
+            units: 'bpm',
+            hoverUnits: 'bpm',
+            values: heartRates,
+            patient: patient
+          });
         });
-        store.createRecord('graph', {
-          title: 'Steps',
-          hoverUnits: 'steps',
-          values: steps,
-          patient: patient
-        });
-        store.createRecord('graph', {
-          title: 'Heart Rate',
-          units: 'bpm',
-          hoverUnits: 'bpm',
-          values: heartRates,
-          patient: patient
-        });
-      });
+      }
 
       // Return patient and their graphs
       return patient;
@@ -2909,7 +2911,7 @@ define('yabbit/tests/routes/patients/index/show.jshint', function () {
 
   QUnit.module('JSHint - routes/patients/index');
   QUnit.test('routes/patients/index/show.js should pass jshint', function(assert) { 
-    assert.ok(false, 'routes/patients/index/show.js should pass jshint.\nroutes/patients/index/show.js: line 22, col 9, \'serializer\' is defined but never used.\n\n1 error'); 
+    assert.ok(false, 'routes/patients/index/show.js should pass jshint.\nroutes/patients/index/show.js: line 29, col 40, Expected \'===\' and instead saw \'==\'.\nroutes/patients/index/show.js: line 22, col 9, \'serializer\' is defined but never used.\n\n2 errors'); 
   });
 
 });
