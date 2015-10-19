@@ -41,36 +41,30 @@ export default Ember.Route.extend({
         heartRates.push({x: item.createdAt, y: item.NormalHR});
       }
 
-      // CREATE GRAPHS
-
-      // Create Calories Graph
+      // Create Graphs
       store.createRecord('graph', {
         title: 'Calories',
-        postUnits: 'calories',
+        hoverUnits: 'calories',
         values: calories,
         patient: patient
       });
-
-      // Create Steps Graph
       store.createRecord('graph', {
         title: 'Steps',
-        postUnits: 'steps',
+        hoverUnits: 'steps',
         values: steps,
         patient: patient
       });
-
-      // Create Heart Rate Graph
       store.createRecord('graph', {
         title: 'Heart Rate',
-        measurement: 'bpm',
-        postUnits: 'bpm',
+        units: 'bpm',
+        hoverUnits: 'bpm',
         values: heartRates,
         patient: patient
       });
 
     });
 
-    // Return patient and their graphs to the route
+    // Return patient and their graphs
     return patient;
   }
 });

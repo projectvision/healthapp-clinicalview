@@ -24,12 +24,13 @@ export default Ember.Component.extend({
       xkey: 'x',
       xLabels: "week",
       xLabelFormat: function (date) {
+        return "Week " + moment(date).week();
         // convert date string or timestamp to just month
         //return months[new Date(date).getMonth()];
-        return "Week " + moment(date).week();
       },
+      hoverUnits: this.get('hoverUnits'), // NOT Morris.js API
       hoverCallback: function (index, options, content, row) {
-        return '<strong>' + row.y + '</strong> ' + options.postUnits + ' - ' + moment(row.x).format('MMM Do');
+        return '<strong>' + row.y + '</strong> ' + options.hoverUnits + ' - ' + moment(row.x).format('MMM Do');
       },
       resize: true,
       hideHover: true,

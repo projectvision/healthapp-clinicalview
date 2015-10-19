@@ -38,10 +38,10 @@
       <div class="column">
         <section class="area-chart">
           <header>
-            <em class="measurement">{{graph.measurement}}</em>
+            <em class="measurement">{{graph.units}}</em>
             <h2>{{graph.title}}</h2>
           </header>
-          {{area-chart values=graph.values postUnits=graph.postUnits}}
+          {{area-chart values=graph.values hoverUnits=graph.hoverUnits}}
         </section>
       </div>
     {{/each}}

@@ -202,12 +202,13 @@ define('yabbit/components/area-chart', ['exports', 'ember'], function (exports, 
         xkey: 'x',
         xLabels: "week",
         xLabelFormat: function xLabelFormat(date) {
+          return "Week " + moment(date).week();
           // convert date string or timestamp to just month
           //return months[new Date(date).getMonth()];
-          return "Week " + moment(date).week();
         },
+        hoverUnits: this.get('hoverUnits'), // NOT Morris.js API
         hoverCallback: function hoverCallback(index, options, content, row) {
-          return '<strong>' + row.y + '</strong> ' + options.postUnits + ' - ' + moment(row.x).format('MMM Do');
+          return '<strong>' + row.y + '</strong> ' + options.hoverUnits + ' - ' + moment(row.x).format('MMM Do');
         },
         resize: true,
         hideHover: true,
@@ -795,35 +796,29 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
           heartRates.push({ x: item.createdAt, y: item.NormalHR });
         }
 
-        // CREATE GRAPHS
-
-        // Create Calories Graph
+        // Create Graphs
         store.createRecord('graph', {
           title: 'Calories',
-          postUnits: 'calories',
+          hoverUnits: 'calories',
           values: calories,
           patient: patient
         });
-
-        // Create Steps Graph
         store.createRecord('graph', {
           title: 'Steps',
-          postUnits: 'steps',
+          hoverUnits: 'steps',
           values: steps,
           patient: patient
         });
-
-        // Create Heart Rate Graph
         store.createRecord('graph', {
           title: 'Heart Rate',
-          measurement: 'bpm',
-          postUnits: 'bpm',
+          units: 'bpm',
+          hoverUnits: 'bpm',
           values: heartRates,
           patient: patient
         });
       });
 
-      // Return patient and their graphs to the route
+      // Return patient and their graphs
       return patient;
     }
   });
@@ -1912,9 +1907,9 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["content","graph.measurement",["loc",[null,[41,36],[41,57]]]],
+          ["content","graph.units",["loc",[null,[41,36],[41,51]]]],
           ["content","graph.title",["loc",[null,[42,16],[42,31]]]],
-          ["inline","area-chart",[],["values",["subexpr","@mut",[["get","graph.values",["loc",[null,[44,30],[44,42]]]]],[],[]],"postUnits",["subexpr","@mut",[["get","graph.postUnits",["loc",[null,[44,53],[44,68]]]]],[],[]]],["loc",[null,[44,10],[44,70]]]]
+          ["inline","area-chart",[],["values",["subexpr","@mut",[["get","graph.values",["loc",[null,[44,30],[44,42]]]]],[],[]],"hoverUnits",["subexpr","@mut",[["get","graph.hoverUnits",["loc",[null,[44,54],[44,70]]]]],[],[]]],["loc",[null,[44,10],[44,72]]]]
         ],
         locals: ["graph"],
         templates: []
@@ -2637,7 +2632,7 @@ define('yabbit/tests/components/area-chart.jshint', function () {
 
   QUnit.module('JSHint - components');
   QUnit.test('components/area-chart.js should pass jshint', function(assert) { 
-    assert.ok(false, 'components/area-chart.js should pass jshint.\ncomponents/area-chart.js: line 20, col 22, \'Morris\' is not defined.\ncomponents/area-chart.js: line 29, col 26, \'moment\' is not defined.\ncomponents/area-chart.js: line 32, col 80, \'moment\' is not defined.\ncomponents/area-chart.js: line 17, col 9, \'months\' is defined but never used.\n\n4 errors'); 
+    assert.ok(false, 'components/area-chart.js should pass jshint.\ncomponents/area-chart.js: line 20, col 22, \'Morris\' is not defined.\ncomponents/area-chart.js: line 27, col 26, \'moment\' is not defined.\ncomponents/area-chart.js: line 33, col 81, \'moment\' is not defined.\ncomponents/area-chart.js: line 17, col 9, \'months\' is defined but never used.\n\n4 errors'); 
   });
 
 });
