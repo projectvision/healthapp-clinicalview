@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 export default Ember.Component.extend({
 
   /****************************************************************************
@@ -24,6 +26,10 @@ export default Ember.Component.extend({
       xLabelFormat: function (date) {
         // convert date string or timestamp to just month
         return months[new Date(date).getMonth()];
+      },
+      postUnits: this.get('postUnits'),
+      hoverCallback: function (index, options, content, row) {
+        return '<strong>' + row.y + '</strong> ' + options.postUnits + ' - ' + moment(row.x).format('MMM Do');
       },
       resize: true,
       hideHover: true,

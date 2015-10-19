@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var User = Parse.Object.extend("User");
+var User = Parse.Object.extend('User');
 var Diet = Parse.Object.extend('Diet');
 var Patients = Parse.Object.extend('UserTable');
 var ActivitiesImport = Parse.Object.extend('ActivitiesImport');
@@ -10,7 +10,7 @@ var ActivitiesImport = Parse.Object.extend('ActivitiesImport');
 /* query Diet for activity level by matching Diet.username with _User.username
 /***************************************************************************/
 
-Parse.Cloud.define("patientsForPhysician", function(request, response) {
+Parse.Cloud.define('patientsForPhysician', function(request, response) {
 
   var patientResults = [];
   var dietResults = [];
@@ -20,9 +20,9 @@ Parse.Cloud.define("patientsForPhysician", function(request, response) {
 
   // Get Patients
   var patientQuery = new Parse.Query(Patients);
-  patientQuery.notEqualTo("Fname", null); // @TODO: Find Patients  connected to _User by MRN or PatientsPhysicians relationship
+  patientQuery.notEqualTo('Fname', null); // @TODO: Find Patients  connected to _User by MRN or PatientsPhysicians relationship
   patientQuery.select('Username.objectId', 'Username.username','Username.ABSI_zscore','Fname','Lname','PercentFitnessChallengesLast','PercentDietChallengesLast','PercentStressChallengesLast');
-  patientQuery.include("Username"); // include username(email) and ABSI_zscore from _User
+  patientQuery.include('Username'); // include username(email) and ABSI_zscore from _User
   patientQuery.find().then(function(patients) {
 
     // Store promises
@@ -36,7 +36,7 @@ Parse.Cloud.define("patientsForPhysician", function(request, response) {
 
         // Get Diet activity level
         var dietQuery = new Parse.Query(Diet);
-        dietQuery.equalTo("username", patient.get('Username').username); // _User username is used as the key
+        dietQuery.equalTo('username', patient.get('Username').username); // _User username is used as the key
         dietQuery.select('ACTIVITY_LEVEL');
 
         // Create promise
@@ -59,20 +59,27 @@ Parse.Cloud.define("patientsForPhysician", function(request, response) {
 /* GRAPHS FOR PATIENT
 /***************************************************************************/
 
-Parse.Cloud.define("graphsForPatient", function(request, response) {
+Parse.Cloud.define('graphsForPatient', function(request, response) {
 
   console.log('--- graphsForPatient ----');
   console.log(request.params);
+
+  // Define From Date
+  //var d = new Date();
+  //var time = (1 * 30 * 24 * 60 * 60 * 1000); // and convert seconds to milliseconds
+  //var fromDate = new Date(d.getTime() - (time));
 
   // Get Patient's _User object with which to filter by
   var user = new User();
   user.id = request.params.user;
 
   // Heart Rate, Step Count, Calories Burned
-  var aQuery = new Parse.Query(ActivitiesImport);
-  aQuery.equalTo("user", user);
-  aQuery.select('NormalHR', 'Calories', 'Steps');
-  aQuery.find().then(function(activities) {
+  var activitiesQuery = new Parse.Query(ActivitiesImport);
+  activitiesQuery.equalTo('user', user);
+  activitiesQuery.limit(30); // 30 days as there is a record for every day?
+  //activitiesQuery.greaterThanOrEqualTo('Date', fromDate);
+  activitiesQuery.select('NormalHR', 'Calories', 'Steps');
+  activitiesQuery.find().then(function(activities) {
     response.success({graphs: activities});
   }, function(error) {
     response.error(error);

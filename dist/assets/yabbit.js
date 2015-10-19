@@ -174,11 +174,11 @@ define('yabbit/components/app-version', ['exports', 'ember-cli-app-version/compo
   });
 
 });
-define('yabbit/components/area-chart', ['exports'], function (exports) {
+define('yabbit/components/area-chart', ['exports', 'ember'], function (exports, Ember) {
 
   'use strict';
 
-  exports['default'] = Ember.Component.extend({
+  exports['default'] = Ember['default'].Component.extend({
 
     /****************************************************************************
     /* PROPERTIES
@@ -204,6 +204,10 @@ define('yabbit/components/area-chart', ['exports'], function (exports) {
         xLabelFormat: function xLabelFormat(date) {
           // convert date string or timestamp to just month
           return months[new Date(date).getMonth()];
+        },
+        postUnits: this.get('postUnits'),
+        hoverCallback: function hoverCallback(index, options, content, row) {
+          return '<strong>' + row.y + '</strong> ' + options.postUnits + ' - ' + moment(row.x).format('MMM Do');
         },
         resize: true,
         hideHover: true,
@@ -796,6 +800,7 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
         // Create Calories Graph
         store.createRecord('graph', {
           title: 'Calories',
+          postUnits: 'calories',
           values: calories,
           patient: patient
         });
@@ -803,6 +808,7 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
         // Create Steps Graph
         store.createRecord('graph', {
           title: 'Steps',
+          postUnits: 'steps',
           values: steps,
           patient: patient
         });
@@ -811,6 +817,7 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
         store.createRecord('graph', {
           title: 'Heart Rate',
           measurement: 'bpm',
+          postUnits: 'bpm',
           values: heartRates,
           patient: patient
         });
@@ -1907,7 +1914,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         statements: [
           ["content","graph.measurement",["loc",[null,[41,36],[41,57]]]],
           ["content","graph.title",["loc",[null,[42,16],[42,31]]]],
-          ["inline","area-chart",[],["values",["subexpr","@mut",[["get","graph.values",["loc",[null,[44,30],[44,42]]]]],[],[]]],["loc",[null,[44,10],[44,44]]]]
+          ["inline","area-chart",[],["values",["subexpr","@mut",[["get","graph.values",["loc",[null,[44,30],[44,42]]]]],[],[]],"postUnits",["subexpr","@mut",[["get","graph.postUnits",["loc",[null,[44,53],[44,68]]]]],[],[]]],["loc",[null,[44,10],[44,70]]]]
         ],
         locals: ["graph"],
         templates: []
@@ -2630,7 +2637,7 @@ define('yabbit/tests/components/area-chart.jshint', function () {
 
   QUnit.module('JSHint - components');
   QUnit.test('components/area-chart.js should pass jshint', function(assert) { 
-    assert.ok(false, 'components/area-chart.js should pass jshint.\ncomponents/area-chart.js: line 1, col 16, \'Ember\' is not defined.\ncomponents/area-chart.js: line 18, col 22, \'Morris\' is not defined.\n\n2 errors'); 
+    assert.ok(false, 'components/area-chart.js should pass jshint.\ncomponents/area-chart.js: line 20, col 22, \'Morris\' is not defined.\ncomponents/area-chart.js: line 32, col 80, \'moment\' is not defined.\n\n2 errors'); 
   });
 
 });
@@ -3151,7 +3158,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+93188180"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+7341f199"});
 }
 
 /* jshint ignore:end */

@@ -46,6 +46,7 @@ export default Ember.Route.extend({
       // Create Calories Graph
       store.createRecord('graph', {
         title: 'Calories',
+        postUnits: 'calories',
         values: calories,
         patient: patient
       });
@@ -53,6 +54,7 @@ export default Ember.Route.extend({
       // Create Steps Graph
       store.createRecord('graph', {
         title: 'Steps',
+        postUnits: 'steps',
         values: steps,
         patient: patient
       });
@@ -61,6 +63,7 @@ export default Ember.Route.extend({
       store.createRecord('graph', {
         title: 'Heart Rate',
         measurement: 'bpm',
+        postUnits: 'bpm',
         values: heartRates,
         patient: patient
       });
