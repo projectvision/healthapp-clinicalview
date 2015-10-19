@@ -62,7 +62,6 @@ Parse.Cloud.define('patientsForPhysician', function(request, response) {
 Parse.Cloud.define('graphsForPatient', function(request, response) {
 
   console.log('--- graphsForPatient ----');
-  console.log(request.params);
 
   // Define From Date
   //var d = new Date();
