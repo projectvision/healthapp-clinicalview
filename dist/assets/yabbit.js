@@ -200,12 +200,12 @@ define('yabbit/components/area-chart', ['exports', 'ember'], function (exports, 
         data: this.get('values'),
         ykeys: 'y', //['p', 'd'], // patient, demographic
         xkey: 'x',
-        xLabels: "month",
+        xLabels: "week",
         xLabelFormat: function xLabelFormat(date) {
           // convert date string or timestamp to just month
-          return months[new Date(date).getMonth()];
+          //return months[new Date(date).getMonth()];
+          return "Week " + moment(date).week();
         },
-        postUnits: this.get('postUnits'),
         hoverCallback: function hoverCallback(index, options, content, row) {
           return '<strong>' + row.y + '</strong> ' + options.postUnits + ' - ' + moment(row.x).format('MMM Do');
         },
@@ -2637,7 +2637,7 @@ define('yabbit/tests/components/area-chart.jshint', function () {
 
   QUnit.module('JSHint - components');
   QUnit.test('components/area-chart.js should pass jshint', function(assert) { 
-    assert.ok(false, 'components/area-chart.js should pass jshint.\ncomponents/area-chart.js: line 20, col 22, \'Morris\' is not defined.\ncomponents/area-chart.js: line 32, col 80, \'moment\' is not defined.\n\n2 errors'); 
+    assert.ok(false, 'components/area-chart.js should pass jshint.\ncomponents/area-chart.js: line 20, col 22, \'Morris\' is not defined.\ncomponents/area-chart.js: line 29, col 26, \'moment\' is not defined.\ncomponents/area-chart.js: line 32, col 80, \'moment\' is not defined.\ncomponents/area-chart.js: line 17, col 9, \'months\' is defined but never used.\n\n4 errors'); 
   });
 
 });

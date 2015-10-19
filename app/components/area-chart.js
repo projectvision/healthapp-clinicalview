@@ -22,12 +22,12 @@ export default Ember.Component.extend({
       data: this.get('values'),
       ykeys: 'y', //['p', 'd'], // patient, demographic
       xkey: 'x',
-      xLabels: "month",
+      xLabels: "week",
       xLabelFormat: function (date) {
         // convert date string or timestamp to just month
-        return months[new Date(date).getMonth()];
+        //return months[new Date(date).getMonth()];
+        return "Week " + moment(date).week();
       },
-      postUnits: this.get('postUnits'),
       hoverCallback: function (index, options, content, row) {
         return '<strong>' + row.y + '</strong> ' + options.postUnits + ' - ' + moment(row.x).format('MMM Do');
       },
