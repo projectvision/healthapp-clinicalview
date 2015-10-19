@@ -810,6 +810,7 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
         // Create Heart Rate Graph
         store.createRecord('graph', {
           title: 'Heart Rate',
+          measurement: 'bpm',
           values: heartRates,
           patient: patient
         });
