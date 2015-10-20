@@ -620,8 +620,8 @@ define('yabbit/models/stat', ['exports', 'ember-data'], function (exports, DS) {
     /***************************************************************************/
 
     title: DS['default'].attr('string'),
-    stat: DS['default'].attr('string'),
-    description: DS['default'].attr('string'),
+    stat: DS['default'].attr('number'),
+    units: DS['default'].attr('string'),
 
     /****************************************************************************
     /* RELATIONSHIPS
@@ -778,12 +778,12 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
 
       // Get Patient
       var patient = this.modelFor('patients.index').findBy('id', params.id);
-      var patientUser = { user: patient.get('user') };
+      var patientUser = { user: patient.get('user'), email: patient.get('email') };
 
       // Get Graphs For Patient
       if (patient.get('graphs').length == 0) {
         adapter.ajax(adapter.buildURL("graphsForPatient"), "POST", { data: patientUser }).then(function (data) {
-          console.log(data.result.graphs[0]);
+          console.log(data.result);
 
           // Seperate Data
           var steps = [];
@@ -815,6 +815,20 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
             units: 'bpm',
             hoverUnits: 'bpm',
             values: heartRates,
+            patient: patient
+          });
+
+          // Create Stats
+          store.createRecord('stat', {
+            title: 'Weight',
+            units: 'lb',
+            stat: data.result.stats.WEIGHT,
+            patient: patient
+          });
+          store.createRecord('stat', {
+            title: 'Waist Circumference',
+            units: 'inches',
+            stat: data.result.stats.Waist_Circumference,
             patient: patient
           });
         });
@@ -1352,6 +1366,94 @@ define('yabbit/templates/components/area-chart', ['exports'], function (exports)
       buildRenderNodes: function buildRenderNodes() { return []; },
       statements: [
 
+      ],
+      locals: [],
+      templates: []
+    };
+  }()));
+
+});
+define('yabbit/templates/components/stat-chart', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    return {
+      meta: {
+        "revision": "Ember@1.13.10",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 10,
+            "column": 0
+          }
+        },
+        "moduleName": "yabbit/templates/components/stat-chart.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"class","column");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("section");
+        dom.setAttribute(el2,"class","stat-chart");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("header");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("em");
+        dom.setAttribute(el4,"class","measurement");
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("h2");
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("span");
+        dom.setAttribute(el3,"class","stat-number");
+        var el4 = dom.createComment("");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0, 1]);
+        var element1 = dom.childAt(element0, [1]);
+        var morphs = new Array(3);
+        morphs[0] = dom.createMorphAt(dom.childAt(element1, [1]),0,0);
+        morphs[1] = dom.createMorphAt(dom.childAt(element1, [3]),0,0);
+        morphs[2] = dom.createMorphAt(dom.childAt(element0, [3]),0,0);
+        return morphs;
+      },
+      statements: [
+        ["content","stat.units",["loc",[null,[4,30],[4,44]]]],
+        ["content","stat.title",["loc",[null,[5,10],[5,24]]]],
+        ["content","stat.stat",["loc",[null,[7,30],[7,43]]]]
       ],
       locals: [],
       templates: []
@@ -1924,11 +2026,53 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 53,
+              "line": 49,
+              "column": 4
+            },
+            "end": {
+              "line": 51,
+              "column": 4
+            }
+          },
+          "moduleName": "yabbit/templates/patients/index/show.hbs"
+        },
+        arity: 1,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("      ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment,1,1,contextualElement);
+          return morphs;
+        },
+        statements: [
+          ["inline","stat-chart",[],["stat",["subexpr","@mut",[["get","stat",["loc",[null,[50,24],[50,28]]]]],[],[]]],["loc",[null,[50,6],[50,30]]]]
+        ],
+        locals: ["stat"],
+        templates: []
+      };
+    }());
+    var child2 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.10",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 57,
               "column": 0
             },
             "end": {
-              "line": 53,
+              "line": 57,
               "column": 66
             }
           },
@@ -1961,7 +2105,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 54,
+            "line": 58,
             "column": 0
           }
         },
@@ -2120,6 +2264,10 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         dom.appendChild(el2, el3);
         var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n  ");
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
@@ -2143,7 +2291,8 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         var element7 = dom.childAt(element4, [5]);
         var element8 = dom.childAt(element3, [3]);
         var element9 = dom.childAt(element3, [5]);
-        var morphs = new Array(12);
+        var element10 = dom.childAt(element2, [3]);
+        var morphs = new Array(13);
         morphs[0] = dom.createAttrMorph(element5, 'style');
         morphs[1] = dom.createMorphAt(dom.childAt(element5, [1]),0,0);
         morphs[2] = dom.createAttrMorph(element6, 'style');
@@ -2154,8 +2303,9 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         morphs[7] = dom.createMorphAt(element8,1,1);
         morphs[8] = dom.createAttrMorph(element9, 'class');
         morphs[9] = dom.createMorphAt(element9,1,1);
-        morphs[10] = dom.createMorphAt(dom.childAt(element2, [3]),1,1);
-        morphs[11] = dom.createMorphAt(fragment,2,2,contextualElement);
+        morphs[10] = dom.createMorphAt(element10,1,1);
+        morphs[11] = dom.createMorphAt(element10,3,3);
+        morphs[12] = dom.createMorphAt(fragment,2,2,contextualElement);
         return morphs;
       },
       statements: [
@@ -2170,10 +2320,11 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         ["attribute","class",["concat",["activity-level ",["get","model.activityLevel.change",["loc",[null,[28,36],[28,62]]]]]]],
         ["content","model.activityLevel",["loc",[null,[29,10],[29,33]]]],
         ["block","each",[["get","model.graphs",["loc",[null,[37,12],[37,24]]]]],[],0,null,["loc",[null,[37,4],[47,13]]]],
-        ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[53,0],[53,78]]]]
+        ["block","each",[["get","model.stats",["loc",[null,[49,12],[49,23]]]]],[],1,null,["loc",[null,[49,4],[51,13]]]],
+        ["block","link-to",["patients.index"],["id","view-all","class","button"],2,null,["loc",[null,[57,0],[57,78]]]]
       ],
       locals: [],
-      templates: [child0, child1]
+      templates: [child0, child1, child2]
     };
   }()));
 
@@ -3155,7 +3306,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+7341f199"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+0e83b245"});
 }
 
 /* jshint ignore:end */

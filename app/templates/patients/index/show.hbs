@@ -46,6 +46,10 @@
       </div>
     {{/each}}
 
+    {{#each model.stats as |stat|}}
+      {{stat-chart stat=stat}}
+    {{/each}}
+
   </div>
 
 </div>

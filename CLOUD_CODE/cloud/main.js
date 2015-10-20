@@ -3,6 +3,7 @@ var User = Parse.Object.extend('User');
 var Diet = Parse.Object.extend('Diet');
 var Patients = Parse.Object.extend('UserTable');
 var ActivitiesImport = Parse.Object.extend('ActivitiesImport');
+var Demographics = Parse.Object.extend('Demographics');
 
 /****************************************************************************
 /* PATIENTS FOR PHYSICIAN
@@ -21,7 +22,7 @@ Parse.Cloud.define('patientsForPhysician', function(request, response) {
   // Get Patients
   var patientQuery = new Parse.Query(Patients);
   patientQuery.notEqualTo('Fname', null); // @TODO: Find Patients  connected to _User by MRN or PatientsPhysicians relationship
-  patientQuery.select('Username.objectId', 'Username.username','Username.ABSI_zscore','Fname','Lname','PercentFitnessChallengesLast','PercentDietChallengesLast','PercentStressChallengesLast');
+  patientQuery.select('Username.objectId', 'Username.username','Username.email','Username.ABSI_zscore','Fname','Lname','PercentFitnessChallengesLast','PercentDietChallengesLast','PercentStressChallengesLast');
   patientQuery.include('Username'); // include username(email) and ABSI_zscore from _User
   patientQuery.find().then(function(patients) {
 
@@ -62,6 +63,7 @@ Parse.Cloud.define('patientsForPhysician', function(request, response) {
 Parse.Cloud.define('graphsForPatient', function(request, response) {
 
   console.log('--- graphsForPatient ----');
+  console.log(request.params);
 
   // Define From Date
   //var d = new Date();
@@ -71,6 +73,9 @@ Parse.Cloud.define('graphsForPatient', function(request, response) {
   // Get Patient's _User object with which to filter by
   var user = new User();
   user.id = request.params.user;
+  user.email = request.params.email;
+
+  // GRAPHS
 
   // Heart Rate, Step Count, Calories Burned
   var activitiesQuery = new Parse.Query(ActivitiesImport);
@@ -79,7 +84,16 @@ Parse.Cloud.define('graphsForPatient', function(request, response) {
   //activitiesQuery.greaterThanOrEqualTo('Date', fromDate);
   activitiesQuery.select('NormalHR', 'Calories', 'Steps');
   activitiesQuery.find().then(function(activities) {
-    response.success({graphs: activities});
+
+    // STATS
+
+    // Weight, West Circumference
+    var demographicsQuery = new Parse.Query(Demographics);
+    demographicsQuery.equalTo('username', user.email); // Demographics username is actually an email, used as key
+    demographicsQuery.select('WEIGHT', 'Waist_Circumference');
+    demographicsQuery.first().then(function(demographics) {
+      response.success({graphs: activities, stats: demographics});
+    });
   }, function(error) {
     response.error(error);
   });

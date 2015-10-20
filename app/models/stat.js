@@ -9,8 +9,8 @@ export default DS.Model.extend({
   /***************************************************************************/
 
   title: DS.attr('string'),
-  stat: DS.attr('string'),
-  description: DS.attr('string'),
+  stat: DS.attr('number'),
+  units: DS.attr('string'),
 
   /****************************************************************************
   /* RELATIONSHIPS

@@ -23,12 +23,12 @@ export default Ember.Route.extend({
 
     // Get Patient
     var patient = this.modelFor('patients.index').findBy('id', params.id);
-    var patientUser = {user: patient.get('user')};
+    var patientUser = {user: patient.get('user'), email: patient.get('email')};
 
     // Get Graphs For Patient
     if (patient.get('graphs').length == 0) {
       adapter.ajax(adapter.buildURL("graphsForPatient"), "POST", {data: patientUser}).then(function(data) {
-        console.log(data.result.graphs[0]);
+        console.log(data.result);
 
         // Seperate Data
         var steps = [];
@@ -63,6 +63,19 @@ export default Ember.Route.extend({
           patient: patient
         });
 
+        // Create Stats
+        store.createRecord('stat', {
+          title: 'Weight',
+          units: 'lb',
+          stat: data.result.stats.WEIGHT,
+          patient: patient
+        });
+        store.createRecord('stat', {
+          title: 'Waist Circumference',
+          units: 'inches',
+          stat: data.result.stats.Waist_Circumference,
+          patient: patient
+        });
       });
     }
 

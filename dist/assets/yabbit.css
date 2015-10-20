@@ -308,6 +308,11 @@ section#patients {
               text-transform: uppercase; }
             section#patients .pane .charts .column section .description .demographic {
               color: #848484; }
+          section#patients .pane .charts .column section .stat-number {
+            font-size: 5em;
+            text-align: center;
+            display: block;
+            padding: 0.5em 0; }
   section#patients #view-all.button {
     position: absolute;
     top: 6px;
