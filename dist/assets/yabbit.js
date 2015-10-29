@@ -24,9 +24,13 @@ define('yabbit/adapters/application', ['exports', 'ember', 'ember-parse-adapter/
         // APP SPECIFIC: Graph data is fragmented so it's a function instead
         else if ('graphsForPatient' === type) {
             return 'functions/graphsForPatient';
-          } else {
-            return 'classes/' + Ember['default'].String.capitalize(Ember['default'].String.camelize(type));
           }
+          // APP SPECIFIC:
+          else if ('demographicsActivities' === type) {
+              return 'functions/demographicsActivities';
+            } else {
+              return 'classes/' + Ember['default'].String.capitalize(Ember['default'].String.camelize(type));
+            }
     }
   });
 
@@ -779,6 +783,11 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
       // Get Patient
       var patient = this.modelFor('patients.index').findBy('id', params.id);
       var patientUser = { user: patient.get('user'), email: patient.get('email') };
+
+      adapter.ajax(adapter.buildURL("demographicsActivities"), "POST", {}).then(function (data) {
+        console.log('demographicsActivities');
+        console.log(data);
+      });
 
       // Get Graphs For Patient
       if (patient.get('graphs').length == 0) {
@@ -3062,7 +3071,7 @@ define('yabbit/tests/routes/patients/index/show.jshint', function () {
 
   QUnit.module('JSHint - routes/patients/index');
   QUnit.test('routes/patients/index/show.js should pass jshint', function(assert) { 
-    assert.ok(false, 'routes/patients/index/show.js should pass jshint.\nroutes/patients/index/show.js: line 29, col 40, Expected \'===\' and instead saw \'==\'.\nroutes/patients/index/show.js: line 22, col 9, \'serializer\' is defined but never used.\n\n2 errors'); 
+    assert.ok(false, 'routes/patients/index/show.js should pass jshint.\nroutes/patients/index/show.js: line 34, col 40, Expected \'===\' and instead saw \'==\'.\nroutes/patients/index/show.js: line 22, col 9, \'serializer\' is defined but never used.\n\n2 errors'); 
   });
 
 });

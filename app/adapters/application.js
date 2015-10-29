@@ -26,6 +26,10 @@ export default adapter.extend({
     else if ('graphsForPatient' === type) {
       return 'functions/graphsForPatient';
     }
+    // APP SPECIFIC:
+    else if ('demographicsActivities' === type) {
+      return 'functions/demographicsActivities';
+    }
     else {
       return 'classes/' + Ember.String.capitalize(Ember.String.camelize(type));
     }
