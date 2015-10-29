@@ -62,9 +62,6 @@ Parse.Cloud.define('patientsForPhysician', function(request, response) {
 
 Parse.Cloud.define('graphsForPatient', function(request, response) {
 
-  console.log('--- graphsForPatient ----');
-  console.log(request.params);
-
   // Define From Date
   //var d = new Date();
   //var time = (1 * 30 * 24 * 60 * 60 * 1000); // and convert seconds to milliseconds
@@ -85,13 +82,29 @@ Parse.Cloud.define('graphsForPatient', function(request, response) {
   activitiesQuery.select('NormalHR', 'Calories', 'Steps');
   activitiesQuery.find().then(function(activities) {
 
+    // Demographics
+    var oldestActivity = activities[activities.length - 1];
+    console.log(oldestActivity.get('createdAt'));
+
+    var demographicsQuery = new Parse.Query(ActivitiesImport);
+    demographicsQuery.descending('createdAt');
+    demographicsQuery.limit(1000);
+    demographicsQuery.greaterThanOrEqualTo('createdAt', oldestActivity.get('createdAt'));
+    demographicsQuery.select('NormalHR', 'Calories', 'Steps');
+    demographicsQuery.find().then(function(allActivities) {
+
+      console.log('demographicsQuery');
+      console.log(allActivities.length);
+
+    });
+
     // STATS
 
-    // Weight, West Circumference
-    var demographicsQuery = new Parse.Query(Demographics);
-    demographicsQuery.equalTo('username', user.email); // Demographics username is actually an email, used as key
-    demographicsQuery.select('WEIGHT', 'Waist_Circumference');
-    demographicsQuery.first().then(function(demographics) {
+    // Weight, Waist Circumference
+    var statsQuery = new Parse.Query(Demographics);
+    statsQuery.equalTo('username', user.email); // Demographics username is actually an email, used as key
+    statsQuery.select('WEIGHT', 'Waist_Circumference');
+    statsQuery.first().then(function(demographics) {
       response.success({graphs: activities, stats: demographics});
     });
   }, function(error) {
