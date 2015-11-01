@@ -72,6 +72,12 @@ Parse.Cloud.define('graphsForPatient', function(request, response) {
   user.id = request.params.user;
   user.email = request.params.email;
 
+  var data = {
+    graphs: null,
+    stats: null,
+    demographics: null
+  }
+
   // GRAPHS
 
   // Heart Rate, Step Count, Calories Burned
@@ -82,14 +88,41 @@ Parse.Cloud.define('graphsForPatient', function(request, response) {
   activitiesQuery.select('NormalHR', 'Calories', 'Steps');
   activitiesQuery.find().then(function(activities) {
 
+    data.graphs = activities;
+
     // STATS
 
     // Weight, Waist Circumference
     var statsQuery = new Parse.Query(Demographics);
     statsQuery.equalTo('username', user.email); // Demographics username is actually an email, used as key
     statsQuery.select('WEIGHT', 'Waist_Circumference');
-    statsQuery.first().then(function(demographics) {
-      response.success({graphs: activities, stats: demographics});
+    statsQuery.first().then(function(stats) {
+
+      data.stats = stats;
+
+      // Demographics
+      var oldestActivity = activities[activities.length - 1];
+      console.log(oldestActivity.get('createdAt'));
+
+      var demographicsQuery = new Parse.Query(Activities);
+      demographicsQuery.descending('createdAt');
+      demographicsQuery.limit(1000);
+      demographicsQuery.greaterThan('createdAt', oldestActivity.get('createdAt'));
+      demographicsQuery.select('NormalHR', 'Calories', 'Steps');
+      demographicsQuery.find().then(function(demographics) {
+
+        data.demographics = demographics;
+
+
+
+        console.log('demographicsQuery');
+        console.log(demographics.length);
+
+        response.success(data);
+
+      }, function(error) {
+        response.error(error);
+      });
     });
   }, function(error) {
     response.error(error);
@@ -113,34 +146,34 @@ Parse.Cloud.define('demographicsActivities', function(request, response) {
   //var fromDate = new Date(d.getTime() - (time));
 
   // Demographics
-  //var oldestActivity = activities[activities.length - 1];
+  var oldestActivity = activities[activities.length - 1];
   //console.log(oldestActivity.get('createdAt'));
 
-  var params = request.params;
-  if (!request.params['concatResults']) {
-    params.concatResults = [];
-  }
-  var skip = (request.params['skip']) ? request.params.skip : 0;
+  //var params = request.params;
+  //if (!request.params['concatResults']) {
+  //  params.concatResults = [];
+  //}
+  //var skip = (request.params['skip']) ? request.params.skip : 0;
 
   var demographicsQuery = new Parse.Query(Activities);
   demographicsQuery.descending('createdAt');
-  demographicsQuery.limit(250);
-  demographicsQuery.skip(skip);
-  //demographicsQuery.greaterThan('createdAt', oldestActivity.get('createdAt'));
+  demographicsQuery.limit(1000);
+  //demographicsQuery.skip(skip);
+  demographicsQuery.greaterThan('createdAt', oldestActivity.get('createdAt'));
   demographicsQuery.select('NormalHR', 'Calories', 'Steps');
   demographicsQuery.find().then(function(results) {
-    if (results.length > 0) { // got results..
-      params['concatResults'] = request.params.concatResults.concat(results);
+    //if (results.length > 0) { // got results..
+    //  params['concatResults'] = request.params.concatResults.concat(results);
 
-      // Call the function again
-      params['skip'] = results.length;
-      request.params = params;
-      Parse.Cloud.run('demographicsActivities', request, response);
-    } else { // we're done here
-      response.success(window.results);
-    }
+    //  // Call the function again
+    //  params['skip'] = results.length;
+    //  request.params = params;
+    //  Parse.Cloud.run('demographicsActivities', request, response);
+    //} else { // we're done here
+    //  response.success(window.results);
+    //}
     console.log('demographicsQuery');
-    console.log(allActivities.length);
+    console.log(results.length);
 
   }, function(error) {
     response.error(error);

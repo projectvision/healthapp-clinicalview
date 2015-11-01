@@ -25,11 +25,6 @@ export default Ember.Route.extend({
     var patient = this.modelFor('patients.index').findBy('id', params.id);
     var patientUser = {user: patient.get('user'), email: patient.get('email')};
 
-    adapter.ajax(adapter.buildURL("demographicsActivities"), "POST", {}).then(function(data) {
-      console.log('demographicsActivities');
-      console.log(data);
-    });
-
     // Get Graphs For Patient
     if (patient.get('graphs').length == 0) {
       adapter.ajax(adapter.buildURL("graphsForPatient"), "POST", {data: patientUser}).then(function(data) {
