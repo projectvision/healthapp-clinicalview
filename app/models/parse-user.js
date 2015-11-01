@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import DS from 'ember-data';
 import ParseUser from 'ember-parse-adapter/models/parse-user';
 
 // AKA Physician

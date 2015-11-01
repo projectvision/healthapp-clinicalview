@@ -266,6 +266,13 @@ define('yabbit/controllers/object', ['exports', 'ember'], function (exports, Emb
 	exports['default'] = Ember['default'].Controller;
 
 });
+define('yabbit/controllers/patients/index/show', ['exports', 'ember'], function (exports, Ember) {
+
+	'use strict';
+
+	exports['default'] = Ember['default'].Controller.extend({});
+
+});
 define('yabbit/controllers/patients/index', ['exports', 'ember'], function (exports, Ember) {
 
   'use strict';
@@ -273,13 +280,6 @@ define('yabbit/controllers/patients/index', ['exports', 'ember'], function (expo
   exports['default'] = Ember['default'].Controller.extend({
     //isCorrectRouteActive: Ember.computed.equal('currentRouteName', 'currentRouteName')
   });
-
-});
-define('yabbit/controllers/patients/index/show', ['exports', 'ember'], function (exports, Ember) {
-
-	'use strict';
-
-	exports['default'] = Ember['default'].Controller.extend({});
 
 });
 define('yabbit/controllers/session/login', ['exports', 'ember'], function (exports, Ember) {
@@ -434,8 +434,6 @@ define('yabbit/initializers/export-application-global', ['exports', 'ember', 'ya
     }
   }
 
-  ;
-
   exports['default'] = {
     name: 'export-application-global',
 
@@ -492,7 +490,7 @@ define('yabbit/models/graph', ['exports', 'ember-data'], function (exports, DS) 
   });
 
 });
-define('yabbit/models/parse-user', ['exports', 'ember', 'ember-parse-adapter/models/parse-user'], function (exports, Ember, ParseUser) {
+define('yabbit/models/parse-user', ['exports', 'ember', 'ember-data', 'ember-parse-adapter/models/parse-user'], function (exports, Ember, DS, ParseUser) {
 
   'use strict';
 
@@ -502,15 +500,15 @@ define('yabbit/models/parse-user', ['exports', 'ember', 'ember-parse-adapter/mod
     /* PROPERTIES
     /***************************************************************************/
 
-    firstName: DS.attr('string'),
-    lastName: DS.attr('string'),
-    isPhysician: DS.attr('boolean'),
+    firstName: DS['default'].attr('string'),
+    lastName: DS['default'].attr('string'),
+    isPhysician: DS['default'].attr('boolean'),
 
     /****************************************************************************
     /* RELATIONSHIPS
     /***************************************************************************/
 
-    patients: DS.hasMany('patient'),
+    patients: DS['default'].hasMany('patient'),
 
     /****************************************************************************
     /* ACTIONS
@@ -544,7 +542,7 @@ define('yabbit/models/parse-user', ['exports', 'ember', 'ember-parse-adapter/mod
   exports['default'] = ParseUser['default'];
 
 });
-define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS) {
+define('yabbit/models/patient', ['exports', 'ember', 'ember-data'], function (exports, Ember, DS) {
 
   'use strict';
 
@@ -568,7 +566,7 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
     /* COMPUTED PROPERTIES
     /***************************************************************************/
 
-    healthRisk: Ember.computed('zScore', function () {
+    healthRisk: Ember['default'].computed('zScore', function () {
 
       // The normal range (given human height, weight, and waist circumfirence values) is between -2 and 2.
       // Below 0 is healthy while above 0 is unhealthy. Z score shows the total relative to the entire population
@@ -583,7 +581,7 @@ define('yabbit/models/patient', ['exports', 'ember-data'], function (exports, DS
       }
     }),
 
-    activityLevel: Ember.computed('activityLevelScore', function () {
+    activityLevel: Ember['default'].computed('activityLevelScore', function () {
       // 4 - 7 Sedentary
       if (this.get('activityLevelScore') <= 7) {
         return 'Sedentary';
@@ -690,67 +688,6 @@ define('yabbit/routes/index', ['exports', 'ember'], function (exports, Ember) {
   exports['default'] = Ember['default'].Route.extend({
     beforeModel: function beforeModel() {
       this.transitionTo('session.login');
-    }
-  });
-
-});
-define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/authenticated-route-mixin'], function (exports, Ember, AuthenticatedRouteMixin) {
-
-  'use strict';
-
-  exports['default'] = Ember['default'].Route.extend(AuthenticatedRouteMixin['default'], {
-    // Render Patient Index into master template
-    renderTemplate: function renderTemplate() {
-      this.render({
-        outlet: 'master'
-      });
-    },
-
-    /****************************************************************************
-    /* PATIENTS FOR PHYSICIAN
-    /***************************************************************************/
-
-    model: function model(params) {
-
-      // Get Store
-      var store = this.get('store');
-
-      // Get Adapter
-      var adapter = store.adapterFor('parse-user');
-      var serializer = store.serializerFor('parse-user');
-
-      // Get Patients For Physician (POST insead of GET to avoid parse error)
-      return adapter.ajax(adapter.buildURL("patientsForPhysician"), "POST", {}).then(function (data) {
-
-        // Build Patients
-        for (var index = 0; index < data.result.patients.length; index++) {
-          var patient = data.result.patients[index];
-          var diet = data.result.diet[index];
-
-          // Build Patient
-          var emberPatient = {
-            data: {
-              id: patient.objectId,
-              type: 'patient',
-              attributes: {
-                firstName: patient.Fname,
-                lastName: patient.Lname,
-                email: patient.Username.email,
-                challengeFitness: patient.PercentFitnessChallengesLast,
-                challengeDiet: patient.PercentDietChallengesLast,
-                challengeStress: patient.PercentStresshChallengesLast,
-                user: patient.Username.objectId,
-                zScore: patient.Username.ABSI_zscore,
-                activityLevelScore: diet.activityLevel
-              }
-            }
-          };
-          // Create Patient
-          store.push(emberPatient);
-        }
-        // Return Patients
-        return store.findAll('patient');
-      });
     }
   });
 
@@ -919,6 +856,67 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
       ]
     }
   ];*/
+
+});
+define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/authenticated-route-mixin'], function (exports, Ember, AuthenticatedRouteMixin) {
+
+  'use strict';
+
+  exports['default'] = Ember['default'].Route.extend(AuthenticatedRouteMixin['default'], {
+    // Render Patient Index into master template
+    renderTemplate: function renderTemplate() {
+      this.render({
+        outlet: 'master'
+      });
+    },
+
+    /****************************************************************************
+    /* PATIENTS FOR PHYSICIAN
+    /***************************************************************************/
+
+    model: function model(params) {
+
+      // Get Store
+      var store = this.get('store');
+
+      // Get Adapter
+      var adapter = store.adapterFor('parse-user');
+      var serializer = store.serializerFor('parse-user');
+
+      // Get Patients For Physician (POST insead of GET to avoid parse error)
+      return adapter.ajax(adapter.buildURL("patientsForPhysician"), "POST", {}).then(function (data) {
+
+        // Build Patients
+        for (var index = 0; index < data.result.patients.length; index++) {
+          var patient = data.result.patients[index];
+          var diet = data.result.diet[index];
+
+          // Build Patient
+          var emberPatient = {
+            data: {
+              id: patient.objectId,
+              type: 'patient',
+              attributes: {
+                firstName: patient.Fname,
+                lastName: patient.Lname,
+                email: patient.Username.email,
+                challengeFitness: patient.PercentFitnessChallengesLast,
+                challengeDiet: patient.PercentDietChallengesLast,
+                challengeStress: patient.PercentStresshChallengesLast,
+                user: patient.Username.objectId,
+                zScore: patient.Username.ABSI_zscore,
+                activityLevelScore: diet.activityLevel
+              }
+            }
+          };
+          // Create Patient
+          store.push(emberPatient);
+        }
+        // Return Patients
+        return store.findAll('patient');
+      });
+    }
+  });
 
 });
 define('yabbit/routes/session/login', ['exports', 'ember'], function (exports, Ember) {
@@ -1517,431 +1515,6 @@ define('yabbit/templates/index', ['exports'], function (exports) {
   }()));
 
 });
-define('yabbit/templates/patients', ['exports'], function (exports) {
-
-  'use strict';
-
-  exports['default'] = Ember.HTMLBars.template((function() {
-    return {
-      meta: {
-        "revision": "Ember@1.13.10",
-        "loc": {
-          "source": null,
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 4,
-            "column": 0
-          }
-        },
-        "moduleName": "yabbit/templates/patients.hbs"
-      },
-      arity: 0,
-      cachedFragment: null,
-      hasRendered: false,
-      buildFragment: function buildFragment(dom) {
-        var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("section");
-        dom.setAttribute(el1,"id","patients");
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createComment("");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n");
-        dom.appendChild(el1, el2);
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n");
-        dom.appendChild(el0, el1);
-        return el0;
-      },
-      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(1);
-        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]),1,1);
-        return morphs;
-      },
-      statements: [
-        ["inline","outlet",["master"],[],["loc",[null,[2,2],[2,21]]]]
-      ],
-      locals: [],
-      templates: []
-    };
-  }()));
-
-});
-define('yabbit/templates/patients/index', ['exports'], function (exports) {
-
-  'use strict';
-
-  exports['default'] = Ember.HTMLBars.template((function() {
-    var child0 = (function() {
-      var child0 = (function() {
-        return {
-          meta: {
-            "revision": "Ember@1.13.10",
-            "loc": {
-              "source": null,
-              "start": {
-                "line": 5,
-                "column": 8
-              },
-              "end": {
-                "line": 5,
-                "column": 95
-              }
-            },
-            "moduleName": "yabbit/templates/patients/index.hbs"
-          },
-          arity: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          buildFragment: function buildFragment(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createComment("");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode(" ");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createComment("");
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-            var morphs = new Array(2);
-            morphs[0] = dom.createMorphAt(fragment,0,0,contextualElement);
-            morphs[1] = dom.createMorphAt(fragment,2,2,contextualElement);
-            dom.insertBoundary(fragment, 0);
-            dom.insertBoundary(fragment, null);
-            return morphs;
-          },
-          statements: [
-            ["content","patient.firstName",["loc",[null,[5,53],[5,74]]]],
-            ["content","patient.lastName",["loc",[null,[5,75],[5,95]]]]
-          ],
-          locals: [],
-          templates: []
-        };
-      }());
-      return {
-        meta: {
-          "revision": "Ember@1.13.10",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 3,
-              "column": 4
-            },
-            "end": {
-              "line": 7,
-              "column": 4
-            }
-          },
-          "moduleName": "yabbit/templates/patients/index.hbs"
-        },
-        arity: 1,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("      ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("li");
-          var el2 = dom.createTextNode("\n        ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createComment("");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n      ");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var morphs = new Array(1);
-          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]),1,1);
-          return morphs;
-        },
-        statements: [
-          ["block","link-to",["patients.index.show",["get","patient.id",["loc",[null,[5,41],[5,51]]]]],[],0,null,["loc",[null,[5,8],[5,107]]]]
-        ],
-        locals: ["patient"],
-        templates: [child0]
-      };
-    }());
-    var child1 = (function() {
-      return {
-        meta: {
-          "revision": "Ember@1.13.10",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 7,
-              "column": 4
-            },
-            "end": {
-              "line": 9,
-              "column": 4
-            }
-          },
-          "moduleName": "yabbit/templates/patients/index.hbs"
-        },
-        arity: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("      ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("li");
-          var el2 = dom.createTextNode("Empty");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes() { return []; },
-        statements: [
-
-        ],
-        locals: [],
-        templates: []
-      };
-    }());
-    var child2 = (function() {
-      return {
-        meta: {
-          "revision": "Ember@1.13.10",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 21,
-              "column": 6
-            },
-            "end": {
-              "line": 35,
-              "column": 6
-            }
-          },
-          "moduleName": "yabbit/templates/patients/index.hbs"
-        },
-        arity: 1,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("        ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("tr");
-          var el2 = dom.createTextNode("\n          ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("td");
-          var el3 = dom.createTextNode("\n            ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createElement("div");
-          dom.setAttribute(el3,"class","bar fitness");
-          var el4 = dom.createComment("");
-          dom.appendChild(el3, el4);
-          var el4 = dom.createTextNode("%");
-          dom.appendChild(el3, el4);
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("\n            ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createElement("div");
-          dom.setAttribute(el3,"class","bar diet");
-          var el4 = dom.createComment("");
-          dom.appendChild(el3, el4);
-          var el4 = dom.createTextNode("%");
-          dom.appendChild(el3, el4);
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("\n            ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createElement("div");
-          dom.setAttribute(el3,"class","bar stress");
-          var el4 = dom.createComment("");
-          dom.appendChild(el3, el4);
-          var el4 = dom.createTextNode("%");
-          dom.appendChild(el3, el4);
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("\n          ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n          ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("td");
-          var el3 = dom.createTextNode("\n            ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createComment("");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("\n          ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n          ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("td");
-          var el3 = dom.createTextNode("\n            ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createComment("");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("\n          ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n        ");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element0 = dom.childAt(fragment, [1]);
-          var element1 = dom.childAt(element0, [1]);
-          var element2 = dom.childAt(element1, [1]);
-          var element3 = dom.childAt(element1, [3]);
-          var element4 = dom.childAt(element1, [5]);
-          var element5 = dom.childAt(element0, [3]);
-          var element6 = dom.childAt(element0, [5]);
-          var morphs = new Array(10);
-          morphs[0] = dom.createAttrMorph(element2, 'style');
-          morphs[1] = dom.createMorphAt(element2,0,0);
-          morphs[2] = dom.createAttrMorph(element3, 'style');
-          morphs[3] = dom.createMorphAt(element3,0,0);
-          morphs[4] = dom.createAttrMorph(element4, 'style');
-          morphs[5] = dom.createMorphAt(element4,0,0);
-          morphs[6] = dom.createAttrMorph(element5, 'class');
-          morphs[7] = dom.createMorphAt(element5,1,1);
-          morphs[8] = dom.createAttrMorph(element6, 'class');
-          morphs[9] = dom.createMorphAt(element6,1,1);
-          return morphs;
-        },
-        statements: [
-          ["attribute","style",["concat",["width: ",["get","patient.challengeFitness",["loc",[null,[24,53],[24,77]]]],"%"]]],
-          ["content","patient.challengeFitness",["loc",[null,[24,82],[24,110]]]],
-          ["attribute","style",["concat",["width: ",["get","patient.challengeDiet",["loc",[null,[25,50],[25,71]]]],"%"]]],
-          ["content","patient.challengeDiet",["loc",[null,[25,76],[25,101]]]],
-          ["attribute","style",["concat",["width: ",["get","patient.challengeStress",["loc",[null,[26,52],[26,75]]]],"%"]]],
-          ["content","patient.challengeStress",["loc",[null,[26,80],[26,107]]]],
-          ["attribute","class",["concat",["health-risk ",["get","patient.healthRisk.change",["loc",[null,[28,35],[28,60]]]]]]],
-          ["content","patient.healthRisk",["loc",[null,[29,12],[29,34]]]],
-          ["attribute","class",["concat",["activity-level ",["get","patient.activityLevel.change",["loc",[null,[31,38],[31,66]]]]]]],
-          ["content","patient.activityLevel",["loc",[null,[32,12],[32,37]]]]
-        ],
-        locals: ["patient"],
-        templates: []
-      };
-    }());
-    return {
-      meta: {
-        "revision": "Ember@1.13.10",
-        "loc": {
-          "source": null,
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 41,
-            "column": 0
-          }
-        },
-        "moduleName": "yabbit/templates/patients/index.hbs"
-      },
-      arity: 0,
-      cachedFragment: null,
-      hasRendered: false,
-      buildFragment: function buildFragment(dom) {
-        var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("aside");
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("ul");
-        var el3 = dom.createTextNode("\n");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createComment("");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("  ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n");
-        dom.appendChild(el1, el2);
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n\n");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createElement("div");
-        dom.setAttribute(el1,"id","patients-overview");
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("table");
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("thead");
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("th");
-        dom.setAttribute(el4,"class","challenge-completion");
-        var el5 = dom.createTextNode("Challenge Completion");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("th");
-        dom.setAttribute(el4,"class","health-risk");
-        var el5 = dom.createTextNode("Health Risk");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("th");
-        dom.setAttribute(el4,"class","activity-level");
-        var el5 = dom.createTextNode("Activity Level");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n    ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("tbody");
-        var el4 = dom.createTextNode("\n");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createComment("");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("    ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n  ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n");
-        dom.appendChild(el1, el2);
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n\n");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createComment("");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n");
-        dom.appendChild(el0, el1);
-        return el0;
-      },
-      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(3);
-        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0, 1]),1,1);
-        morphs[1] = dom.createMorphAt(dom.childAt(fragment, [2, 1, 3]),1,1);
-        morphs[2] = dom.createMorphAt(fragment,4,4,contextualElement);
-        return morphs;
-      },
-      statements: [
-        ["block","each",[["get","model",["loc",[null,[3,12],[3,17]]]]],[],0,1,["loc",[null,[3,4],[9,13]]]],
-        ["block","each",[["get","model",["loc",[null,[21,14],[21,19]]]]],[],2,null,["loc",[null,[21,6],[35,15]]]],
-        ["inline","outlet",["detail"],[],["loc",[null,[40,0],[40,19]]]]
-      ],
-      locals: [],
-      templates: [child0, child1, child2]
-    };
-  }()));
-
-});
 define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
 
   'use strict';
@@ -2338,12 +1911,58 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
   }()));
 
 });
-define('yabbit/templates/session', ['exports'], function (exports) {
+define('yabbit/templates/patients/index', ['exports'], function (exports) {
 
   'use strict';
 
   exports['default'] = Ember.HTMLBars.template((function() {
     var child0 = (function() {
+      var child0 = (function() {
+        return {
+          meta: {
+            "revision": "Ember@1.13.10",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 5,
+                "column": 8
+              },
+              "end": {
+                "line": 5,
+                "column": 95
+              }
+            },
+            "moduleName": "yabbit/templates/patients/index.hbs"
+          },
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createComment("");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createTextNode(" ");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createComment("");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+            var morphs = new Array(2);
+            morphs[0] = dom.createMorphAt(fragment,0,0,contextualElement);
+            morphs[1] = dom.createMorphAt(fragment,2,2,contextualElement);
+            dom.insertBoundary(fragment, 0);
+            dom.insertBoundary(fragment, null);
+            return morphs;
+          },
+          statements: [
+            ["content","patient.firstName",["loc",[null,[5,53],[5,74]]]],
+            ["content","patient.lastName",["loc",[null,[5,75],[5,95]]]]
+          ],
+          locals: [],
+          templates: []
+        };
+      }());
       return {
         meta: {
           "revision": "Ember@1.13.10",
@@ -2354,18 +1973,72 @@ define('yabbit/templates/session', ['exports'], function (exports) {
               "column": 4
             },
             "end": {
-              "line": 3,
-              "column": 48
+              "line": 7,
+              "column": 4
             }
           },
-          "moduleName": "yabbit/templates/session.hbs"
+          "moduleName": "yabbit/templates/patients/index.hbs"
+        },
+        arity: 1,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("      ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("li");
+          var el2 = dom.createTextNode("\n        ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createComment("");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n      ");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]),1,1);
+          return morphs;
+        },
+        statements: [
+          ["block","link-to",["patients.index.show",["get","patient.id",["loc",[null,[5,41],[5,51]]]]],[],0,null,["loc",[null,[5,8],[5,107]]]]
+        ],
+        locals: ["patient"],
+        templates: [child0]
+      };
+    }());
+    var child1 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.10",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 7,
+              "column": 4
+            },
+            "end": {
+              "line": 9,
+              "column": 4
+            }
+          },
+          "moduleName": "yabbit/templates/patients/index.hbs"
         },
         arity: 0,
         cachedFragment: null,
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("Login");
+          var el1 = dom.createTextNode("      ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("li");
+          var el2 = dom.createTextNode("Empty");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
           return el0;
         },
@@ -2377,37 +2050,125 @@ define('yabbit/templates/session', ['exports'], function (exports) {
         templates: []
       };
     }());
-    var child1 = (function() {
+    var child2 = (function() {
       return {
         meta: {
           "revision": "Ember@1.13.10",
           "loc": {
             "source": null,
             "start": {
-              "line": 4,
-              "column": 4
+              "line": 21,
+              "column": 6
             },
             "end": {
-              "line": 4,
-              "column": 51
+              "line": 35,
+              "column": 6
             }
           },
-          "moduleName": "yabbit/templates/session.hbs"
+          "moduleName": "yabbit/templates/patients/index.hbs"
         },
-        arity: 0,
+        arity: 1,
         cachedFragment: null,
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("Signup");
+          var el1 = dom.createTextNode("        ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("tr");
+          var el2 = dom.createTextNode("\n          ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("td");
+          var el3 = dom.createTextNode("\n            ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("div");
+          dom.setAttribute(el3,"class","bar fitness");
+          var el4 = dom.createComment("");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("%");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n            ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("div");
+          dom.setAttribute(el3,"class","bar diet");
+          var el4 = dom.createComment("");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("%");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n            ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("div");
+          dom.setAttribute(el3,"class","bar stress");
+          var el4 = dom.createComment("");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("%");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n          ");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n          ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("td");
+          var el3 = dom.createTextNode("\n            ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createComment("");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n          ");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n          ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("td");
+          var el3 = dom.createTextNode("\n            ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createComment("");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n          ");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n        ");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
           return el0;
         },
-        buildRenderNodes: function buildRenderNodes() { return []; },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var element0 = dom.childAt(fragment, [1]);
+          var element1 = dom.childAt(element0, [1]);
+          var element2 = dom.childAt(element1, [1]);
+          var element3 = dom.childAt(element1, [3]);
+          var element4 = dom.childAt(element1, [5]);
+          var element5 = dom.childAt(element0, [3]);
+          var element6 = dom.childAt(element0, [5]);
+          var morphs = new Array(10);
+          morphs[0] = dom.createAttrMorph(element2, 'style');
+          morphs[1] = dom.createMorphAt(element2,0,0);
+          morphs[2] = dom.createAttrMorph(element3, 'style');
+          morphs[3] = dom.createMorphAt(element3,0,0);
+          morphs[4] = dom.createAttrMorph(element4, 'style');
+          morphs[5] = dom.createMorphAt(element4,0,0);
+          morphs[6] = dom.createAttrMorph(element5, 'class');
+          morphs[7] = dom.createMorphAt(element5,1,1);
+          morphs[8] = dom.createAttrMorph(element6, 'class');
+          morphs[9] = dom.createMorphAt(element6,1,1);
+          return morphs;
+        },
         statements: [
-
+          ["attribute","style",["concat",["width: ",["get","patient.challengeFitness",["loc",[null,[24,53],[24,77]]]],"%"]]],
+          ["content","patient.challengeFitness",["loc",[null,[24,82],[24,110]]]],
+          ["attribute","style",["concat",["width: ",["get","patient.challengeDiet",["loc",[null,[25,50],[25,71]]]],"%"]]],
+          ["content","patient.challengeDiet",["loc",[null,[25,76],[25,101]]]],
+          ["attribute","style",["concat",["width: ",["get","patient.challengeStress",["loc",[null,[26,52],[26,75]]]],"%"]]],
+          ["content","patient.challengeStress",["loc",[null,[26,80],[26,107]]]],
+          ["attribute","class",["concat",["health-risk ",["get","patient.healthRisk.change",["loc",[null,[28,35],[28,60]]]]]]],
+          ["content","patient.healthRisk",["loc",[null,[29,12],[29,34]]]],
+          ["attribute","class",["concat",["activity-level ",["get","patient.activityLevel.change",["loc",[null,[31,38],[31,66]]]]]]],
+          ["content","patient.activityLevel",["loc",[null,[32,12],[32,37]]]]
         ],
-        locals: [],
+        locals: ["patient"],
         templates: []
       };
     }());
@@ -2421,34 +2182,135 @@ define('yabbit/templates/session', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 8,
+            "line": 41,
             "column": 0
           }
         },
-        "moduleName": "yabbit/templates/session.hbs"
+        "moduleName": "yabbit/templates/patients/index.hbs"
       },
       arity: 0,
       cachedFragment: null,
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("div");
-        dom.setAttribute(el1,"id","edit");
+        var el1 = dom.createElement("aside");
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2,"class","tabs");
-        var el3 = dom.createTextNode("\n    ");
+        var el2 = dom.createElement("ul");
+        var el3 = dom.createTextNode("\n");
         dom.appendChild(el2, el3);
         var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"id","patients-overview");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("table");
         var el3 = dom.createTextNode("\n    ");
         dom.appendChild(el2, el3);
-        var el3 = dom.createComment("");
+        var el3 = dom.createElement("thead");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("th");
+        dom.setAttribute(el4,"class","challenge-completion");
+        var el5 = dom.createTextNode("Challenge Completion");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("th");
+        dom.setAttribute(el4,"class","health-risk");
+        var el5 = dom.createTextNode("Health Risk");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("th");
+        dom.setAttribute(el4,"class","activity-level");
+        var el5 = dom.createTextNode("Activity Level");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("tbody");
+        var el4 = dom.createTextNode("\n");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createComment("");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("    ");
+        dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n  ");
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(3);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0, 1]),1,1);
+        morphs[1] = dom.createMorphAt(dom.childAt(fragment, [2, 1, 3]),1,1);
+        morphs[2] = dom.createMorphAt(fragment,4,4,contextualElement);
+        return morphs;
+      },
+      statements: [
+        ["block","each",[["get","model",["loc",[null,[3,12],[3,17]]]]],[],0,1,["loc",[null,[3,4],[9,13]]]],
+        ["block","each",[["get","model",["loc",[null,[21,14],[21,19]]]]],[],2,null,["loc",[null,[21,6],[35,15]]]],
+        ["inline","outlet",["detail"],[],["loc",[null,[40,0],[40,19]]]]
+      ],
+      locals: [],
+      templates: [child0, child1, child2]
+    };
+  }()));
+
+});
+define('yabbit/templates/patients', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    return {
+      meta: {
+        "revision": "Ember@1.13.10",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 0
+          }
+        },
+        "moduleName": "yabbit/templates/patients.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("section");
+        dom.setAttribute(el1,"id","patients");
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createComment("");
@@ -2461,21 +2323,15 @@ define('yabbit/templates/session', ['exports'], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0]);
-        var element1 = dom.childAt(element0, [1]);
-        var morphs = new Array(3);
-        morphs[0] = dom.createMorphAt(element1,1,1);
-        morphs[1] = dom.createMorphAt(element1,3,3);
-        morphs[2] = dom.createMorphAt(element0,3,3);
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]),1,1);
         return morphs;
       },
       statements: [
-        ["block","link-to",["session.login"],["id","login"],0,null,["loc",[null,[3,4],[3,60]]]],
-        ["block","link-to",["session.signup"],["id","signup"],1,null,["loc",[null,[4,4],[4,63]]]],
-        ["content","outlet",["loc",[null,[6,2],[6,12]]]]
+        ["inline","outlet",["master"],[],["loc",[null,[2,2],[2,21]]]]
       ],
       locals: [],
-      templates: [child0, child1]
+      templates: []
     };
   }()));
 
@@ -2748,6 +2604,148 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
   }()));
 
 });
+define('yabbit/templates/session', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    var child0 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.10",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 3,
+              "column": 4
+            },
+            "end": {
+              "line": 3,
+              "column": 48
+            }
+          },
+          "moduleName": "yabbit/templates/session.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Login");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
+    var child1 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.10",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 4,
+              "column": 4
+            },
+            "end": {
+              "line": 4,
+              "column": 51
+            }
+          },
+          "moduleName": "yabbit/templates/session.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Signup");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
+    return {
+      meta: {
+        "revision": "Ember@1.13.10",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 8,
+            "column": 0
+          }
+        },
+        "moduleName": "yabbit/templates/session.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"id","edit");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","tabs");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0]);
+        var element1 = dom.childAt(element0, [1]);
+        var morphs = new Array(3);
+        morphs[0] = dom.createMorphAt(element1,1,1);
+        morphs[1] = dom.createMorphAt(element1,3,3);
+        morphs[2] = dom.createMorphAt(element0,3,3);
+        return morphs;
+      },
+      statements: [
+        ["block","link-to",["session.login"],["id","login"],0,null,["loc",[null,[3,4],[3,60]]]],
+        ["block","link-to",["session.signup"],["id","signup"],1,null,["loc",[null,[4,4],[4,63]]]],
+        ["content","outlet",["loc",[null,[6,2],[6,12]]]]
+      ],
+      locals: [],
+      templates: [child0, child1]
+    };
+  }()));
+
+});
 define('yabbit/tests/adapters/application.jshint', function () {
 
   'use strict';
@@ -2808,16 +2806,6 @@ define('yabbit/tests/controllers/account/edit.jshint', function () {
   });
 
 });
-define('yabbit/tests/controllers/patients/index.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - controllers/patients');
-  QUnit.test('controllers/patients/index.js should pass jshint', function(assert) { 
-    assert.ok(true, 'controllers/patients/index.js should pass jshint.'); 
-  });
-
-});
 define('yabbit/tests/controllers/patients/index/show.jshint', function () {
 
   'use strict';
@@ -2825,6 +2813,16 @@ define('yabbit/tests/controllers/patients/index/show.jshint', function () {
   QUnit.module('JSHint - controllers/patients/index');
   QUnit.test('controllers/patients/index/show.js should pass jshint', function(assert) { 
     assert.ok(true, 'controllers/patients/index/show.js should pass jshint.'); 
+  });
+
+});
+define('yabbit/tests/controllers/patients/index.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - controllers/patients');
+  QUnit.test('controllers/patients/index.js should pass jshint', function(assert) { 
+    assert.ok(true, 'controllers/patients/index.js should pass jshint.'); 
   });
 
 });
@@ -2991,7 +2989,7 @@ define('yabbit/tests/models/parse-user.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/parse-user.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 15, col 15, \'DS\' is not defined.\nmodels/parse-user.js: line 16, col 14, \'DS\' is not defined.\nmodels/parse-user.js: line 17, col 17, \'DS\' is not defined.\nmodels/parse-user.js: line 23, col 13, \'DS\' is not defined.\nmodels/parse-user.js: line 1, col 8, \'Ember\' is defined but never used.\nmodels/parse-user.js: line 34, col 9, \'serializer\' is defined but never used.\n\n6 errors'); 
+    assert.ok(false, 'models/parse-user.js should pass jshint.\nmodels/parse-user.js: line 1, col 8, \'Ember\' is defined but never used.\nmodels/parse-user.js: line 35, col 9, \'serializer\' is defined but never used.\n\n2 errors'); 
   });
 
 });
@@ -3001,7 +2999,7 @@ define('yabbit/tests/models/patient.jshint', function () {
 
   QUnit.module('JSHint - models');
   QUnit.test('models/patient.js should pass jshint', function(assert) { 
-    assert.ok(false, 'models/patient.js should pass jshint.\nmodels/patient.js: line 23, col 15, \'Ember\' is not defined.\nmodels/patient.js: line 41, col 18, \'Ember\' is not defined.\n\n2 errors'); 
+    assert.ok(true, 'models/patient.js should pass jshint.'); 
   });
 
 });
@@ -3055,16 +3053,6 @@ define('yabbit/tests/routes/index.jshint', function () {
   });
 
 });
-define('yabbit/tests/routes/patients/index.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - routes/patients');
-  QUnit.test('routes/patients/index.js should pass jshint', function(assert) { 
-    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 24, col 9, \'serializer\' is defined but never used.\nroutes/patients/index.js: line 17, col 19, \'params\' is defined but never used.\n\n2 errors'); 
-  });
-
-});
 define('yabbit/tests/routes/patients/index/show.jshint', function () {
 
   'use strict';
@@ -3072,6 +3060,16 @@ define('yabbit/tests/routes/patients/index/show.jshint', function () {
   QUnit.module('JSHint - routes/patients/index');
   QUnit.test('routes/patients/index/show.js should pass jshint', function(assert) { 
     assert.ok(false, 'routes/patients/index/show.js should pass jshint.\nroutes/patients/index/show.js: line 34, col 40, Expected \'===\' and instead saw \'==\'.\nroutes/patients/index/show.js: line 22, col 9, \'serializer\' is defined but never used.\n\n2 errors'); 
+  });
+
+});
+define('yabbit/tests/routes/patients/index.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - routes/patients');
+  QUnit.test('routes/patients/index.js should pass jshint', function(assert) { 
+    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 24, col 9, \'serializer\' is defined but never used.\nroutes/patients/index.js: line 17, col 19, \'params\' is defined but never used.\n\n2 errors'); 
   });
 
 });
@@ -3315,7 +3313,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+ec25a504"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+3f6ed419"});
 }
 
 /* jshint ignore:end */
