@@ -212,14 +212,15 @@ define('yabbit/components/area-chart', ['exports', 'ember'], function (exports, 
         },
         hoverUnits: this.get('hoverUnits'), // NOT Morris.js API
         hoverCallback: function hoverCallback(index, options, content, row) {
-          return '<strong>' + row.y + '</strong> ' + options.hoverUnits + ' - ' + moment(row.x).format('MMM Do');
+          return '<strong>' + row.p + '</strong> ' + options.hoverUnits + ' - ' + moment(row.x).format('MMM Do');
         },
         resize: true,
         hideHover: true,
         fillOpacity: 0.2,
         behaveLikeLine: true,
+        continuousLine: false,
         lineColors: ['#848484', '#4BB3D2'],
-        labels: ['Patient', 'Demographic'],
+        labels: ['Demographic', 'Patient'],
         pointFillColors: ['#848484', '#4BB3D2']
       });
     }
@@ -735,9 +736,9 @@ define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (expo
             var graph = data.result.graphs[index];
             var average = data.result.averages[index];
 
-            steps.push({ x: graph.createdAt, p: graph.Steps });
+            steps.push({ x: graph.createdAt, p: graph.Steps, d: average.steps });
             calories.push({ x: graph.createdAt, p: graph.Calories, d: average.calories });
-            heartRates.push({ x: graph.createdAt, p: graph.NormalHR });
+            heartRates.push({ x: graph.createdAt, p: graph.NormalHR, d: average.heartrates });
           }
 
           // Create Graphs

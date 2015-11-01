@@ -126,13 +126,20 @@ Parse.Cloud.define('graphsForPatient', function(request, response) {
         var activityAverages = [];
 
         _.each(activityGroups, function(activityGroup) {
-
-          var allCalories = 0;
+          var totalSteps = 0;
+          var totalCalories = 0;
+          var totalHeartRates = 0;
+          
           _.each(activityGroup, function(activityGroupItem) {
-            allCalories = allCalories + activityGroupItem.get('Calories');
+            totalSteps = totalSteps + (number) activityGroupItem.get('Steps');
+            totalCalories = totalCalories + (number) activityGroupItem.get('Calories');
+            totalHeartRates = totalHeartRates + (number) activityGroupItem.get('NormalHR');
           });
+          console.log(allCalories);
           activityAverages.push({
-            calories: allCalories / activityGroup.length
+            steps: totalSteps / activityGroup.length
+            calories: totalCalories / activityGroup.length
+            heartRates: totalHeartRates / activityGroup.length
           });
         });
         data.averages = activityAverages;

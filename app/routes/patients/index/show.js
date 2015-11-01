@@ -39,9 +39,9 @@ export default Ember.Route.extend({
           var graph = data.result.graphs[index];
           var average = data.result.averages[index];
 
-          steps.push({x: graph.createdAt, p: graph.Steps});
+          steps.push({x: graph.createdAt, p: graph.Steps, d: average.steps});
           calories.push({x: graph.createdAt, p: graph.Calories, d: average.calories});
-          heartRates.push({x: graph.createdAt, p: graph.NormalHR});
+          heartRates.push({x: graph.createdAt, p: graph.NormalHR, d: average.heartrates});
         }
 
         // Create Graphs

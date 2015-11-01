@@ -30,14 +30,15 @@ export default Ember.Component.extend({
       },
       hoverUnits: this.get('hoverUnits'), // NOT Morris.js API
       hoverCallback: function (index, options, content, row) {
-        return '<strong>' + row.y + '</strong> ' + options.hoverUnits + ' - ' + moment(row.x).format('MMM Do');
+        return '<strong>' + row.p + '</strong> ' + options.hoverUnits + ' - ' + moment(row.x).format('MMM Do');
       },
       resize: true,
       hideHover: true,
       fillOpacity: 0.2,
       behaveLikeLine: true,
+      continuousLine: false,
       lineColors:['#848484','#4BB3D2'],
-      labels: ['Patient', 'Demographic'],
+      labels: ['Demographic', 'Patient'],
       pointFillColors:['#848484','#4BB3D2']
     });
   }
