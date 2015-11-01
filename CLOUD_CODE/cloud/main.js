@@ -102,21 +102,27 @@ Parse.Cloud.define('graphsForPatient', function(request, response) {
 
       // Demographics
       var oldestActivity = activities[activities.length - 1];
+      console.log('-----oldestActivity-------');
       console.log(oldestActivity.get('createdAt'));
 
       var demographicsQuery = new Parse.Query(Activities);
       demographicsQuery.descending('createdAt');
-      demographicsQuery.limit(1000);
       demographicsQuery.greaterThan('createdAt', oldestActivity.get('createdAt'));
+      demographicsQuery.limit(1000);
       demographicsQuery.select('NormalHR', 'Calories', 'Steps');
       demographicsQuery.find().then(function(demographics) {
 
-        data.demographics = demographics;
+        // Find matching demographics data for patient's days
+        var activityDemographics = [];
 
+        _.each(activities, function(activity) {
+          activityDemographics.push(_.filter(demographics, function(demo) {
+            return activity.get('createdAt').getDate() == demo.get('createdAt').getDate()
+            && activity.get('createdAt').getMonth() == demo.get('createdAt').getMonth();
+          }));
+        });
 
-
-        console.log('demographicsQuery');
-        console.log(demographics.length);
+        data.demographics = activityDemographics;
 
         response.success(data);
 
