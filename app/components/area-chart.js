@@ -20,7 +20,7 @@ export default Ember.Component.extend({
     this.chart = new Morris.Area({
       element: this.get('elementId'),
       data: this.get('values'),
-      ykeys: 'y', //['p', 'd'], // patient, demographic
+      ykeys: ['d', 'p'], // demographic, patient
       xkey: 'x',
       xLabels: "week",
       xLabelFormat: function (date) {

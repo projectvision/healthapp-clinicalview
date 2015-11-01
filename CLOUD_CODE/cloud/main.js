@@ -75,7 +75,8 @@ Parse.Cloud.define('graphsForPatient', function(request, response) {
   var data = {
     graphs: null,
     stats: null,
-    demographics: null
+    demographics: null,
+    averages: null
   }
 
   // GRAPHS
@@ -102,8 +103,6 @@ Parse.Cloud.define('graphsForPatient', function(request, response) {
 
       // Demographics
       var oldestActivity = activities[activities.length - 1];
-      console.log('-----oldestActivity-------');
-      console.log(oldestActivity.get('createdAt'));
 
       var demographicsQuery = new Parse.Query(Activities);
       demographicsQuery.descending('createdAt');
@@ -112,17 +111,31 @@ Parse.Cloud.define('graphsForPatient', function(request, response) {
       demographicsQuery.select('NormalHR', 'Calories', 'Steps');
       demographicsQuery.find().then(function(demographics) {
 
-        // Find matching demographics data for patient's days
-        var activityDemographics = [];
+        // Group activities to each patient day
+        var activityGroups = [];
 
         _.each(activities, function(activity) {
-          activityDemographics.push(_.filter(demographics, function(demo) {
+          activityGroups.push(_.filter(demographics, function(demo) {
             return activity.get('createdAt').getDate() == demo.get('createdAt').getDate()
             && activity.get('createdAt').getMonth() == demo.get('createdAt').getMonth();
           }));
         });
+        data.demographics = activityGroups;
 
-        data.demographics = activityDemographics;
+        // Average activities
+        var activityAverages = [];
+
+        _.each(activityGroups, function(activityGroup) {
+
+          var allCalories = 0;
+          _.each(activityGroup, function(activityGroupItem) {
+            allCalories = allCalories + activityGroupItem.get('Calories');
+          });
+          activityAverages.push({
+            calories: allCalories / activityGroup.length
+          });
+        });
+        data.averages = activityAverages;
 
         response.success(data);
 

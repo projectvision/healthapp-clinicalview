@@ -36,10 +36,12 @@ export default Ember.Route.extend({
         var heartRates = [];
 
         for (var index = 0; index < data.result.graphs.length; index++) {
-          var item = data.result.graphs[index];
-          steps.push({x: item.createdAt, y: item.Steps});
-          calories.push({x: item.createdAt, y: item.Calories});
-          heartRates.push({x: item.createdAt, y: item.NormalHR});
+          var graph = data.result.graphs[index];
+          var average = data.result.averages[index];
+
+          steps.push({x: graph.createdAt, p: graph.Steps});
+          calories.push({x: graph.createdAt, p: graph.Calories, d: average.calories});
+          heartRates.push({x: graph.createdAt, p: graph.NormalHR});
         }
 
         // Create Graphs
