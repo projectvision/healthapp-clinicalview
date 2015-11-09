@@ -91089,19 +91089,7 @@ Licensed under the BSD-2-Clause License.
 
 }).call(this);
 
-;define('ember-cli-app-version', ['ember-cli-app-version/index', 'ember', 'exports'], function(__index__, __Ember__, __exports__) {
-  'use strict';
-  var keys = Object.keys || __Ember__['default'].keys;
-  var forEach = Array.prototype.forEach && function(array, cb) {
-    array.forEach(cb);
-  } || __Ember__['default'].EnumerableUtils.forEach;
-
-  forEach(keys(__index__), (function(key) {
-    __exports__[key] = __index__[key];
-  }));
-});
-
-define('ember-cli-app-version/components/app-version', ['exports', 'ember', 'ember-cli-app-version/templates/app-version'], function (exports, Ember, layout) {
+;define('ember-cli-app-version/components/app-version', ['exports', 'ember', 'ember-cli-app-version/templates/app-version'], function (exports, Ember, layout) {
 
   'use strict';
 
@@ -91180,7 +91168,7 @@ define('ember-cli-app-version/templates/app-version', ['exports'], function (exp
   }()));
 
 });
-define('ember-cli-content-security-policy', ['ember-cli-content-security-policy/index', 'ember', 'exports'], function(__index__, __Ember__, __exports__) {
+define('ember-cli-app-version', ['ember-cli-app-version/index', 'ember', 'exports'], function(__index__, __Ember__, __exports__) {
   'use strict';
   var keys = Object.keys || __Ember__['default'].keys;
   var forEach = Array.prototype.forEach && function(array, cb) {
@@ -91192,7 +91180,7 @@ define('ember-cli-content-security-policy', ['ember-cli-content-security-policy/
   }));
 });
 
-define('ember-parse-adapter', ['ember-parse-adapter/index', 'ember', 'exports'], function(__index__, __Ember__, __exports__) {
+define('ember-cli-content-security-policy', ['ember-cli-content-security-policy/index', 'ember', 'exports'], function(__index__, __Ember__, __exports__) {
   'use strict';
   var keys = Object.keys || __Ember__['default'].keys;
   var forEach = Array.prototype.forEach && function(array, cb) {
@@ -91337,7 +91325,6 @@ define('ember-parse-adapter/adapters/application', ['exports', 'ember', 'ember-d
           }
         }
       };
-
       // the request is to the related type and not the type for the record.
       // the query is where there is a pointer to this record.
       return this.ajax(this.buildURL(relationship.type), "GET", { data: query });
@@ -91362,7 +91349,6 @@ define('ember-parse-adapter/adapters/application', ['exports', 'ember', 'ember-d
       if (_query.where && 'string' !== Ember['default'].typeOf(_query.where)) {
         _query.where = JSON.stringify(_query.where);
       }
-
       // Pass to _super()
       return this._super(store, type, _query);
     },
@@ -91469,16 +91455,14 @@ define('ember-parse-adapter/models/parse-user', ['exports', 'ember', 'ember-data
 
       return adapter.ajax(adapter.buildURL(model.modelName), 'POST', { data: data }).then(function (response) {
 
-        //var serialized = serializer.normalize( model, response ),
-        //    record = store.push( serialized );
-
         var serialized = serializer.normalize(model, response);
+        // This is the essential bit - merge response data onto existing data.
         Ember['default'].merge(serialized.data.attributes, data);
         var record = store.push(serialized);
 
         return record;
       }, function (response) {
-        return Ember['default'].RSVP.reject(response);
+        return Ember['default'].RSVP.reject(response.responseJSON);
       });
     }
   });
@@ -91807,7 +91791,7 @@ define('ember-parse-adapter/transforms/geopoint', ['exports', 'ember-data', 'emb
   });
 
 });
-define('ember-validations', ['ember-validations/index', 'ember', 'exports'], function(__index__, __Ember__, __exports__) {
+define('ember-parse-adapter', ['ember-parse-adapter/index', 'ember', 'exports'], function(__index__, __Ember__, __exports__) {
   'use strict';
   var keys = Object.keys || __Ember__['default'].keys;
   var forEach = Array.prototype.forEach && function(array, cb) {
@@ -92614,6 +92598,18 @@ define('ember-validations/validators/local/presence', ['exports', 'ember', 'embe
   });
 
 });
+define('ember-validations', ['ember-validations/index', 'ember', 'exports'], function(__index__, __Ember__, __exports__) {
+  'use strict';
+  var keys = Object.keys || __Ember__['default'].keys;
+  var forEach = Array.prototype.forEach && function(array, cb) {
+    array.forEach(cb);
+  } || __Ember__['default'].EnumerableUtils.forEach;
+
+  forEach(keys(__index__), (function(key) {
+    __exports__[key] = __index__[key];
+  }));
+});
+
 ;/* jshint ignore:start */
 
 

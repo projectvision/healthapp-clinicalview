@@ -236,6 +236,13 @@ define('yabbit/controllers/object', ['exports', 'ember'], function (exports, Emb
 	exports['default'] = Ember['default'].Controller;
 
 });
+define('yabbit/controllers/patients/index/show', ['exports', 'ember'], function (exports, Ember) {
+
+	'use strict';
+
+	exports['default'] = Ember['default'].Controller.extend({});
+
+});
 define('yabbit/controllers/patients/index', ['exports', 'ember'], function (exports, Ember) {
 
   'use strict';
@@ -243,13 +250,6 @@ define('yabbit/controllers/patients/index', ['exports', 'ember'], function (expo
   exports['default'] = Ember['default'].Controller.extend({
     //isCorrectRouteActive: Ember.computed.equal('currentRouteName', 'currentRouteName')
   });
-
-});
-define('yabbit/controllers/patients/index/show', ['exports', 'ember'], function (exports, Ember) {
-
-	'use strict';
-
-	exports['default'] = Ember['default'].Controller.extend({});
 
 });
 define('yabbit/controllers/session/login', ['exports', 'ember'], function (exports, Ember) {
@@ -345,96 +345,6 @@ define('yabbit/controllers/session/signup', ['exports', 'ember', 'ember-validati
   });
 
 });
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/adapters/application.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/adapters');
-  QUnit.test('modules/ember-parse-adapter/adapters/application.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/adapters/application.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/file.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter');
-  QUnit.test('modules/ember-parse-adapter/file.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/file.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/geopoint.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter');
-  QUnit.test('modules/ember-parse-adapter/geopoint.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/geopoint.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/initializers/initialize.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/initializers');
-  QUnit.test('modules/ember-parse-adapter/initializers/initialize.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/initializers/initialize.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/models/parse-user.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/models');
-  QUnit.test('modules/ember-parse-adapter/models/parse-user.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/models/parse-user.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/serializers/application.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/serializers');
-  QUnit.test('modules/ember-parse-adapter/serializers/application.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/serializers/application.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/transforms/date.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/transforms');
-  QUnit.test('modules/ember-parse-adapter/transforms/date.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/transforms/date.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/transforms/file.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/transforms');
-  QUnit.test('modules/ember-parse-adapter/transforms/file.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/transforms/file.js should pass jshint.');
-  });
-
-});
-define('yabbit/ember-parse-adapter/tests/modules/ember-parse-adapter/transforms/geopoint.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - modules/ember-parse-adapter/transforms');
-  QUnit.test('modules/ember-parse-adapter/transforms/geopoint.js should pass jshint', function (assert) {
-    assert.ok(true, 'modules/ember-parse-adapter/transforms/geopoint.js should pass jshint.');
-  });
-
-});
 define('yabbit/file', ['exports', 'ember-parse-adapter/file'], function (exports, file) {
 
 	'use strict';
@@ -493,8 +403,6 @@ define('yabbit/initializers/export-application-global', ['exports', 'ember', 'ya
       }
     }
   }
-
-  ;
 
   exports['default'] = {
     name: 'export-application-global',
@@ -642,6 +550,24 @@ define('yabbit/routes/index', ['exports', 'ember'], function (exports, Ember) {
   });
 
 });
+define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (exports, Ember) {
+
+  'use strict';
+
+  exports['default'] = Ember['default'].Route.extend({
+    // Render Patient Show into detail template
+    renderTemplate: function renderTemplate() {
+      this.render({
+        outlet: 'detail'
+      });
+    },
+    // Return the selected patient
+    model: function model(params) {
+      return this.modelFor('patients.index').findBy('patientId', parseInt(params.id));
+    }
+  });
+
+});
 define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/authenticated-route-mixin'], function (exports, Ember, AuthenticatedRouteMixin) {
 
   'use strict';
@@ -782,24 +708,6 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
           data: [{ x: '2015-07', p: 10000, d: 20000 }, { x: '2015-08', p: 11000, d: 21000 }, { x: '2015-09', p: 15000, d: 23000 }, { x: '2015-10', p: 16000, d: 24000 }, { x: '2015-11', p: 20000, d: 23000 }, { x: '2015-12', p: 35000, d: 22000 }]
         }]
       }];
-    }
-  });
-
-});
-define('yabbit/routes/patients/index/show', ['exports', 'ember'], function (exports, Ember) {
-
-  'use strict';
-
-  exports['default'] = Ember['default'].Route.extend({
-    // Render Patient Show into detail template
-    renderTemplate: function renderTemplate() {
-      this.render({
-        outlet: 'detail'
-      });
-    },
-    // Return the selected patient
-    model: function model(params) {
-      return this.modelFor('patients.index').findBy('patientId', parseInt(params.id));
     }
   });
 
@@ -1312,11 +1220,126 @@ define('yabbit/templates/index', ['exports'], function (exports) {
   }()));
 
 });
-define('yabbit/templates/patients', ['exports'], function (exports) {
+define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
 
   'use strict';
 
   exports['default'] = Ember.HTMLBars.template((function() {
+    var child0 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.10",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 37,
+              "column": 4
+            },
+            "end": {
+              "line": 47,
+              "column": 4
+            }
+          },
+          "moduleName": "yabbit/templates/patients/index/show.hbs"
+        },
+        arity: 1,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("      ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("div");
+          dom.setAttribute(el1,"class","column");
+          var el2 = dom.createTextNode("\n        ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("section");
+          dom.setAttribute(el2,"class","area-chart");
+          var el3 = dom.createTextNode("\n          ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("header");
+          var el4 = dom.createTextNode("\n            ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createElement("em");
+          dom.setAttribute(el4,"class","measurement");
+          var el5 = dom.createComment("");
+          dom.appendChild(el4, el5);
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n            ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createElement("h2");
+          var el5 = dom.createComment("");
+          dom.appendChild(el4, el5);
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n          ");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n          ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createComment("");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n        ");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n      ");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var element0 = dom.childAt(fragment, [1, 1]);
+          var element1 = dom.childAt(element0, [1]);
+          var morphs = new Array(3);
+          morphs[0] = dom.createMorphAt(dom.childAt(element1, [1]),0,0);
+          morphs[1] = dom.createMorphAt(dom.childAt(element1, [3]),0,0);
+          morphs[2] = dom.createMorphAt(element0,3,3);
+          return morphs;
+        },
+        statements: [
+          ["content","chart.measurement",["loc",[null,[41,36],[41,57]]]],
+          ["content","chart.title",["loc",[null,[42,16],[42,31]]]],
+          ["inline","area-chart",[],["data",["subexpr","@mut",[["get","chart.data",["loc",[null,[44,28],[44,38]]]]],[],[]]],["loc",[null,[44,10],[44,40]]]]
+        ],
+        locals: ["chart"],
+        templates: []
+      };
+    }());
+    var child1 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.10",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 53,
+              "column": 0
+            },
+            "end": {
+              "line": 53,
+              "column": 66
+            }
+          },
+          "moduleName": "yabbit/templates/patients/index/show.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("View All");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
     return {
       meta: {
         "revision": "Ember@1.13.10",
@@ -1327,40 +1350,219 @@ define('yabbit/templates/patients', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 4,
+            "line": 54,
             "column": 0
           }
         },
-        "moduleName": "yabbit/templates/patients.hbs"
+        "moduleName": "yabbit/templates/patients/index/show.hbs"
       },
       arity: 0,
       cachedFragment: null,
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("section");
-        dom.setAttribute(el1,"id","patients");
-        var el2 = dom.createTextNode("\n  ");
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"id","patient");
+        dom.setAttribute(el1,"class","pane");
+        var el2 = dom.createTextNode("\n\n  ");
         dom.appendChild(el1, el2);
-        var el2 = dom.createComment("");
+        var el2 = dom.createElement("table");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("thead");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("th");
+        dom.setAttribute(el4,"class","challenge-completion");
+        var el5 = dom.createTextNode("Challenge Completion");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("th");
+        dom.setAttribute(el4,"class","health-risk");
+        var el5 = dom.createTextNode("Health Risk");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("th");
+        dom.setAttribute(el4,"class","activity-level");
+        var el5 = dom.createTextNode("Activity Level");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("tbody");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("tr");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("td");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","bar fitness");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("em");
+        dom.setAttribute(el7,"class","percent");
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("%");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("em");
+        var el8 = dom.createTextNode("Fitness");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","bar diet");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("em");
+        dom.setAttribute(el7,"class","percent");
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("%");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("em");
+        var el8 = dom.createTextNode("Diet");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","bar stress");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("em");
+        dom.setAttribute(el7,"class","percent");
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("%");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("em");
+        var el8 = dom.createTextNode("Strength");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("td");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("td");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n");
+        var el2 = dom.createTextNode("\n\n  ");
         dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","charts");
+        var el3 = dom.createTextNode("\n\n");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(1);
-        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]),1,1);
+        var element2 = dom.childAt(fragment, [0]);
+        var element3 = dom.childAt(element2, [1, 3, 1]);
+        var element4 = dom.childAt(element3, [1]);
+        var element5 = dom.childAt(element4, [1]);
+        var element6 = dom.childAt(element4, [3]);
+        var element7 = dom.childAt(element4, [5]);
+        var element8 = dom.childAt(element3, [3]);
+        var element9 = dom.childAt(element3, [5]);
+        var morphs = new Array(12);
+        morphs[0] = dom.createAttrMorph(element5, 'style');
+        morphs[1] = dom.createMorphAt(dom.childAt(element5, [1]),0,0);
+        morphs[2] = dom.createAttrMorph(element6, 'style');
+        morphs[3] = dom.createMorphAt(dom.childAt(element6, [1]),0,0);
+        morphs[4] = dom.createAttrMorph(element7, 'style');
+        morphs[5] = dom.createMorphAt(dom.childAt(element7, [1]),0,0);
+        morphs[6] = dom.createAttrMorph(element8, 'class');
+        morphs[7] = dom.createMorphAt(element8,1,1);
+        morphs[8] = dom.createAttrMorph(element9, 'class');
+        morphs[9] = dom.createMorphAt(element9,1,1);
+        morphs[10] = dom.createMorphAt(dom.childAt(element2, [3]),1,1);
+        morphs[11] = dom.createMorphAt(fragment,2,2,contextualElement);
         return morphs;
       },
       statements: [
-        ["inline","outlet",["master"],[],["loc",[null,[2,2],[2,21]]]]
+        ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.fitness",["loc",[null,[12,51],[12,84]]]],"%"]]],
+        ["content","model.challengeCompletion.fitness",["loc",[null,[13,32],[13,69]]]],
+        ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.diet",["loc",[null,[16,48],[16,78]]]],"%"]]],
+        ["content","model.challengeCompletion.diet",["loc",[null,[17,32],[17,66]]]],
+        ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.stress",["loc",[null,[20,50],[20,82]]]],"%"]]],
+        ["content","model.challengeCompletion.stress",["loc",[null,[21,32],[21,68]]]],
+        ["attribute","class",["concat",["health-risk ",["get","model.healthRisk.change",["loc",[null,[25,33],[25,56]]]]]]],
+        ["content","model.healthRisk.status",["loc",[null,[26,10],[26,37]]]],
+        ["attribute","class",["concat",["activity-level ",["get","model.activityLevel.change",["loc",[null,[28,36],[28,62]]]]]]],
+        ["content","model.activityLevel.status",["loc",[null,[29,10],[29,40]]]],
+        ["block","each",[["get","model.charts",["loc",[null,[37,12],[37,24]]]]],[],0,null,["loc",[null,[37,4],[47,13]]]],
+        ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[53,0],[53,78]]]]
       ],
       locals: [],
-      templates: []
+      templates: [child0, child1]
     };
   }()));
 
@@ -1737,126 +1939,11 @@ define('yabbit/templates/patients/index', ['exports'], function (exports) {
   }()));
 
 });
-define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
+define('yabbit/templates/patients', ['exports'], function (exports) {
 
   'use strict';
 
   exports['default'] = Ember.HTMLBars.template((function() {
-    var child0 = (function() {
-      return {
-        meta: {
-          "revision": "Ember@1.13.10",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 37,
-              "column": 4
-            },
-            "end": {
-              "line": 47,
-              "column": 4
-            }
-          },
-          "moduleName": "yabbit/templates/patients/index/show.hbs"
-        },
-        arity: 1,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("      ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("div");
-          dom.setAttribute(el1,"class","column");
-          var el2 = dom.createTextNode("\n        ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("section");
-          dom.setAttribute(el2,"class","area-chart");
-          var el3 = dom.createTextNode("\n          ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createElement("header");
-          var el4 = dom.createTextNode("\n            ");
-          dom.appendChild(el3, el4);
-          var el4 = dom.createElement("em");
-          dom.setAttribute(el4,"class","measurement");
-          var el5 = dom.createComment("");
-          dom.appendChild(el4, el5);
-          dom.appendChild(el3, el4);
-          var el4 = dom.createTextNode("\n            ");
-          dom.appendChild(el3, el4);
-          var el4 = dom.createElement("h2");
-          var el5 = dom.createComment("");
-          dom.appendChild(el4, el5);
-          dom.appendChild(el3, el4);
-          var el4 = dom.createTextNode("\n          ");
-          dom.appendChild(el3, el4);
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("\n          ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createComment("");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("\n        ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n      ");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element0 = dom.childAt(fragment, [1, 1]);
-          var element1 = dom.childAt(element0, [1]);
-          var morphs = new Array(3);
-          morphs[0] = dom.createMorphAt(dom.childAt(element1, [1]),0,0);
-          morphs[1] = dom.createMorphAt(dom.childAt(element1, [3]),0,0);
-          morphs[2] = dom.createMorphAt(element0,3,3);
-          return morphs;
-        },
-        statements: [
-          ["content","chart.measurement",["loc",[null,[41,36],[41,57]]]],
-          ["content","chart.title",["loc",[null,[42,16],[42,31]]]],
-          ["inline","area-chart",[],["data",["subexpr","@mut",[["get","chart.data",["loc",[null,[44,28],[44,38]]]]],[],[]]],["loc",[null,[44,10],[44,40]]]]
-        ],
-        locals: ["chart"],
-        templates: []
-      };
-    }());
-    var child1 = (function() {
-      return {
-        meta: {
-          "revision": "Ember@1.13.10",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 53,
-              "column": 0
-            },
-            "end": {
-              "line": 53,
-              "column": 66
-            }
-          },
-          "moduleName": "yabbit/templates/patients/index/show.hbs"
-        },
-        arity: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("View All");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes() { return []; },
-        statements: [
-
-        ],
-        locals: [],
-        templates: []
-      };
-    }());
     return {
       meta: {
         "revision": "Ember@1.13.10",
@@ -1867,334 +1954,19 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 54,
+            "line": 4,
             "column": 0
           }
         },
-        "moduleName": "yabbit/templates/patients/index/show.hbs"
+        "moduleName": "yabbit/templates/patients.hbs"
       },
       arity: 0,
       cachedFragment: null,
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("div");
-        dom.setAttribute(el1,"id","patient");
-        dom.setAttribute(el1,"class","pane");
-        var el2 = dom.createTextNode("\n\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("table");
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("thead");
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("th");
-        dom.setAttribute(el4,"class","challenge-completion");
-        var el5 = dom.createTextNode("Challenge Completion");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("th");
-        dom.setAttribute(el4,"class","health-risk");
-        var el5 = dom.createTextNode("Health Risk");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("th");
-        dom.setAttribute(el4,"class","activity-level");
-        var el5 = dom.createTextNode("Activity Level");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n    ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("tbody");
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("tr");
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("td");
-        var el6 = dom.createTextNode("\n          ");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createElement("div");
-        dom.setAttribute(el6,"class","bar fitness");
-        var el7 = dom.createTextNode("\n            ");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createElement("em");
-        dom.setAttribute(el7,"class","percent");
-        var el8 = dom.createComment("");
-        dom.appendChild(el7, el8);
-        var el8 = dom.createTextNode("%");
-        dom.appendChild(el7, el8);
-        dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("\n            ");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createElement("em");
-        var el8 = dom.createTextNode("Fitness");
-        dom.appendChild(el7, el8);
-        dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("\n          ");
-        dom.appendChild(el6, el7);
-        dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n          ");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createElement("div");
-        dom.setAttribute(el6,"class","bar diet");
-        var el7 = dom.createTextNode("\n            ");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createElement("em");
-        dom.setAttribute(el7,"class","percent");
-        var el8 = dom.createComment("");
-        dom.appendChild(el7, el8);
-        var el8 = dom.createTextNode("%");
-        dom.appendChild(el7, el8);
-        dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("\n            ");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createElement("em");
-        var el8 = dom.createTextNode("Diet");
-        dom.appendChild(el7, el8);
-        dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("\n          ");
-        dom.appendChild(el6, el7);
-        dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n          ");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createElement("div");
-        dom.setAttribute(el6,"class","bar stress");
-        var el7 = dom.createTextNode("\n            ");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createElement("em");
-        dom.setAttribute(el7,"class","percent");
-        var el8 = dom.createComment("");
-        dom.appendChild(el7, el8);
-        var el8 = dom.createTextNode("%");
-        dom.appendChild(el7, el8);
-        dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("\n            ");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createElement("em");
-        var el8 = dom.createTextNode("Strength");
-        dom.appendChild(el7, el8);
-        dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("\n          ");
-        dom.appendChild(el6, el7);
-        dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n        ");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("td");
-        var el6 = dom.createTextNode("\n          ");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createComment("");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n        ");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("td");
-        var el6 = dom.createTextNode("\n          ");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createComment("");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n        ");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n      ");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n    ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n  ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2,"class","charts");
-        var el3 = dom.createTextNode("\n\n");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createComment("");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n  ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n\n");
-        dom.appendChild(el1, el2);
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n\n");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createComment("");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n");
-        dom.appendChild(el0, el1);
-        return el0;
-      },
-      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element2 = dom.childAt(fragment, [0]);
-        var element3 = dom.childAt(element2, [1, 3, 1]);
-        var element4 = dom.childAt(element3, [1]);
-        var element5 = dom.childAt(element4, [1]);
-        var element6 = dom.childAt(element4, [3]);
-        var element7 = dom.childAt(element4, [5]);
-        var element8 = dom.childAt(element3, [3]);
-        var element9 = dom.childAt(element3, [5]);
-        var morphs = new Array(12);
-        morphs[0] = dom.createAttrMorph(element5, 'style');
-        morphs[1] = dom.createMorphAt(dom.childAt(element5, [1]),0,0);
-        morphs[2] = dom.createAttrMorph(element6, 'style');
-        morphs[3] = dom.createMorphAt(dom.childAt(element6, [1]),0,0);
-        morphs[4] = dom.createAttrMorph(element7, 'style');
-        morphs[5] = dom.createMorphAt(dom.childAt(element7, [1]),0,0);
-        morphs[6] = dom.createAttrMorph(element8, 'class');
-        morphs[7] = dom.createMorphAt(element8,1,1);
-        morphs[8] = dom.createAttrMorph(element9, 'class');
-        morphs[9] = dom.createMorphAt(element9,1,1);
-        morphs[10] = dom.createMorphAt(dom.childAt(element2, [3]),1,1);
-        morphs[11] = dom.createMorphAt(fragment,2,2,contextualElement);
-        return morphs;
-      },
-      statements: [
-        ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.fitness",["loc",[null,[12,51],[12,84]]]],"%"]]],
-        ["content","model.challengeCompletion.fitness",["loc",[null,[13,32],[13,69]]]],
-        ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.diet",["loc",[null,[16,48],[16,78]]]],"%"]]],
-        ["content","model.challengeCompletion.diet",["loc",[null,[17,32],[17,66]]]],
-        ["attribute","style",["concat",["width: ",["get","model.challengeCompletion.stress",["loc",[null,[20,50],[20,82]]]],"%"]]],
-        ["content","model.challengeCompletion.stress",["loc",[null,[21,32],[21,68]]]],
-        ["attribute","class",["concat",["health-risk ",["get","model.healthRisk.change",["loc",[null,[25,33],[25,56]]]]]]],
-        ["content","model.healthRisk.status",["loc",[null,[26,10],[26,37]]]],
-        ["attribute","class",["concat",["activity-level ",["get","model.activityLevel.change",["loc",[null,[28,36],[28,62]]]]]]],
-        ["content","model.activityLevel.status",["loc",[null,[29,10],[29,40]]]],
-        ["block","each",[["get","model.charts",["loc",[null,[37,12],[37,24]]]]],[],0,null,["loc",[null,[37,4],[47,13]]]],
-        ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[53,0],[53,78]]]]
-      ],
-      locals: [],
-      templates: [child0, child1]
-    };
-  }()));
-
-});
-define('yabbit/templates/session', ['exports'], function (exports) {
-
-  'use strict';
-
-  exports['default'] = Ember.HTMLBars.template((function() {
-    var child0 = (function() {
-      return {
-        meta: {
-          "revision": "Ember@1.13.10",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 3,
-              "column": 4
-            },
-            "end": {
-              "line": 3,
-              "column": 48
-            }
-          },
-          "moduleName": "yabbit/templates/session.hbs"
-        },
-        arity: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("Login");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes() { return []; },
-        statements: [
-
-        ],
-        locals: [],
-        templates: []
-      };
-    }());
-    var child1 = (function() {
-      return {
-        meta: {
-          "revision": "Ember@1.13.10",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 4,
-              "column": 4
-            },
-            "end": {
-              "line": 4,
-              "column": 51
-            }
-          },
-          "moduleName": "yabbit/templates/session.hbs"
-        },
-        arity: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("Signup");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes() { return []; },
-        statements: [
-
-        ],
-        locals: [],
-        templates: []
-      };
-    }());
-    return {
-      meta: {
-        "revision": "Ember@1.13.10",
-        "loc": {
-          "source": null,
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 8,
-            "column": 0
-          }
-        },
-        "moduleName": "yabbit/templates/session.hbs"
-      },
-      arity: 0,
-      cachedFragment: null,
-      hasRendered: false,
-      buildFragment: function buildFragment(dom) {
-        var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("div");
-        dom.setAttribute(el1,"id","edit");
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2,"class","tabs");
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createComment("");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createComment("");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n  ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
+        var el1 = dom.createElement("section");
+        dom.setAttribute(el1,"id","patients");
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createComment("");
@@ -2207,21 +1979,15 @@ define('yabbit/templates/session', ['exports'], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0]);
-        var element1 = dom.childAt(element0, [1]);
-        var morphs = new Array(3);
-        morphs[0] = dom.createMorphAt(element1,1,1);
-        morphs[1] = dom.createMorphAt(element1,3,3);
-        morphs[2] = dom.createMorphAt(element0,3,3);
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]),1,1);
         return morphs;
       },
       statements: [
-        ["block","link-to",["session.login"],["id","login"],0,null,["loc",[null,[3,4],[3,60]]]],
-        ["block","link-to",["session.signup"],["id","signup"],1,null,["loc",[null,[4,4],[4,63]]]],
-        ["content","outlet",["loc",[null,[6,2],[6,12]]]]
+        ["inline","outlet",["master"],[],["loc",[null,[2,2],[2,21]]]]
       ],
       locals: [],
-      templates: [child0, child1]
+      templates: []
     };
   }()));
 
@@ -2494,6 +2260,148 @@ define('yabbit/templates/session/signup', ['exports'], function (exports) {
   }()));
 
 });
+define('yabbit/templates/session', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    var child0 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.10",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 3,
+              "column": 4
+            },
+            "end": {
+              "line": 3,
+              "column": 48
+            }
+          },
+          "moduleName": "yabbit/templates/session.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Login");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
+    var child1 = (function() {
+      return {
+        meta: {
+          "revision": "Ember@1.13.10",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 4,
+              "column": 4
+            },
+            "end": {
+              "line": 4,
+              "column": 51
+            }
+          },
+          "moduleName": "yabbit/templates/session.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Signup");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() { return []; },
+        statements: [
+
+        ],
+        locals: [],
+        templates: []
+      };
+    }());
+    return {
+      meta: {
+        "revision": "Ember@1.13.10",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 8,
+            "column": 0
+          }
+        },
+        "moduleName": "yabbit/templates/session.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"id","edit");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","tabs");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0]);
+        var element1 = dom.childAt(element0, [1]);
+        var morphs = new Array(3);
+        morphs[0] = dom.createMorphAt(element1,1,1);
+        morphs[1] = dom.createMorphAt(element1,3,3);
+        morphs[2] = dom.createMorphAt(element0,3,3);
+        return morphs;
+      },
+      statements: [
+        ["block","link-to",["session.login"],["id","login"],0,null,["loc",[null,[3,4],[3,60]]]],
+        ["block","link-to",["session.signup"],["id","signup"],1,null,["loc",[null,[4,4],[4,63]]]],
+        ["content","outlet",["loc",[null,[6,2],[6,12]]]]
+      ],
+      locals: [],
+      templates: [child0, child1]
+    };
+  }()));
+
+});
 define('yabbit/tests/adapters/application.jshint', function () {
 
   'use strict';
@@ -2554,16 +2462,6 @@ define('yabbit/tests/controllers/account/edit.jshint', function () {
   });
 
 });
-define('yabbit/tests/controllers/patients/index.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - controllers/patients');
-  QUnit.test('controllers/patients/index.js should pass jshint', function(assert) { 
-    assert.ok(true, 'controllers/patients/index.js should pass jshint.'); 
-  });
-
-});
 define('yabbit/tests/controllers/patients/index/show.jshint', function () {
 
   'use strict';
@@ -2571,6 +2469,16 @@ define('yabbit/tests/controllers/patients/index/show.jshint', function () {
   QUnit.module('JSHint - controllers/patients/index');
   QUnit.test('controllers/patients/index/show.js should pass jshint', function(assert) { 
     assert.ok(true, 'controllers/patients/index/show.js should pass jshint.'); 
+  });
+
+});
+define('yabbit/tests/controllers/patients/index.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - controllers/patients');
+  QUnit.test('controllers/patients/index.js should pass jshint', function(assert) { 
+    assert.ok(true, 'controllers/patients/index.js should pass jshint.'); 
   });
 
 });
@@ -2781,16 +2689,6 @@ define('yabbit/tests/routes/index.jshint', function () {
   });
 
 });
-define('yabbit/tests/routes/patients/index.jshint', function () {
-
-  'use strict';
-
-  QUnit.module('JSHint - routes/patients');
-  QUnit.test('routes/patients/index.js should pass jshint', function(assert) { 
-    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 11, col 19, \'params\' is defined but never used.\n\n1 error'); 
-  });
-
-});
 define('yabbit/tests/routes/patients/index/show.jshint', function () {
 
   'use strict';
@@ -2798,6 +2696,16 @@ define('yabbit/tests/routes/patients/index/show.jshint', function () {
   QUnit.module('JSHint - routes/patients/index');
   QUnit.test('routes/patients/index/show.js should pass jshint', function(assert) { 
     assert.ok(true, 'routes/patients/index/show.js should pass jshint.'); 
+  });
+
+});
+define('yabbit/tests/routes/patients/index.jshint', function () {
+
+  'use strict';
+
+  QUnit.module('JSHint - routes/patients');
+  QUnit.test('routes/patients/index.js should pass jshint', function(assert) { 
+    assert.ok(false, 'routes/patients/index.js should pass jshint.\nroutes/patients/index.js: line 11, col 19, \'params\' is defined but never used.\n\n1 error'); 
   });
 
 });
@@ -3041,7 +2949,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+4f1f5ebd"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+52659eef"});
 }
 
 /* jshint ignore:end */

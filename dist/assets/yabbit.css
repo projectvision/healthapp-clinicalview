@@ -67,8 +67,7 @@ input {
     display: block;
     padding: 10px;
     font-size: 1em; }
-    #edit input[type="text"],
-    #edit input[type="password"] {
+    #edit input[type="text"], #edit input[type="password"] {
       margin-bottom: 5px; }
   #edit button {
     margin-top: 10px; }
@@ -326,8 +325,7 @@ section#patients {
         text-shadow: 1px 1px 1px #fefefe; }
         section#patients table thead th.challenge-completion {
           width: 40%; }
-        section#patients table thead th.health-risk,
-        section#patients table thead th.activity-level {
+        section#patients table thead th.health-risk, section#patients table thead th.activity-level {
           width: 30%; }
     section#patients table tbody tr td {
       padding: 0 10px;
@@ -355,11 +353,9 @@ section#patients {
         content: '▲'; }
       section#patients table tbody tr td.down:after {
         content: '▼'; }
-      section#patients table tbody tr td.health-risk.down:after,
-      section#patients table tbody tr td.activity-level.up:after {
+      section#patients table tbody tr td.health-risk.down:after, section#patients table tbody tr td.activity-level.up:after {
         color: #17A554; }
-      section#patients table tbody tr td.health-risk.up:after,
-      section#patients table tbody tr td.activity-level.down:after {
+      section#patients table tbody tr td.health-risk.up:after, section#patients table tbody tr td.activity-level.down:after {
         color: #FF3F8B; }
   section#patients table thead th {
     border: 1px solid #ccc;
