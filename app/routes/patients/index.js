@@ -10,29 +10,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
   model: function(params) {
 
-    // @TODO: Load patients from Parse
-
-    //// Get adapter and serializer
-    //var store = this.get('store');
-    //var adapter = store.adapterFor('parse-user');
-    //var serializer = store.serializerFor('parse-user');
-
-    //var parsePatients = adapter.ajax(adapter.buildURL("parse-user", "me"), "GET", {}).then(function(user) {
-    //  return store.push({
-    //    data: {
-    //      id: user.objectId,
-    //      type: 'parse-user',
-    //      attributes: {
-    //        sessionToken: user.sessionToken,
-    //        email: user.email,
-    //        username: user.username,
-    //        firstName: user.firstName,
-    //        lastName: user.lastName
-    //      }
-    //    }
-    //  });
-    //});
-
     // Dummy Data
     return [
       {

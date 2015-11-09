@@ -307,6 +307,11 @@ section#patients {
               text-transform: uppercase; }
             section#patients .pane .charts .column section .description .demographic {
               color: #848484; }
+          section#patients .pane .charts .column section img {
+            max-width: 100%;
+            height: auto; }
+        section#patients .pane .charts .column.span2 {
+          width: 100%; }
   section#patients #view-all.button {
     position: absolute;
     top: 6px;
