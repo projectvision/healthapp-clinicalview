@@ -1440,7 +1440,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         var el7 = dom.createTextNode("\n            ");
         dom.appendChild(el6, el7);
         var el7 = dom.createElement("em");
-        var el8 = dom.createTextNode("Strength");
+        var el8 = dom.createTextNode("Stress");
         dom.appendChild(el7, el8);
         dom.appendChild(el6, el7);
         var el7 = dom.createTextNode("\n          ");
