@@ -1506,7 +1506,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         dom.appendChild(el4, el5);
         var el5 = dom.createElement("img");
         dom.setAttribute(el5,"id","logo");
-        dom.setAttribute(el5,"src","assets/behavioral-risk-score.png");
+        dom.setAttribute(el5,"src","assets/behavioral-risk-score2.png");
         dom.appendChild(el4, el5);
         var el5 = dom.createTextNode("\n      ");
         dom.appendChild(el4, el5);
