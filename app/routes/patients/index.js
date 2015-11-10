@@ -84,6 +84,13 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           percent: 33,
           level: 'low'
         },
+        "behavioralRiskFactors": {
+          noise: 'moderate',
+          air: 'high',
+          healthy: 'low',
+          crime: 'moderate',
+          unhealthy: 'low'
+        },
         "radar": {
           labels: ["Susceptibility", "Severity", "Benefit", "Barrier", "Cues", "Self-efficacy"],
           datasets: [{
@@ -170,6 +177,13 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           percent: 60,
           level: 'moderate'
         },
+        "behavioralRiskFactors": {
+          noise: 'low',
+          air: 'moderate',
+          healthy: 'moderate',
+          crime: 'low',
+          unhealthy: 'high'
+        },
         "radar": {
           labels: ["Susceptibility", "Severity", "Benefit", "Barrier", "Cues", "Self-efficacy"],
           datasets: [{
@@ -255,6 +269,13 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           score: 110,
           percent: 73,
           level: 'high'
+        },
+        "behavioralRiskFactors": {
+          noise: 'low',
+          air: 'high',
+          healthy: 'moderate',
+          crime: 'low',
+          unhealthy: 'low'
         },
         "radar": {
           labels: ["Susceptibility", "Severity", "Benefit", "Barrier", "Cues", "Self-efficacy"],

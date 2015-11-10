@@ -75,7 +75,33 @@
         <header>
           <h2>Behavioral Risk Score Factors</h2>
         </header>
-        <img id="logo" src="assets/behaviorial-risk-score-factors.png"/>
+        <div class="content">
+          <div class="col">
+            <div class="circle {{model.behavioralRiskFactors.noise}}">
+              <p><span class="risk-level">{{model.behavioralRiskFactors.noise}}</span> exposure to noise pollution</p>
+            </div>
+          </div>
+          <div class="col">
+            <div class="circle {{model.behavioralRiskFactors.air}}">
+              <p><span class="risk-level">{{model.behavioralRiskFactors.air}}</span> exposure to air pollution</p>
+            </div>
+          </div>
+          <div class="col">
+            <div class="circle healthy {{model.behavioralRiskFactors.healthy}}">
+              <p><span class="risk-level">{{model.behavioralRiskFactors.healthy}}</span> exposure to healthy food choices</p>
+            </div>
+          </div>
+          <div class="col">
+            <div class="circle {{model.behavioralRiskFactors.crime}}">
+              <p><span class="risk-level">{{model.behavioralRiskFactors.crime}}</span> exposure to violent crime</p>
+            </div>
+          </div>
+          <div class="col">
+            <div class="circle {{model.behavioralRiskFactors.unhealthy}}">
+              <p><span class="risk-level">{{model.behavioralRiskFactors.unhealthy}}</span> exposure to unhealthy food choices</p>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
 

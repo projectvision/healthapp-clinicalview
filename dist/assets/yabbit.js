@@ -628,6 +628,13 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
           percent: 33,
           level: 'low'
         },
+        "behavioralRiskFactors": {
+          noise: 'moderate',
+          air: 'high',
+          healthy: 'low',
+          crime: 'moderate',
+          unhealthy: 'low'
+        },
         "radar": {
           labels: ["Susceptibility", "Severity", "Benefit", "Barrier", "Cues", "Self-efficacy"],
           datasets: [{
@@ -680,6 +687,13 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
           percent: 60,
           level: 'moderate'
         },
+        "behavioralRiskFactors": {
+          noise: 'low',
+          air: 'moderate',
+          healthy: 'moderate',
+          crime: 'low',
+          unhealthy: 'high'
+        },
         "radar": {
           labels: ["Susceptibility", "Severity", "Benefit", "Barrier", "Cues", "Self-efficacy"],
           datasets: [{
@@ -731,6 +745,13 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
           score: 110,
           percent: 73,
           level: 'high'
+        },
+        "behavioralRiskFactors": {
+          noise: 'low',
+          air: 'high',
+          healthy: 'moderate',
+          crime: 'low',
+          unhealthy: 'low'
         },
         "radar": {
           labels: ["Susceptibility", "Severity", "Benefit", "Barrier", "Cues", "Self-efficacy"],
@@ -1270,11 +1291,11 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 82,
+              "line": 108,
               "column": 4
             },
             "end": {
-              "line": 92,
+              "line": 118,
               "column": 4
             }
           },
@@ -1336,9 +1357,9 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["content","chart.measurement",["loc",[null,[86,36],[86,57]]]],
-          ["content","chart.title",["loc",[null,[87,16],[87,31]]]],
-          ["inline","area-chart",[],["data",["subexpr","@mut",[["get","chart.data",["loc",[null,[89,28],[89,38]]]]],[],[]]],["loc",[null,[89,10],[89,40]]]]
+          ["content","chart.measurement",["loc",[null,[112,36],[112,57]]]],
+          ["content","chart.title",["loc",[null,[113,16],[113,31]]]],
+          ["inline","area-chart",[],["data",["subexpr","@mut",[["get","chart.data",["loc",[null,[115,28],[115,38]]]]],[],[]]],["loc",[null,[115,10],[115,40]]]]
         ],
         locals: ["chart"],
         templates: []
@@ -1351,11 +1372,11 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 98,
+              "line": 124,
               "column": 0
             },
             "end": {
-              "line": 98,
+              "line": 124,
               "column": 66
             }
           },
@@ -1388,7 +1409,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 99,
+            "line": 125,
             "column": 0
           }
         },
@@ -1695,9 +1716,130 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         dom.appendChild(el4, el5);
         var el5 = dom.createTextNode("\n        ");
         dom.appendChild(el4, el5);
-        var el5 = dom.createElement("img");
-        dom.setAttribute(el5,"id","logo");
-        dom.setAttribute(el5,"src","assets/behaviorial-risk-score-factors.png");
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5,"class","content");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","col");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("p");
+        var el9 = dom.createElement("span");
+        dom.setAttribute(el9,"class","risk-level");
+        var el10 = dom.createComment("");
+        dom.appendChild(el9, el10);
+        dom.appendChild(el8, el9);
+        var el9 = dom.createTextNode(" exposure to noise pollution");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n            ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","col");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("p");
+        var el9 = dom.createElement("span");
+        dom.setAttribute(el9,"class","risk-level");
+        var el10 = dom.createComment("");
+        dom.appendChild(el9, el10);
+        dom.appendChild(el8, el9);
+        var el9 = dom.createTextNode(" exposure to air pollution");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n            ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","col");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("p");
+        var el9 = dom.createElement("span");
+        dom.setAttribute(el9,"class","risk-level");
+        var el10 = dom.createComment("");
+        dom.appendChild(el9, el10);
+        dom.appendChild(el8, el9);
+        var el9 = dom.createTextNode(" exposure to healthy food choices");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n            ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","col");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("p");
+        var el9 = dom.createElement("span");
+        dom.setAttribute(el9,"class","risk-level");
+        var el10 = dom.createComment("");
+        dom.appendChild(el9, el10);
+        dom.appendChild(el8, el9);
+        var el9 = dom.createTextNode(" exposure to violent crime");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n            ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","col");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("p");
+        var el9 = dom.createElement("span");
+        dom.setAttribute(el9,"class","risk-level");
+        var el10 = dom.createComment("");
+        dom.appendChild(el9, el10);
+        dom.appendChild(el8, el9);
+        var el9 = dom.createTextNode(" exposure to unhealthy food choices");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n            ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
         dom.appendChild(el4, el5);
         var el5 = dom.createTextNode("\n      ");
         dom.appendChild(el4, el5);
@@ -1738,7 +1880,13 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         var element13 = dom.childAt(element11, [7, 1]);
         var element14 = dom.childAt(element10, [3, 1, 3]);
         var element15 = dom.childAt(element14, [3, 1]);
-        var morphs = new Array(20);
+        var element16 = dom.childAt(element10, [5, 1, 3]);
+        var element17 = dom.childAt(element16, [1, 1]);
+        var element18 = dom.childAt(element16, [3, 1]);
+        var element19 = dom.childAt(element16, [5, 1]);
+        var element20 = dom.childAt(element16, [7, 1]);
+        var element21 = dom.childAt(element16, [9, 1]);
+        var morphs = new Array(30);
         morphs[0] = dom.createAttrMorph(element5, 'style');
         morphs[1] = dom.createMorphAt(dom.childAt(element5, [1]),0,0);
         morphs[2] = dom.createAttrMorph(element6, 'style');
@@ -1757,8 +1905,18 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         morphs[15] = dom.createMorphAt(element14,1,1);
         morphs[16] = dom.createAttrMorph(element15, 'class');
         morphs[17] = dom.createMorphAt(element15,0,0);
-        morphs[18] = dom.createMorphAt(element10,7,7);
-        morphs[19] = dom.createMorphAt(fragment,2,2,contextualElement);
+        morphs[18] = dom.createAttrMorph(element17, 'class');
+        morphs[19] = dom.createMorphAt(dom.childAt(element17, [1, 0]),0,0);
+        morphs[20] = dom.createAttrMorph(element18, 'class');
+        morphs[21] = dom.createMorphAt(dom.childAt(element18, [1, 0]),0,0);
+        morphs[22] = dom.createAttrMorph(element19, 'class');
+        morphs[23] = dom.createMorphAt(dom.childAt(element19, [1, 0]),0,0);
+        morphs[24] = dom.createAttrMorph(element20, 'class');
+        morphs[25] = dom.createMorphAt(dom.childAt(element20, [1, 0]),0,0);
+        morphs[26] = dom.createAttrMorph(element21, 'class');
+        morphs[27] = dom.createMorphAt(dom.childAt(element21, [1, 0]),0,0);
+        morphs[28] = dom.createMorphAt(element10,7,7);
+        morphs[29] = dom.createMorphAt(fragment,2,2,contextualElement);
         return morphs;
       },
       statements: [
@@ -1780,8 +1938,18 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         ["inline","ember-chart",[],["type","radar","data",["subexpr","@mut",[["get","model.radar",["loc",[null,[64,42],[64,53]]]]],[],[]],"width","250","height","160"],["loc",[null,[64,10],[64,80]]]],
         ["attribute","class",["concat",["risk-level ",["get","model.behavioralRisk.level",["loc",[null,[66,38],[66,64]]]]]]],
         ["content","model.behavioralRisk.level",["loc",[null,[66,68],[66,98]]]],
-        ["block","each",[["get","model.charts",["loc",[null,[82,12],[82,24]]]]],[],0,null,["loc",[null,[82,4],[92,13]]]],
-        ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[98,0],[98,78]]]]
+        ["attribute","class",["concat",["circle ",["get","model.behavioralRiskFactors.noise",["loc",[null,[80,33],[80,66]]]]]]],
+        ["content","model.behavioralRiskFactors.noise",["loc",[null,[81,42],[81,79]]]],
+        ["attribute","class",["concat",["circle ",["get","model.behavioralRiskFactors.air",["loc",[null,[85,33],[85,64]]]]]]],
+        ["content","model.behavioralRiskFactors.air",["loc",[null,[86,42],[86,77]]]],
+        ["attribute","class",["concat",["circle healthy ",["get","model.behavioralRiskFactors.healthy",["loc",[null,[90,41],[90,76]]]]]]],
+        ["content","model.behavioralRiskFactors.healthy",["loc",[null,[91,42],[91,81]]]],
+        ["attribute","class",["concat",["circle ",["get","model.behavioralRiskFactors.crime",["loc",[null,[95,33],[95,66]]]]]]],
+        ["content","model.behavioralRiskFactors.crime",["loc",[null,[96,42],[96,79]]]],
+        ["attribute","class",["concat",["circle ",["get","model.behavioralRiskFactors.unhealthy",["loc",[null,[100,33],[100,70]]]]]]],
+        ["content","model.behavioralRiskFactors.unhealthy",["loc",[null,[101,42],[101,83]]]],
+        ["block","each",[["get","model.charts",["loc",[null,[108,12],[108,24]]]]],[],0,null,["loc",[null,[108,4],[118,13]]]],
+        ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[124,0],[124,78]]]]
       ],
       locals: [],
       templates: [child0, child1]
