@@ -385,10 +385,8 @@ section#patients {
                 background: #c63939; }
               section#patients .pane .charts .column.span2 .col .circle p {
                 display: block;
-                margin-top: -25px;
+                margin-top: -33px;
                 padding: 10px; }
-              section#patients .pane .charts .column.span2 .col .circle.healthy p {
-                margin-top: -35px; }
   section#patients #view-all.button {
     position: absolute;
     top: 6px;
