@@ -196,6 +196,13 @@ define('yabbit/components/area-chart', ['exports'], function (exports) {
   });
 
 });
+define('yabbit/components/ember-chart', ['exports', 'ember-cli-chart/components/ember-chart'], function (exports, EmberChart) {
+
+	'use strict';
+
+	exports['default'] = EmberChart['default'];
+
+});
 define('yabbit/controllers/account/edit', ['exports', 'ember'], function (exports, Ember) {
 
   'use strict';
@@ -615,7 +622,25 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
         }, {
           title: "Calories burned",
           data: [{ x: '2015-07', p: 10000, d: 20000 }, { x: '2015-08', p: 11000, d: 21000 }, { x: '2015-09', p: 15000, d: 23000 }, { x: '2015-10', p: 16000, d: 24000 }, { x: '2015-11', p: 20000, d: 23000 }, { x: '2015-12', p: 35000, d: 22000 }]
-        }]
+        }],
+        "behavioralRisk": {
+          score: 50,
+          percent: 33,
+          level: 'low'
+        },
+        "radar": {
+          labels: ["Susceptibility", "Severity", "Benefit", "Barrier", "Cues", "Self-efficacy"],
+          datasets: [{
+            label: "Health Belief Spectrum",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "#4BB3D2",
+            pointColor: "#4BB3D2",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [1, 3, 3, 4, 4, 5]
+          }]
+        }
       }, {
         "patientId": 987654321,
         "firstName": "Miguel",
@@ -649,7 +674,25 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
         }, {
           title: "Calories burned",
           data: [{ x: '2015-07', p: 14000, d: 18000 }, { x: '2015-08', p: 15000, d: 21000 }, { x: '2015-09', p: 14000, d: 23000 }, { x: '2015-10', p: 16000, d: 20000 }, { x: '2015-11', p: 20000, d: 23000 }, { x: '2015-12', p: 35000, d: 22000 }]
-        }]
+        }],
+        "behavioralRisk": {
+          score: 90,
+          percent: 60,
+          level: 'moderate'
+        },
+        "radar": {
+          labels: ["Susceptibility", "Severity", "Benefit", "Barrier", "Cues", "Self-efficacy"],
+          datasets: [{
+            label: "Health Belief Spectrum",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "#4BB3D2",
+            pointColor: "#4BB3D2",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [5, 6, 3, 4, 2, 1]
+          }]
+        }
       }, {
         "patientId": 76764565643,
         "firstName": "Marlon",
@@ -683,7 +726,25 @@ define('yabbit/routes/patients/index', ['exports', 'ember', 'simple-auth/mixins/
         }, {
           title: "Calories burned",
           data: [{ x: '2015-07', p: 10000, d: 20000 }, { x: '2015-08', p: 11000, d: 21000 }, { x: '2015-09', p: 15000, d: 23000 }, { x: '2015-10', p: 16000, d: 24000 }, { x: '2015-11', p: 20000, d: 23000 }, { x: '2015-12', p: 35000, d: 22000 }]
-        }]
+        }],
+        "behavioralRisk": {
+          score: 110,
+          percent: 73,
+          level: 'high'
+        },
+        "radar": {
+          labels: ["Susceptibility", "Severity", "Benefit", "Barrier", "Cues", "Self-efficacy"],
+          datasets: [{
+            label: "Health Belief Spectrum",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "#4BB3D2",
+            pointColor: "#4BB3D2",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [4, 4, 1, 5, 3, 4]
+          }]
+        }
       }];
     }
   });
@@ -1209,11 +1270,11 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 64,
+              "line": 82,
               "column": 4
             },
             "end": {
-              "line": 74,
+              "line": 92,
               "column": 4
             }
           },
@@ -1275,9 +1336,9 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           return morphs;
         },
         statements: [
-          ["content","chart.measurement",["loc",[null,[68,36],[68,57]]]],
-          ["content","chart.title",["loc",[null,[69,16],[69,31]]]],
-          ["inline","area-chart",[],["data",["subexpr","@mut",[["get","chart.data",["loc",[null,[71,28],[71,38]]]]],[],[]]],["loc",[null,[71,10],[71,40]]]]
+          ["content","chart.measurement",["loc",[null,[86,36],[86,57]]]],
+          ["content","chart.title",["loc",[null,[87,16],[87,31]]]],
+          ["inline","area-chart",[],["data",["subexpr","@mut",[["get","chart.data",["loc",[null,[89,28],[89,38]]]]],[],[]]],["loc",[null,[89,10],[89,40]]]]
         ],
         locals: ["chart"],
         templates: []
@@ -1290,11 +1351,11 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 80,
+              "line": 98,
               "column": 0
             },
             "end": {
-              "line": 80,
+              "line": 98,
               "column": 66
             }
           },
@@ -1327,7 +1388,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 81,
+            "line": 99,
             "column": 0
           }
         },
@@ -1489,7 +1550,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         var el4 = dom.createTextNode("\n      ");
         dom.appendChild(el3, el4);
         var el4 = dom.createElement("section");
-        dom.setAttribute(el4,"class","area-chart");
+        dom.setAttribute(el4,"class","bar-chart");
         var el5 = dom.createTextNode("\n        ");
         dom.appendChild(el4, el5);
         var el5 = dom.createElement("header");
@@ -1504,9 +1565,57 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         dom.appendChild(el4, el5);
         var el5 = dom.createTextNode("\n        ");
         dom.appendChild(el4, el5);
-        var el5 = dom.createElement("img");
-        dom.setAttribute(el5,"id","logo");
-        dom.setAttribute(el5,"src","assets/behavioral-risk-score2.png");
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5,"class","content");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","bar-background");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("em");
+        dom.setAttribute(el8,"class","score");
+        var el9 = dom.createComment("");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n            ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("label");
+        dom.setAttribute(el6,"class","low-risk");
+        var el7 = dom.createTextNode("Low Risk");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("label");
+        dom.setAttribute(el6,"class","high-risk");
+        var el7 = dom.createTextNode("High Risk");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","description");
+        var el7 = dom.createTextNode("Patient has\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("span");
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n             of non-adherance based on current behavior pattern\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
         dom.appendChild(el4, el5);
         var el5 = dom.createTextNode("\n      ");
         dom.appendChild(el4, el5);
@@ -1521,7 +1630,7 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         var el4 = dom.createTextNode("\n      ");
         dom.appendChild(el3, el4);
         var el4 = dom.createElement("section");
-        dom.setAttribute(el4,"class","area-chart");
+        dom.setAttribute(el4,"class","area-chart radar");
         var el5 = dom.createTextNode("\n        ");
         dom.appendChild(el4, el5);
         var el5 = dom.createElement("header");
@@ -1536,9 +1645,27 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         dom.appendChild(el4, el5);
         var el5 = dom.createTextNode("\n        ");
         dom.appendChild(el4, el5);
-        var el5 = dom.createElement("img");
-        dom.setAttribute(el5,"id","logo");
-        dom.setAttribute(el5,"src","assets/health-belief-spectrum.png");
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5,"class","content");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6,"class","description");
+        var el7 = dom.createTextNode("Patient has\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("span");
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n             psychological resistance to behavior change\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
         dom.appendChild(el4, el5);
         var el5 = dom.createTextNode("\n      ");
         dom.appendChild(el4, el5);
@@ -1605,7 +1732,13 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         var element7 = dom.childAt(element4, [5]);
         var element8 = dom.childAt(element3, [3]);
         var element9 = dom.childAt(element3, [5]);
-        var morphs = new Array(12);
+        var element10 = dom.childAt(element2, [3]);
+        var element11 = dom.childAt(element10, [1, 1, 3]);
+        var element12 = dom.childAt(element11, [1, 1]);
+        var element13 = dom.childAt(element11, [7, 1]);
+        var element14 = dom.childAt(element10, [3, 1, 3]);
+        var element15 = dom.childAt(element14, [3, 1]);
+        var morphs = new Array(20);
         morphs[0] = dom.createAttrMorph(element5, 'style');
         morphs[1] = dom.createMorphAt(dom.childAt(element5, [1]),0,0);
         morphs[2] = dom.createAttrMorph(element6, 'style');
@@ -1616,8 +1749,16 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         morphs[7] = dom.createMorphAt(element8,1,1);
         morphs[8] = dom.createAttrMorph(element9, 'class');
         morphs[9] = dom.createMorphAt(element9,1,1);
-        morphs[10] = dom.createMorphAt(dom.childAt(element2, [3]),7,7);
-        morphs[11] = dom.createMorphAt(fragment,2,2,contextualElement);
+        morphs[10] = dom.createAttrMorph(element12, 'class');
+        morphs[11] = dom.createAttrMorph(element12, 'style');
+        morphs[12] = dom.createMorphAt(dom.childAt(element12, [1]),0,0);
+        morphs[13] = dom.createAttrMorph(element13, 'class');
+        morphs[14] = dom.createMorphAt(element13,0,0);
+        morphs[15] = dom.createMorphAt(element14,1,1);
+        morphs[16] = dom.createAttrMorph(element15, 'class');
+        morphs[17] = dom.createMorphAt(element15,0,0);
+        morphs[18] = dom.createMorphAt(element10,7,7);
+        morphs[19] = dom.createMorphAt(fragment,2,2,contextualElement);
         return morphs;
       },
       statements: [
@@ -1631,8 +1772,16 @@ define('yabbit/templates/patients/index/show', ['exports'], function (exports) {
         ["content","model.healthRisk.status",["loc",[null,[26,10],[26,37]]]],
         ["attribute","class",["concat",["activity-level ",["get","model.activityLevel.change",["loc",[null,[28,36],[28,62]]]]]]],
         ["content","model.activityLevel.status",["loc",[null,[29,10],[29,40]]]],
-        ["block","each",[["get","model.charts",["loc",[null,[64,12],[64,24]]]]],[],0,null,["loc",[null,[64,4],[74,13]]]],
-        ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[80,0],[80,78]]]]
+        ["attribute","class",["concat",["bar ",["get","model.behavioralRisk.level",["loc",[null,[44,30],[44,56]]]]]]],
+        ["attribute","style",["concat",["width: ",["get","model.behavioralRisk.percent",["loc",[null,[44,76],[44,104]]]],"%"]]],
+        ["content","model.behavioralRisk.score",["loc",[null,[45,32],[45,62]]]],
+        ["attribute","class",["concat",["risk-level ",["get","model.behavioralRisk.level",["loc",[null,[51,38],[51,64]]]]]]],
+        ["content","model.behavioralRisk.level",["loc",[null,[51,68],[51,98]]]],
+        ["inline","ember-chart",[],["type","radar","data",["subexpr","@mut",[["get","model.radar",["loc",[null,[64,42],[64,53]]]]],[],[]],"width","250","height","160"],["loc",[null,[64,10],[64,80]]]],
+        ["attribute","class",["concat",["risk-level ",["get","model.behavioralRisk.level",["loc",[null,[66,38],[66,64]]]]]]],
+        ["content","model.behavioralRisk.level",["loc",[null,[66,68],[66,98]]]],
+        ["block","each",[["get","model.charts",["loc",[null,[82,12],[82,24]]]]],[],0,null,["loc",[null,[82,4],[92,13]]]],
+        ["block","link-to",["patients.index"],["id","view-all","class","button"],1,null,["loc",[null,[98,0],[98,78]]]]
       ],
       locals: [],
       templates: [child0, child1]
@@ -3022,7 +3171,7 @@ catch(err) {
 if (runningTests) {
   require("yabbit/tests/test-helper");
 } else {
-  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+52659eef"});
+  require("yabbit/app")["default"].create({"applicationId":"kAPizP7WxU9vD8ndEHZd4w14HBDANxCYi5VQQGJ9","restApiId":"1wRXdgIGcnCPoeywMgdNQ7THSbMO7UxWZYdvlfJN","name":"yabbit","version":"0.0.0+8dc82a29"});
 }
 
 /* jshint ignore:end */

@@ -310,6 +310,57 @@ section#patients {
           section#patients .pane .charts .column section img {
             max-width: 100%;
             height: auto; }
+          section#patients .pane .charts .column section .content {
+            overflow: auto;
+            padding: 10px;
+            min-height: 185px; }
+            section#patients .pane .charts .column section .content .description {
+              padding-top: 10px;
+              font-family: "Myriad Pro"; }
+            section#patients .pane .charts .column section .content .risk-level {
+              text-transform: capitalize; }
+              section#patients .pane .charts .column section .content .risk-level.low {
+                color: #71c639; }
+              section#patients .pane .charts .column section .content .risk-level.moderate {
+                color: #f89a3b; }
+              section#patients .pane .charts .column section .content .risk-level.high {
+                color: #c63939; }
+            section#patients .pane .charts .column section .content label {
+              color: #706f70;
+              display: inline-block;
+              padding: 5px 0 10px 0; }
+              section#patients .pane .charts .column section .content label.high-risk {
+                float: right; }
+          section#patients .pane .charts .column section.bar-chart .bar-background {
+            margin-top: 30px;
+            background: #565656;
+            overflow: hidden;
+            border-radius: 3px; }
+            section#patients .pane .charts .column section.bar-chart .bar-background .bar {
+              color: white;
+              overflow: hidden;
+              height: 40px;
+              padding: 2px 3px; }
+              section#patients .pane .charts .column section.bar-chart .bar-background .bar .score {
+                float: right;
+                font-size: 1.3em;
+                padding: 5px 5px 0 0;
+                font-style: normal; }
+              section#patients .pane .charts .column section.bar-chart .bar-background .bar.low {
+                background: #71c639; }
+              section#patients .pane .charts .column section.bar-chart .bar-background .bar.moderate {
+                background: #f89a3b; }
+              section#patients .pane .charts .column section.bar-chart .bar-background .bar.high {
+                background: #c63939; }
+          section#patients .pane .charts .column section.bar-chart .description {
+            width: 60%;
+            display: block;
+            margin: 0 auto; }
+          section#patients .pane .charts .column section.radar canvas {
+            float: left; }
+          section#patients .pane .charts .column section.radar .description {
+            overflow: auto;
+            margin-top: 45px; }
         section#patients .pane .charts .column.span2 {
           width: 100%; }
   section#patients #view-all.button {

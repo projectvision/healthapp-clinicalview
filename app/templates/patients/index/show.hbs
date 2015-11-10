@@ -35,20 +35,38 @@
   <div class="charts">
 
     <div class="column">
-      <section class="area-chart">
+      <section class="bar-chart">
         <header>
           <h2>Behavioral Risk Score</h2>
         </header>
-        <img id="logo" src="assets/behavioral-risk-score2.png"/>
+        <div class="content">
+          <div class="bar-background">
+            <div class="bar {{model.behavioralRisk.level}}" style="width: {{model.behavioralRisk.percent}}%">
+              <em class="score">{{model.behavioralRisk.score}}</em>
+            </div>
+          </div>
+          <label class="low-risk">Low Risk</label>
+          <label class="high-risk">High Risk</label>
+          <div class="description">Patient has
+            <span class="risk-level {{model.behavioralRisk.level}}">{{model.behavioralRisk.level}}</span>
+             of non-adherance based on current behavior pattern
+          </div>
+        </div>
       </section>
     </div>
 
     <div class="column">
-      <section class="area-chart">
+      <section class="area-chart radar">
         <header>
           <h2>Health Belief Spectrum</h2>
         </header>
-        <img id="logo" src="assets/health-belief-spectrum.png"/>
+        <div class="content">
+          {{ember-chart type='radar' data=model.radar width="250" height="160"}}
+          <div class="description">Patient has
+            <span class="risk-level {{model.behavioralRisk.level}}">{{model.behavioralRisk.level}}</span>
+             psychological resistance to behavior change
+          </div>
+        </div>
       </section>
     </div>
 

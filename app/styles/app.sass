@@ -240,6 +240,59 @@ section#patients
           img
             max-width: 100%
             height: auto
+          .content
+            overflow: auto
+            padding: $padding
+            min-height: 185px
+            .description
+              padding-top: $padding
+              font-family: "Myriad Pro"
+            .risk-level
+              text-transform: capitalize
+              &.low
+                color: #71c639
+              &.moderate
+                color: #f89a3b
+              &.high
+                color: #c63939
+            label
+              color: #706f70
+              display: inline-block
+              padding: 5px 0 10px 0
+              &.high-risk
+                float: right
+          &.bar-chart
+            .bar-background
+              margin-top: 30px
+              background: #565656
+              overflow: hidden
+              border-radius: 3px
+              .bar
+                color: white
+                overflow: hidden
+                height: 40px
+                padding: 2px 3px
+                .score
+                  float: right
+                  font-size: 1.3em
+                  padding: 5px 5px 0 0
+                  font-style: normal
+                &.low
+                  background: #71c639
+                &.moderate
+                  background: #f89a3b
+                &.high
+                  background: #c63939
+            .description
+              width: 60%
+              display: block
+              margin: 0 auto
+          &.radar
+            canvas
+              float: left
+            .description
+              overflow: auto
+              margin-top: 45px
         &.span2
           width: 100%
 

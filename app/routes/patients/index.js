@@ -78,7 +78,25 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
               {x:'2015-12', p:35000, d:22000},
             ]
           }
-        ]
+        ],
+        "behavioralRisk": {
+          score: 50,
+          percent: 33,
+          level: 'low'
+        },
+        "radar": {
+          labels: ["Susceptibility", "Severity", "Benefit", "Barrier", "Cues", "Self-efficacy"],
+          datasets: [{
+            label: "Health Belief Spectrum",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "#4BB3D2",
+            pointColor: "#4BB3D2",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [1, 3, 3, 4, 4, 5]
+          }]
+        }
       },
       {
         "patientId": 987654321,
@@ -146,7 +164,25 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
               {x:'2015-12', p:35000, d:22000},
             ]
           }
-        ]
+        ],
+        "behavioralRisk": {
+          score: 90,
+          percent: 60,
+          level: 'moderate'
+        },
+        "radar": {
+          labels: ["Susceptibility", "Severity", "Benefit", "Barrier", "Cues", "Self-efficacy"],
+          datasets: [{
+            label: "Health Belief Spectrum",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "#4BB3D2",
+            pointColor: "#4BB3D2",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [5, 6, 3, 4, 2, 1]
+          }]
+        }
       },
       {
         "patientId": 76764565643,
@@ -214,7 +250,25 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
               {x:'2015-12', p:35000, d:22000},
             ]
           }
-        ]
+        ],
+        "behavioralRisk": {
+          score: 110,
+          percent: 73,
+          level: 'high'
+        },
+        "radar": {
+          labels: ["Susceptibility", "Severity", "Benefit", "Barrier", "Cues", "Self-efficacy"],
+          datasets: [{
+            label: "Health Belief Spectrum",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "#4BB3D2",
+            pointColor: "#4BB3D2",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [4, 4, 1, 5, 3, 4]
+          }]
+        }
       },
     ];
   }
